@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
 import 'package:ug_blood_donate/screens/first_screens/third_sreen.dart';
 
-class Onboarding extends StatelessWidget {
+class Onboarding extends StatefulWidget {
+  @override
+  State<Onboarding> createState() => _OnboardingState();
+}
+
+class _OnboardingState extends State<Onboarding> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,14 +24,14 @@ class Onboarding extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 50.0),
                   child: Text(
-                    'Find Blood Donars',
+                    'Find Blood Donors',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Column(
                   children: [
                     Text(
-                      'Locate a blood donar nearby',
+                      'Locate a blood donor nearby',
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.blueGrey[900],

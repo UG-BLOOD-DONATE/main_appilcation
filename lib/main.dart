@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ug_blood_donate/screens/first_screens/second_screen.dart';
 import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
