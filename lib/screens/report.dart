@@ -1,12 +1,10 @@
-import 'package:donation_app/main.dart';
+
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(report_Page());
-}
 
-class report_Page extends StatelessWidget {
-  const report_Page({super.key});
+
+class Report_Page extends StatelessWidget {
+  const Report_Page({super.key});
 
   @override
   Widget build(BuildContext context) {
