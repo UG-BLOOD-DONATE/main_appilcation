@@ -380,7 +380,7 @@ class UserPost extends StatelessWidget {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (_) => RegisterPage(), //  Profile(profileId: profileId),
+        builder: (_) => ProfilePage(), //  Profile(profileId: profileId),
       ),
     );
   }

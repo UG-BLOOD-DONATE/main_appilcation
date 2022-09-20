@@ -24,12 +24,12 @@ class CommentModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['username'] = this.username;
-    data['comment'] = this.comment;
-    data['timestamp'] = this.timestamp;
-    data['userDp'] = this.userDp;
-    data['userId'] = this.userId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['username'] = username;
+    data['comment'] = comment;
+    data['timestamp'] = timestamp;
+    data['userDp'] = userDp;
+    data['userId'] = userId;
     return data;
   }
 }

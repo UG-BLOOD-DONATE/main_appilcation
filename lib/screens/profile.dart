@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +45,13 @@ class RegisterPage extends StatelessWidget {
                   Center(
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 90.0),
+                          vertical: 10.0, horizontal: 40.0),
                       child: Hero(
                         tag: 'Photo',
                         child: Card(
                           child: Image.asset(
                             'lib/images/mark.jpg',
-                            width: 200,
+                            width: 100,
                             height: 150,
                           ),
                         ),

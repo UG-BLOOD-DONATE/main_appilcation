@@ -6,6 +6,7 @@ import 'package:ug_blood_donate/screens/bottom_navigation.dart';
 import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
+import 'package:ug_blood_donate/screens/profile.dart';
 import 'package:ug_blood_donate/screens/request_blood.dart';
 
 final List<String> imgList = [
@@ -152,7 +153,7 @@ class _BuildBodyState extends State<BuildBody> {
                   ),
                   const mycard(
                     cardChild: icondata(label: 'Report', icon: Icons.report),
-                    page: F_donors(),
+                    page: ProfilePage(),
                   ),
                 ],
               )

@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:ug_blood_donate/screens/profile.dart';
 
 import '../models/tab_icon_data.dart';
 import '../ug_app_theme.dart';
@@ -66,20 +69,24 @@ class _BottomBarViewState extends State<BottomBarView>
                           child: Row(
                             children: <Widget>[
                               Expanded(
-                                child: TabIcons(
-                                    tabIconData: widget.tabIconsList[0],
-                                    removeAllSelect: () {
-                                      setRemoveAllSelection(
-                                          widget.tabIconsList[0]);
-                                    }),
+                                child: GestureDetector(
+                                  child: TabIcons(
+                                      tabIconData: widget.tabIconsList[0],
+                                      removeAllSelect: () {
+                                        setRemoveAllSelection(
+                                            widget.tabIconsList[0]);
+                                      }),
+                                ),
                               ),
                               Expanded(
-                                child: TabIcons(
-                                    tabIconData: widget.tabIconsList[1],
-                                    removeAllSelect: () {
-                                      setRemoveAllSelection(
-                                          widget.tabIconsList[1]);
-                                    }),
+                                child: GestureDetector(
+                                  child: TabIcons(
+                                      tabIconData: widget.tabIconsList[1],
+                                      removeAllSelect: () {
+                                        setRemoveAllSelection(
+                                            widget.tabIconsList[1]);
+                                      }),
+                                ),
                               ),
                               SizedBox(
                                 width: Tween<double>(begin: 0.0, end: 1.0)
@@ -90,20 +97,31 @@ class _BottomBarViewState extends State<BottomBarView>
                                     64.0,
                               ),
                               Expanded(
-                                child: TabIcons(
-                                    tabIconData: widget.tabIconsList[2],
-                                    removeAllSelect: () {
-                                      setRemoveAllSelection(
-                                          widget.tabIconsList[2]);
-                                    }),
+                                child: GestureDetector(
+                                  child: TabIcons(
+                                      tabIconData: widget.tabIconsList[2],
+                                      removeAllSelect: () {
+                                        setRemoveAllSelection(
+                                            widget.tabIconsList[2]);
+                                      }),
+                                ),
                               ),
                               Expanded(
-                                child: TabIcons(
-                                    tabIconData: widget.tabIconsList[3],
-                                    removeAllSelect: () {
-                                      setRemoveAllSelection(
-                                          widget.tabIconsList[3]);
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                      return const ProfilePage();
                                     }),
+                                  ),
+                                  child: TabIcons(
+                                      tabIconData: widget.tabIconsList[3],
+                                      removeAllSelect: () {
+                                        setRemoveAllSelection(
+                                            widget.tabIconsList[3]);
+                                      }),
+                                ),
                               ),
                             ],
                           ),
@@ -239,7 +257,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
       aspectRatio: 1,
       child: Center(
         child: InkWell(
-          splashColor: Color.fromARGB(0, 243, 56, 56),
+          splashColor: const Color.fromARGB(0, 243, 56, 56),
           focusColor: Colors.transparent,
           highlightColor: Colors.transparent,
           hoverColor: Colors.transparent,
