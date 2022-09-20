@@ -24,6 +24,8 @@ class UserModel {
       location: map['location'],
     );
   }
+
+  get photoUrl => null;
 //sending to server
   Map<String, dynamic> toMap() {
     return {
