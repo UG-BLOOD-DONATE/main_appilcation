@@ -16,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool showProgress = false;
+
   bool _isObscure3 = true;
 
   bool visible = false;
@@ -142,22 +143,32 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 300,
                             height: 50,
                             child: ElevatedButton(
+                            
                               onPressed: () {
-                                Center(child: CircularProgressIndicator());
+                               const CircularProgressIndicator(color: Colors.white,);
                                 setState(() {
                                   showProgress = true;
                                 });
+                                Future.delayed(Duration(seconds: 3), (() {
+                                  setState(() {
+                                    showProgress = false;
+                                  });
+                                }));
                                 signIn(
                                   email.text,
                                   password.text,
                                 );
                               },
-                              child: Text(
-                                'LOG IN',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
+                              child: showProgress
+                                  ? CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : Text(
+                                      'LOG IN',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
@@ -246,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
           email: email,
           password: password,
         );
-        Fluttertoast.showToast(msg: 'Login Successfully');
+        Fluttertoast.showToast(msg: 'Logged in Successfully');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

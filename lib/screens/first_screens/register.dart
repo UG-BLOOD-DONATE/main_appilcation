@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +14,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+   bool showProgress = false;
   bool _isObscure = true;
   bool _isObscure2 = true;
   final _formkey = GlobalKey<FormState>();
@@ -96,6 +96,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                     BorderSide(width: 2, color: Colors.pink),
                                 borderRadius: BorderRadius.circular(9.0)),
                             hintText: 'Email'),
+                            validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Email cannot be empty";
+                          }
+                          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                              .hasMatch(value)) {
+                            return ("Please enter a valid email");
+                          } else {
+                            return null;
+                          }
+                        },
                         keyboardType: TextInputType.emailAddress,
                       ),
                       SizedBox(height: 10),
@@ -253,12 +264,25 @@ class _RegisterPageState extends State<RegisterPage> {
                               height: 50,
                               child: ElevatedButton(
                                   onPressed: () {
+                                    setState(() {
+                                  showProgress = true;
+                                });
+                                Future.delayed(Duration(seconds: 3), (() {
+                                  setState(() {
+                                    showProgress = false;
+                                  });
+                                }));
+                                    
                                     signUp(
                                       email.text,
                                       password.text,
                                     );
                                   },
-                                  child: Text(
+                                  child: showProgress
+                                  ? CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  :Text(
                                     'REGISTER',
                                     style: TextStyle(
                                       fontSize: 20,

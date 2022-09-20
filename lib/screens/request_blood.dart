@@ -1,7 +1,14 @@
 // ignore_for_file: deprecated_member_use, library_private_types_in_public_api
 
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ug_blood_donate/home.dart';
+
+
 
 const String myhomepageRoute = '/';
 //const String myprofileRoute = 'profile';
@@ -48,13 +55,15 @@ class MyRequest extends StatefulWidget {
 }
 
 class _MyRequestState extends State<MyRequest> {
+  bool showProgress = false;
   final GlobalKey<FormState> _formKey = GlobalKey();
+  final _auth = FirebaseAuth.instance;
+  TextEditingController location = TextEditingController();
+  TextEditingController hospital = TextEditingController();
+  TextEditingController bloodtype = TextEditingController();
+  TextEditingController contact = TextEditingController();
+  TextEditingController note = TextEditingController();
 
-  String p_location = "";
-  String hospital = "";
-  String blood_type = "";
-  String p_contact = "";
-  String p_note = "";
   //var measure;
 
   void _submit() {
@@ -150,6 +159,8 @@ class _MyRequestState extends State<MyRequest> {
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference bloodrequests =
+        FirebaseFirestore.instance.collection('bloodrequests');
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -203,6 +214,7 @@ class _MyRequestState extends State<MyRequest> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     TextFormField(
+                      controller: location,
                       decoration: const InputDecoration(
                           icon: Icon(
                             Icons.location_on_rounded,
@@ -216,17 +228,6 @@ class _MyRequestState extends State<MyRequest> {
                                 BorderSide(color: Colors.grey, width: 0.0),
                           ),
                           border: OutlineInputBorder()),
-                      onFieldSubmitted: (value) {
-                        setState(() {
-                          p_location = value.capitalize();
-                          // firstNameList.add(firstName);
-                        });
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          p_location = value.capitalize();
-                        });
-                      },
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
@@ -242,6 +243,7 @@ class _MyRequestState extends State<MyRequest> {
                       height: 20,
                     ),
                     TextFormField(
+                      controller: hospital,
                       decoration: const InputDecoration(
                           icon: Icon(
                             Icons.home,
@@ -265,22 +267,12 @@ class _MyRequestState extends State<MyRequest> {
                           return 'Last Name cannot contain special characters';
                         }
                       },
-                      onFieldSubmitted: (value) {
-                        setState(() {
-                          hospital = value.capitalize();
-                          // lastNameList.add(lastName);
-                        });
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          hospital = value.capitalize();
-                        });
-                      },
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     TextFormField(
+                      controller: bloodtype,
                       decoration: const InputDecoration(
                           icon: Icon(
                             Icons.bloodtype_outlined,
@@ -295,103 +287,65 @@ class _MyRequestState extends State<MyRequest> {
                           ),
                           border: OutlineInputBorder()),
                       keyboardType: TextInputType.text,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: contact,
+                      decoration: const InputDecoration(
+                          icon: Icon(
+                            Icons.phone,
+                            color: Color.fromARGB(234, 239, 52, 83),
+                          ),
+                          labelText: 'Mobile',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.0),
+                          ),
+                          border: OutlineInputBorder()),
+                      keyboardType: TextInputType.phone,
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
                             value.length < 10) {
-                          return 'mobile numcer must contain at least 10 characters';
+                          return 'mobile number must contain at least 10 characters';
                         } else if (value.contains(RegExp(r'^[_\-=,\.;]$'))) {
                           return 'Description cannot contain special characters';
                         }
                       },
-                      onFieldSubmitted: (value) {
-                        setState(() {
-                          blood_type = value;
-                          // bodyTempList.add(bodyTemp);
-                        });
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          blood_type = value;
-                        });
-                      },
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     TextFormField(
-                        decoration: const InputDecoration(
-                            icon: Icon(
-                              Icons.phone,
-                              color: Color.fromARGB(234, 239, 52, 83),
-                            ),
-                            labelText: 'Mobile',
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              borderSide:
-                                  BorderSide(color: Colors.grey, width: 0.0),
-                            ),
-                            border: OutlineInputBorder()),
-                        keyboardType: TextInputType.phone,
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              value.length < 10) {
-                            return 'mobile numcer must contain at least 10 characters';
-                          } else if (value.contains(RegExp(r'^[_\-=,\.;]$'))) {
-                            return 'Description cannot contain special characters';
-                          }
-                        },
-                        onFieldSubmitted: (value) {
-                          setState(() {
-                            p_contact = value.capitalize();
-                            // lastNameList.add(lastName);
-                          });
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            p_contact = value.capitalize();
-                          });
-                        }),
-                    const SizedBox(
-                      height: 20,
+                      controller: note,
+                      decoration: const InputDecoration(
+                          icon: Icon(
+                            Icons.note_outlined,
+                            color: Color.fromARGB(234, 239, 52, 83),
+                          ),
+                          labelText: 'Add note',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.0),
+                          ),
+                          border: OutlineInputBorder()),
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.length < 3) {
+                          return 'Description must contain at least 3 characters';
+                        } else if (value
+                            .contains(RegExp(r'^[0-9_\-=@,\.;]+$'))) {
+                          return 'Description cannot contain special characters';
+                        }
+                      },
                     ),
-                    TextFormField(
-                        decoration: const InputDecoration(
-                            icon: Icon(
-                              Icons.note_outlined,
-                              color: Color.fromARGB(234, 239, 52, 83),
-                            ),
-                            labelText: 'Add note',
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              borderSide:
-                                  BorderSide(color: Colors.grey, width: 0.0),
-                            ),
-                            border: OutlineInputBorder()),
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              value.length < 3) {
-                            return 'Description must contain at least 3 characters';
-                          } else if (value
-                              .contains(RegExp(r'^[0-9_\-=@,\.;]+$'))) {
-                            return 'Description cannot contain special characters';
-                          }
-                        },
-                        onFieldSubmitted: (value) {
-                          setState(() {
-                            p_note = value.capitalize();
-                            // lastNameList.add(lastName);
-                          });
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            p_note = value.capitalize();
-                          });
-                        }),
                     // const SizedBox(
                     //   height: 20,
                     // ),
@@ -429,16 +383,65 @@ class _MyRequestState extends State<MyRequest> {
                     const SizedBox(
                       height: 20,
                     ),
-                    ElevatedButton(
-                      //color: Color.fromARGB(234, 239, 52, 83),
-                      onPressed: () {
-                        // Validate returns true if the form is valid, or false otherwise.
-                        if (_formKey.currentState!.validate()) {
-                          _submit();
-                        }
-                      },
-                      child: Center(child: const Text("REQUEST")),
-                    ),
+                    SizedBox(
+                      width: 300,
+                      height: 50,
+                      child: ElevatedButton(
+                        //color: Color.fromARGB(234, 239, 52, 83),
+                        onPressed: () {
+                          const CircularProgressIndicator(
+                            color: Colors.white,
+                          );
+                          setState(() {
+                            showProgress = true;
+                          });
+                          Future.delayed(Duration(seconds: 3), (() {
+                            setState(() {
+                              showProgress = false;
+                            });
+                          }));
+                          // Validate returns true if the form is valid, or false otherwise.
+                          if (_formKey.currentState!.validate()) {
+                            bloodrequests.add({
+                              'location': location.text,
+                              'hospital': hospital.text,
+                              'bloodtype': bloodtype.text,
+                              'contact': contact.text,
+                              'note': note.text
+                            }).then((value) =>  Fluttertoast.showToast(
+                                        msg: "Blood request sent successfully")
+                                    .catchError((e) {
+                                  print("Blood request not sent try again");
+                                }));
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Home(),
+                              ),
+                            );
+                          }
+                        },
+                        child: showProgress
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : Text(
+                                'REQUEST',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.pink),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
