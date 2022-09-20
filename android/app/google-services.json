@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "958312419373",
+    "project_id": "ug-blood-donate",
+    "storage_bucket": "ug-blood-donate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958312419373:android:1f3fec96e30643136368a4",
+        "android_client_info": {
+          "package_name": "com.example.donateblood_ug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958312419373-irjjlubc36gbr753nlvi2pito5msrc0f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZXOYbxPajXPiCdCBdMeY2tcDAkaC676I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958312419373-irjjlubc36gbr753nlvi2pito5msrc0f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "958312419373-il80h9475kj6j0g92u7g5087qovgbu88.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.donatebloodUg"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958312419373:android:ff65ab84c7d21c116368a4",
+        "android_client_info": {
+          "package_name": "com.example.ug_blood_donate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "958312419373-irjjlubc36gbr753nlvi2pito5msrc0f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZXOYbxPajXPiCdCBdMeY2tcDAkaC676I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "958312419373-irjjlubc36gbr753nlvi2pito5msrc0f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "958312419373-il80h9475kj6j0g92u7g5087qovgbu88.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.donatebloodUg"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

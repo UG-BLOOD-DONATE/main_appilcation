@@ -1,0 +1,53 @@
+{
+    "users" :[
+        {
+            "name" : "yigagilbert",
+            "location" : "wakiso, Uganda",
+            "booldtype" : "A+",
+            "image" : "https://github.com/yigagilbert"
+        },
+        {
+            "name" : "faza",
+            "location" : "wakiso, Uganda",
+            "booldtype" : "B",
+            "image" : "https://github.com/yigagilbert"
+        },
+        {
+            "name" : "mark",
+            "location" : "wakiso, Uganda",
+            "booldtype" : "D",
+            "image" : "https://github.com/yigagilbert"
+        },
+        {
+            "name" : "jonah",
+            "location" : "wakiso, Uganda",
+            "booldtype" : "A+",
+            "image" : "https://github.com/yigagilbert"
+        },
+        {
+            "name" : "ssubi",
+            "location" : "wakiso, Uganda",
+            "booldtype" : "A+",
+            "image" : "https://github.com/yigagilbert"
+        },
+        {
+            "name" : "yigagilbert",
+            "location" : "wakiso, Uganda",
+            "booldtype" : "AB",
+            "image" : "https://github.com/yigagilbert"
+        },
+        {
+            "name" : "yigagilbert",
+            "location" : "wakiso, Uganda",
+            "booldtype" : "A+",
+            "image" : "https://github.com/yigagilbert"
+        },
+        {
+            "name" : "yigagilbert",
+            "location" : "wakiso, Uganda",
+            "booldtype" : "A+",
+            "image" : "https://github.com/yigagilbert"
+        }
+        
+    ]
+}
