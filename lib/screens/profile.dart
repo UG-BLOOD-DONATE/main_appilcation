@@ -1,7 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ug_blood_donate/components/custom_card.dart';
+import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
+import 'package:ug_blood_donate/utils/firebase.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  currentUserId() {
+    return firebaseAuth.currentUser?.uid;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +132,9 @@ class ProfilePage extends StatelessWidget {
                                   print('Pressed');
                                 },
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Color.fromARGB(150, 27, 158, 163)),
+                                  backgroundColor: MaterialStateProperty.all<
+                                          Color>(
+                                      const Color.fromARGB(150, 27, 158, 163)),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
@@ -217,6 +230,16 @@ class ProfilePage extends StatelessWidget {
                             height: 105,
                             child: ElevatedButton(
                                 onPressed: () {},
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.white),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                  ),
+                                ),
                                 child: const ListTile(
                                   title: Text(
                                     '05',
@@ -230,16 +253,6 @@ class ProfilePage extends StatelessWidget {
                                     'Donated',
                                     style: TextStyle(
                                         fontSize: 8, color: Colors.black),
-                                  ),
-                                ),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.white),
-                                  shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
                                   ),
                                 ))),
                       ],
@@ -310,7 +323,7 @@ class ProfilePage extends StatelessWidget {
                         /*1*/
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             SizedBox(
                               height: 25,
                             ),
@@ -404,10 +417,17 @@ class ProfilePage extends StatelessWidget {
                       const SizedBox(
                         width: 10,
                       ),
-                      const Text(
-                        "Sign Out",
-                        style: TextStyle(
-                          fontSize: 20,
+                      CustomCard(
+                        onTap: () {
+                          firebaseAuth.signOut();
+                          Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (_) => const Frist_Home()));
+                        },
+                        child: const Text(
+                          "Sign Out",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
                         ),
                       )
                     ],
@@ -417,7 +437,7 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [],
+                children: const [],
               ),
               const SizedBox(
                 height: 20,
