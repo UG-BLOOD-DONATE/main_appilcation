@@ -2,6 +2,7 @@
 
 //import 'package:provider/provider.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
 import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
+import 'package:ug_blood_donate/models/user_model.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -26,7 +28,8 @@ final List<String> imgList = [
 ];
 
 final storageRef = FirebaseStorage.instance.ref();
-//final postRef = Firestore.instance.collection('posts');
+final postRef = FirebaseFirestore.instance.collection('posts');
+//User currentUser;
 
 class Home extends StatefulWidget {
   User currentUser;

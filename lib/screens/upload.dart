@@ -3,12 +3,22 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ug_blood_donate/home.dart';
 import 'package:uuid/uuid.dart';
 import 'package:image/image.dart' as Im;
 import 'package:ug_blood_donate/widgets/indicators.dart';
+
+Future<Placemark> getloca() async {
+  Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high);
+  List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+  return placemarks[0];
+}
 
 class Upload extends StatefulWidget {
   User currentUser;
@@ -178,7 +188,7 @@ class _UploadState extends State<Upload> {
           height: 100.0,
           alignment: Alignment.center,
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: getUserLocation(),
             icon: const Icon(Icons.my_location),
             label: const Text(
               'get current loc',
@@ -219,6 +229,13 @@ class _UploadState extends State<Upload> {
       location: locationController.text,
       description: captionController.text,
     );
+    captionController.clear();
+    locationController.clear();
+    setState(() {
+      file = null;
+      isUploading = false;
+      postId = Uuid().v4();
+    });
   }
 
   Future<String> uploadImage(imageFile) async {
@@ -236,5 +253,28 @@ class _UploadState extends State<Upload> {
   createPostInFirestore(
       {required String mediaUrl,
       required String location,
-      required String description}) {}
+      required String description}) {
+    postRef
+        .doc(widget.currentUser.uid)
+        .collection("userPosts")
+        .doc(postId)
+        .set({
+      "postId": postId,
+      "ownerId": widget.currentUser.uid,
+      //"username": widget.currentUser.fullname,
+      "mediaUrl": mediaUrl,
+      "description": description,
+      //"timestamp": timestamp,
+      "likes": {},
+    });
+  }
+
+  getUserLocation() async {
+    Placemark placemark = await getloca();
+    String completeAddress =
+        '${placemark..subThoroughfare} ${placemark.administrativeArea} ${placemark.country} ${placemark.postalCode} ${placemark.subLocality}';
+    String formattedAddress = "${placemark.locality}, ${placemark.country}";
+    print(completeAddress);
+    locationController.text = formattedAddress;
+  }
 }
