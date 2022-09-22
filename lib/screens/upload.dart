@@ -1,8 +1,14 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:ug_blood_donate/home.dart';
+import 'package:uuid/uuid.dart';
+import 'package:image/image.dart' as Im;
+import 'package:ug_blood_donate/widgets/indicators.dart';
 
 class Upload extends StatefulWidget {
   User currentUser;
@@ -13,8 +19,12 @@ class Upload extends StatefulWidget {
 }
 
 class _UploadState extends State<Upload> {
-  ImagePicker _picker = ImagePicker();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController captionController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
   File? file;
+  bool isUploading = false;
+  String postId = const Uuid().v4();
 
   handleChooseFromGalley() async {
     Navigator.pop(context);
@@ -92,20 +102,20 @@ class _UploadState extends State<Upload> {
       appBar: AppBar(
         backgroundColor: Colors.white70,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
           onPressed: clearImage(),
         ),
-        title: Text(
+        title: const Text(
           'Caption post',
           style: TextStyle(color: Colors.black),
         ),
         actions: [
           ElevatedButton(
-            onPressed: () {},
-            child: Text(
+            onPressed: isUploading ? null : () => handleSubmit(),
+            child: const Text(
               "Post",
               style: TextStyle(
                 color: Colors.blueAccent,
@@ -116,6 +126,7 @@ class _UploadState extends State<Upload> {
         ],
       ),
       body: ListView(children: <Widget>[
+        isUploading ? linearProgress(context) : const Text(''),
         Container(
           height: 220.0,
           width: MediaQuery.of(context).size.width * 0.8,
@@ -129,7 +140,7 @@ class _UploadState extends State<Upload> {
             ),
           ),
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(top: 10.0),
         ),
         ListTile(
@@ -140,6 +151,7 @@ class _UploadState extends State<Upload> {
           title: Container(
             width: 250,
             child: TextField(
+              controller: captionController,
               decoration: InputDecoration(
                 hintText: "Write a Caption....",
                 border: InputBorder.none,
@@ -147,12 +159,13 @@ class _UploadState extends State<Upload> {
             ),
           ),
         ),
-        Divider(),
+        const Divider(),
         ListTile(
-          leading: Icon(Icons.pin_drop, color: Colors.orange, size: 35.0),
+          leading: const Icon(Icons.pin_drop, color: Colors.orange, size: 35.0),
           title: Container(
             width: 250.0,
             child: TextField(
+              controller: locationController,
               decoration: InputDecoration(
                 hintText: 'Location',
                 border: InputBorder.none,
@@ -166,8 +179,8 @@ class _UploadState extends State<Upload> {
           alignment: Alignment.center,
           child: ElevatedButton.icon(
             onPressed: () {},
-            icon: Icon(Icons.my_location),
-            label: Text(
+            icon: const Icon(Icons.my_location),
+            label: const Text(
               'get current loc',
               style: TextStyle(color: Colors.white),
             ),
@@ -182,4 +195,46 @@ class _UploadState extends State<Upload> {
       file = null;
     });
   }
+
+  compressImage() async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    // int rand = new Math.Random().nextInt(10000);
+    Im.Image? imageFile = Im.decodeImage(file!.readAsBytesSync());
+    final compressedImageFile = File('$path/img_$postId.jpg')
+      ..writeAsBytesSync(Im.encodeJpg(imageFile!, quality: 85));
+    setState(() {
+      file = compressedImageFile;
+    }); // choose the size here, it will maintain aspect ratio
+  }
+
+  handleSubmit() async {
+    setState(() {
+      isUploading = true;
+    });
+    await compressImage();
+    String mediaUrl = await uploadImage(file);
+    createPostInFirestore(
+      mediaUrl: mediaUrl,
+      location: locationController.text,
+      description: captionController.text,
+    );
+  }
+
+  Future<String> uploadImage(imageFile) async {
+    UploadTask uploadTask =
+        storageRef.child("post_$postId.jpg").putFile(imageFile);
+    var imageUrl = await (await uploadTask).ref.getDownloadURL();
+    return imageUrl.toString();
+    // UploadTask uploadTask =
+    //     storageRef.child("post_$postId.jpg").putFile(imageFile);
+    // TaskSnapshot storageSnap = await uploadTask.onComplete;
+    // String downloadUrl = await storageSnap.ref.getDownloadURL();
+    // return downloadUrl;
+  }
+
+  createPostInFirestore(
+      {required String mediaUrl,
+      required String location,
+      required String description}) {}
 }
