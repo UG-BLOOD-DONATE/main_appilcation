@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     // Scaffold is a layout for
@@ -14,11 +19,11 @@ class RegisterPage extends StatelessWidget {
             color: Colors.black,
             size: 24.0,
           ),
-          title: const Text("Notifications"),
+          title:  Text("Notifications"),
           centerTitle: true,
           actions: <Widget>[
             IconButton(
-              icon: const Icon(
+              icon:  Icon(
                 Icons.edit_note_sharp,
                 color: Colors.black,
               ),

@@ -335,7 +335,7 @@ class _PostsState extends State<Posts> {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (_) => const ProfilePage(), //profileId: profileId
+        builder: (_) =>  ProfilePage(), //profileId: profileId
       ),
     );
   }

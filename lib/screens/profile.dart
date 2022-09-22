@@ -1,11 +1,21 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ug_blood_donate/components/custom_card.dart';
+import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
+import 'package:path/path.dart' as path;
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  String? userId;
+  ProfilePage({Key? key, this.userId}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -14,6 +24,49 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   currentUserId() {
     return firebaseAuth.currentUser?.uid;
+  }
+
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+  double screenHeight = 0;
+  double screenWidth = 0;
+  Color primary = const Color(0xffeef444c);
+  String profilePicLink = "";
+
+  void pickUploadProfilePic({String? userId}) async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 512,
+      maxWidth: 512,
+      imageQuality: 90,
+    );
+    final postID = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child("${widget.userId}/images")
+        .child("post_$postID");
+
+    await ref.putFile(File(image!.path));
+
+    ref.getDownloadURL().then((value) async {
+      setState(() {
+        profilePicLink = value;
+      });
+    });
+    print(profilePicLink);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
   }
 
   @override
@@ -56,17 +109,30 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 40.0),
-                      child: Hero(
-                        tag: 'Photo',
-                        child: Card(
-                          child: Image.asset(
-                            'lib/images/mark.jpg',
-                            width: 100,
-                            height: 150,
-                          ),
+                    child: GestureDetector(
+                      onDoubleTap: () {
+                        pickUploadProfilePic(userId: loggedInUser.uid);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(120, 5, 40, 24),
+                        height: 120,
+                        width: 120,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: primary,
+                        ),
+                        child: Center(
+                          child: profilePicLink == " "
+                              ? const Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                  size: 80,
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.network(profilePicLink),
+                                ),
                         ),
                       ),
                     ),
@@ -74,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
               const SizedBox(
-                height: 40,
+                height: 10,
               ),
               Row(
                 children: [
@@ -85,9 +151,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         /*2*/
                         Container(
-                          padding: const EdgeInsets.only(bottom: 0),
-                          child: const Text(
-                            'Kyagaba Jonah',
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 30),
+                          child: Text(
+                            "${loggedInUser.fullname}",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 25),
                           ),
@@ -105,7 +172,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.location_on, color: Colors.pink[500]),
-                  const Text("Kampala, Uganda")
+                  Text(
+                    "${loggedInUser.location}",
+                  )
                 ],
               ),
               const SizedBox(
@@ -202,9 +271,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          child: const ListTile(
+                          child: ListTile(
                             title: Text(
-                              'A+',
+                              "${loggedInUser.bloodType}",
                               style: TextStyle(
                                 fontSize: 30,
                                 color: Colors.black,
@@ -446,4 +515,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ));
   }
+
+  Future<void> _upload(String inputSource) async {}
 }
