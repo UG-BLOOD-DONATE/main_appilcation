@@ -1,3 +1,8 @@
+// ignore_for_file: non_constant_identifier_names, avoid_unnecessary_containers
+
+//import 'package:provider/provider.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +13,7 @@ import 'package:ug_blood_donate/screens/find_donor.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
 import 'package:ug_blood_donate/screens/request_blood.dart';
+import 'package:ug_blood_donate/screens/upload.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -19,7 +25,9 @@ final List<String> imgList = [
 ];
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  User currentUser;
+  //const Upload({super.key, required this.currentUser});
+  Home({Key? key, required this.currentUser}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -27,6 +35,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
+  //final User user = ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +61,7 @@ class _HomeState extends State<Home> {
       ), //AppBar
       body: SingleChildScrollView(
         child: Container(
-          child: const BuildBody(),
+          child: BuildBody(currentUser: widget.currentUser),
         ),
       ),
       bottomNavigationBar: SizedBox(
@@ -62,125 +71,148 @@ class _HomeState extends State<Home> {
 }
 
 class BuildBody extends StatefulWidget {
-  const BuildBody({Key? key}) : super(key: key);
+  final User currentUser;
+  const BuildBody({Key? key, required this.currentUser}) : super(key: key);
 
   @override
   State<BuildBody> createState() => _BuildBodyState();
 }
 
 class _BuildBodyState extends State<BuildBody> {
+  bool isToggle = true;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Container(
-      color: const Color.fromARGB(255, 254, 255, 255),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // SizedBox(
-          //   height: 30,
-          // ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.start,
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     CircleAvatar(
-          //       backgroundColor: Colors.greenAccent[400],
-          //       radius: 20,
-          //     ),
-          //     SizedBox(
-          //       width: 280,
-          //     ),
-          //     Icon(
-          //       Icons.notifications,
-          //       size: 25,
-          //     )
-          //   ],
-          // ),
-          const SizedBox(
-            height: 10,
-          ),
-          CarouselSlider(
-            options: CarouselOptions(
-              autoPlay: true,
-              aspectRatio: 2.0,
-              enlargeCenterPage: true,
+      child: Container(
+        color: const Color.fromARGB(255, 254, 255, 255),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // SizedBox(
+            //   height: 30,
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.start,
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     CircleAvatar(
+            //       backgroundColor: Colors.greenAccent[400],
+            //       radius: 20,
+            //     ),
+            //     SizedBox(
+            //       width: 280,
+            //     ),
+            //     Icon(
+            //       Icons.notifications,
+            //       size: 25,
+            //     )
+            //   ],
+            // ),
+            const SizedBox(
+              height: 10,
             ),
-            items: imageSliders,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  mycard(
-                    cardChild: icondata(
-                      label: 'Find Donors',
-                      icon: Icons.search,
-                    ),
-                    page: F_donors(),
-                  ),
-                  mycard(
-                    cardChild:
-                        icondata(label: ' Request', icon: Icons.bloodtype),
-                    page: Request(),
-                  ),
-                  mycard(
-                    cardChild: icondata(
-                        label: 'Campaign', icon: Icons.campaign_outlined),
-                    page: F_donors(),
-                  ),
-                ],
+            CarouselSlider(
+              options: CarouselOptions(
+                autoPlay: true,
+                aspectRatio: 2.0,
+                enlargeCenterPage: true,
               ),
-              const SizedBox(
-                height: 5,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  mycard(
-                    cardChild: const icondata(
-                        label: 'Assistant', icon: Icons.assistant_navigation),
-                    page: ChatPage(
-                      title: 'Assistant',
+              items: imageSliders,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [
+                    mycard(
+                      cardChild: icondata(
+                        label: 'Find Donors',
+                        icon: Icons.search,
+                      ),
+                      page: F_donors(),
                     ),
-                  ),
-                  const mycard(
-                    cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
-                    page: F_donors(),
-                  ),
-                  const mycard(
-                    cardChild: icondata(label: 'Report', icon: Icons.report),
-                    page: ProfilePage(),
-                  ),
-                ],
-              )
-            ],
-          ),
-          const Center(
-              child: Text(
-            'Twitter feeds.',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          )),
-          Center(
-            child: ElevatedButton(
-              //   child: WebViewExample(),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const WebViewExample())),
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                width: 150,
-                height: 100,
-                child: const Text(
-                    'see all twitter feeds about blood donation in Uganda >>>'),
+                    mycard(
+                      cardChild:
+                          icondata(label: ' Request', icon: Icons.bloodtype),
+                      page: Request(),
+                    ),
+                    mycard(
+                      cardChild: icondata(
+                          label: 'Campaign', icon: Icons.campaign_outlined),
+                      page: F_donors(),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    mycard(
+                      cardChild: const icondata(
+                          label: 'Assistant', icon: Icons.assistant_navigation),
+                      page: ChatPage(
+                        title: 'Assistant',
+                      ),
+                    ),
+                    const mycard(
+                        cardChild:
+                            icondata(label: 'Map', icon: Icons.map_outlined),
+                        page: ProfilePage() //CreatePost(),
+                        ),
+                    const mycard(
+                      cardChild: icondata(label: 'Report', icon: Icons.report),
+                      page: ProfilePage(),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            const Center(
+                child: Text(
+              'Twitter feeds.',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            )),
+            Center(
+              child: ElevatedButton(
+                //   child: WebViewExample(),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const WebViewExample())),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  width: 150,
+                  height: 100,
+                  child: const Text(
+                      'see all twitter feeds about blood donation in Uganda >>>'),
+                ),
               ),
             ),
-          ),
-        ],
+            Center(
+              child: ElevatedButton(
+                //   child: WebViewExample(),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => Upload(
+                              currentUser: widget.currentUser,
+                            ))),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  width: 150,
+                  height: 100,
+                  child: const Text('upload post >>>'),
+                ),
+              ),
+            ),
+            //const CreatePost(),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
 

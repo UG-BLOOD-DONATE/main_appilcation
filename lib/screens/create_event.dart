@@ -153,12 +153,12 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, size: 32.0),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const Home(),
-            ),
-          ),
+          onPressed: () => Navigator.pop(context, true // MaterialPageRoute(
+              //   builder: (_) => Home(
+              //     currentUser: null,
+              //   ),
+              // ),
+              ),
         ),
         backgroundColor: const Color.fromARGB(255, 254, 255, 255),
         title: const Text(

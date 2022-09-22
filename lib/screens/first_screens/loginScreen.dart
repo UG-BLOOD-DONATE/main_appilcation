@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool visible = false;
   final _auth = FirebaseAuth.instance;
+  late User currentUser;
   final _formkey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -63,17 +66,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.grey[200],
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.mail_outlined,
                               color: Colors.pink,
                             ),
                             focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 3, color: Colors.pink),
+                                borderSide: const BorderSide(
+                                    width: 3, color: Colors.pink),
                                 borderRadius: BorderRadius.circular(9.0)),
                             enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: Colors.pink),
+                                borderSide: const BorderSide(
+                                    width: 2, color: Colors.pink),
                                 borderRadius: BorderRadius.circular(9.0)),
                             hintText: 'Email'),
                         validator: (value) {
@@ -91,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.done,
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       TextFormField(
                         textInputAction: TextInputAction.done,
                         controller: password,
@@ -109,17 +112,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                     _isObscure3 = !_isObscure3;
                                   });
                                 }),
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.lock,
                               color: Colors.pink,
                             ),
                             focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 3, color: Colors.pink),
+                                borderSide: const BorderSide(
+                                    width: 3, color: Colors.pink),
                                 borderRadius: BorderRadius.circular(9.0)),
                             enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(width: 2, color: Colors.pink),
+                                borderSide: const BorderSide(
+                                    width: 2, color: Colors.pink),
                                 borderRadius: BorderRadius.circular(9.0)),
                             hintText: 'Password'),
                         validator: (value) {
@@ -135,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         onChanged: (value) {},
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -143,13 +146,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 300,
                             height: 50,
                             child: ElevatedButton(
-                            
                               onPressed: () {
-                               const CircularProgressIndicator(color: Colors.white,);
+                                const CircularProgressIndicator(
+                                  color: Colors.white,
+                                );
                                 setState(() {
                                   showProgress = true;
                                 });
-                                Future.delayed(Duration(seconds: 3), (() {
+                                Future.delayed(const Duration(seconds: 3), (() {
                                   setState(() {
                                     showProgress = false;
                                   });
@@ -159,16 +163,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   password.text,
                                 );
                               },
-                              child: showProgress
-                                  ? CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                  : Text(
-                                      'LOG IN',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    ),
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
@@ -179,11 +173,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
+                              child: showProgress
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : const Text(
+                                      'LOG IN',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
                             ),
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Row(
@@ -195,11 +199,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) {
-                                  return ForgotPassword();
+                                  return const ForgotPassword();
                                 }),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Forgot Password?',
                               style: TextStyle(
                                 color: Colors.pink,
@@ -209,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Row(
@@ -228,11 +232,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) {
-                                  return RegisterPage();
+                                  return const RegisterPage();
                                 }),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Register Now.',
                               style: TextStyle(
                                 color: Colors.pink,
@@ -258,10 +262,20 @@ class _LoginScreenState extends State<LoginScreen> {
           password: password,
         );
         Fluttertoast.showToast(msg: 'Logged in Successfully');
+        FirebaseAuth.instance.authStateChanges().listen((User? user) {
+          if (user == null) {
+            print("no user in");
+          } else {
+            currentUser = user;
+            print("user in");
+          }
+        });
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Home(),
+            builder: (context) => Home(
+              currentUser: currentUser,
+            ),
           ),
         );
       } on FirebaseAuthException catch (e) {

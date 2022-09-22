@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ug_blood_donate/home.dart';
 
-
-
 const String myhomepageRoute = '/';
 //const String myprofileRoute = 'profile';
 
@@ -58,6 +56,7 @@ class _MyRequestState extends State<MyRequest> {
   bool showProgress = false;
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _auth = FirebaseAuth.instance;
+  late User currentUser;
   TextEditingController location = TextEditingController();
   TextEditingController hospital = TextEditingController();
   TextEditingController bloodtype = TextEditingController();
@@ -165,12 +164,13 @@ class _MyRequestState extends State<MyRequest> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, size: 32.0),
-          onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const Home(),
-            ),
-          ),
+          onPressed: () => Navigator.pop(context, true
+              // MaterialPageRoute(
+              //   builder: (_) => Home(
+              //     currentUser: user,
+              //   ),
+              // ),
+              ),
         ),
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
         title: const Text(
@@ -408,17 +408,16 @@ class _MyRequestState extends State<MyRequest> {
                               'bloodtype': bloodtype.text,
                               'contact': contact.text,
                               'note': note.text
-                            }).then((value) =>  Fluttertoast.showToast(
+                            }).then((value) => Fluttertoast.showToast(
                                         msg: "Blood request sent successfully")
                                     .catchError((e) {
                                   print("Blood request not sent try again");
                                 }));
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Home(),
-                              ),
-                            );
+                            Navigator.pop(context, true
+                                // MaterialPageRoute(
+                                //   builder: (context) => Home(),
+                                // ),
+                                );
                           }
                         },
                         child: showProgress

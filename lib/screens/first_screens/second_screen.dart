@@ -24,7 +24,9 @@ class _OnboardingState extends State<Onboarding> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Home(),
+            builder: (context) => Home(
+              currentUser: user,
+            ),
           ),
         );
       }

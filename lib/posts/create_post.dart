@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,8 @@ import 'package:ug_blood_donate/view_models/auth/posts_view_model.dart';
 import 'package:ug_blood_donate/widgets/indicators.dart';
 
 class CreatePost extends StatefulWidget {
+  const CreatePost({super.key});
+
   @override
   _CreatePostState createState() => _CreatePostState();
 }
@@ -158,13 +162,13 @@ class _CreatePostState extends State<CreatePost> {
               ),
               ListTile(
                 contentPadding: const EdgeInsets.all(0.0),
-                title: Container(
+                title: SizedBox(
                   width: 250.0,
                   child: TextFormField(
                     controller: viewModel.locationTEC,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(0.0),
-                      hintText: 'United States,Los Angeles!',
+                      hintText: 'Kampala,Uganda!',
                       focusedBorder: UnderlineInputBorder(),
                     ),
                     maxLines: null,
