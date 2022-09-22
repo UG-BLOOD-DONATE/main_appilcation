@@ -112,7 +112,7 @@ class _BottomBarViewState extends State<BottomBarView>
                                     context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) {
-                                      return const ProfilePage();
+                                      return  ProfilePage();
                                     }),
                                   ),
                                   child: TabIcons(

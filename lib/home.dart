@@ -91,47 +91,47 @@ class _BuildBodyState extends State<BuildBody> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
-        color: const Color.fromARGB(255, 254, 255, 255),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // SizedBox(
-            //   height: 30,
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     CircleAvatar(
-            //       backgroundColor: Colors.greenAccent[400],
-            //       radius: 20,
-            //     ),
-            //     SizedBox(
-            //       width: 280,
-            //     ),
-            //     Icon(
-            //       Icons.notifications,
-            //       size: 25,
-            //     )
-            //   ],
-            // ),
-            const SizedBox(
-              height: 10,
+        child: Container(
+      color: const Color.fromARGB(255, 254, 255, 255),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // SizedBox(
+          //   height: 30,
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     CircleAvatar(
+          //       backgroundColor: Colors.greenAccent[400],
+          //       radius: 20,
+          //     ),
+          //     SizedBox(
+          //       width: 280,
+          //     ),
+          //     Icon(
+          //       Icons.notifications,
+          //       size: 25,
+          //     )
+          //   ],
+          // ),
+          const SizedBox(
+            height: 10,
+          ),
+          CarouselSlider(
+            options: CarouselOptions(
+              autoPlay: true,
+              aspectRatio: 2.0,
+              enlargeCenterPage: true,
             ),
-            CarouselSlider(
-              options: CarouselOptions(
-                autoPlay: true,
-                aspectRatio: 2.0,
-                enlargeCenterPage: true,
-              ),
-              items: imageSliders,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Row(
+            items: imageSliders,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: const [
                     mycard(
@@ -141,85 +141,59 @@ class _BuildBodyState extends State<BuildBody> {
                       ),
                       page: F_donors(),
                     ),
-                    mycard(
-                      cardChild:
-                          icondata(label: ' Request', icon: Icons.bloodtype),
-                      page: Request(),
-                    ),
-                    mycard(
-                      cardChild: icondata(
-                          label: 'Campaign', icon: Icons.campaign_outlined),
-                      page: F_donors(),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    mycard(
-                      cardChild: const icondata(
-                          label: 'Assistant', icon: Icons.assistant_navigation),
-                      page: ChatPage(
-                        title: 'Assistant',
-                      ),
-                    ),
-                    const mycard(
-                        cardChild:
-                            icondata(label: 'Map', icon: Icons.map_outlined),
-                        page: ProfilePage() //CreatePost(),
-                        ),
-                    const mycard(
-                      cardChild: icondata(label: 'Report', icon: Icons.report),
-                      page: ProfilePage(),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const Center(
-                child: Text(
-              'Twitter feeds.',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            )),
-            Center(
-              child: ElevatedButton(
-                //   child: WebViewExample(),
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const WebViewExample())),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  width: 150,
-                  height: 100,
-                  child: const Text(
-                      'see all twitter feeds about blood donation in Uganda >>>'),
-                ),
+                  ]),
+              const mycard(
+                cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
+                page: F_donors(),
+              ),
+              mycard(
+                cardChild: icondata(label: 'Report', icon: Icons.report),
+                page: ProfilePage(),
+              ),
+            ],
+          ),
+          //   ],
+          // ),
+          Center(
+              child: Text(
+            'Twitter feeds.',
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          )),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const WebViewExample())),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text(
+                    'see all twitter feeds about blood donation in Uganda >>>'),
               ),
             ),
-            Center(
-              child: ElevatedButton(
-                //   child: WebViewExample(),
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => Upload(
-                              currentUser: widget.currentUser,
-                            ))),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  width: 150,
-                  height: 100,
-                  child: const Text('upload post >>>'),
-                ),
+          ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => Upload(
+                            currentUser: widget.currentUser,
+                          ))),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('upload post >>>'),
               ),
             ),
-            //const CreatePost(),
-          ],
-        ),
+          ),
+          //const CreatePost(),
+        ],
       ),
-    );
+    ));
   }
 }
 
