@@ -132,24 +132,50 @@ class _BuildBodyState extends State<BuildBody> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
-                    mycard(
-                      cardChild: icondata(
-                        label: 'Find Donors',
-                        icon: Icons.search,
-                      ),
-                      page: F_donors(),
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const [
+                  mycard(
+                    cardChild: icondata(
+                      label: 'Find Donors',
+                      icon: Icons.search,
                     ),
-                  ]),
-              const mycard(
-                cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
-                page: F_donors(),
+                    page: F_donors(),
+                  ),
+                  mycard(
+                    cardChild:
+                        icondata(label: ' Request', icon: Icons.bloodtype),
+                    page: Request(),
+                  ),
+                  mycard(
+                    cardChild: icondata(
+                        label: 'Campaign', icon: Icons.campaign_outlined),
+                    page: F_donors(),
+                  ),
+                ],
               ),
-              mycard(
-                cardChild: icondata(label: 'Report', icon: Icons.report),
-                page: ProfilePage(),
+              const SizedBox(
+                height: 5,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  mycard(
+                    cardChild: const icondata(
+                        label: 'Assistant', icon: Icons.assistant_navigation),
+                    page: ChatPage(
+                      title: 'Assistant',
+                    ),
+                  ),
+                  const mycard(
+                    cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
+                    page: F_donors(),
+                  ),
+                  mycard(
+                    cardChild: icondata(label: 'Report', icon: Icons.report),
+                    page: ProfilePage(userId: widget.currentUser.uid),
+                  ),
+                ],
+              )
             ],
           ),
           //   ],
