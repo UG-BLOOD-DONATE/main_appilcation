@@ -93,8 +93,7 @@ class _UploadState extends State<Upload> {
         Padding(
           padding: const EdgeInsets.only(top: 20.0),
           child: ElevatedButton(
-            onPressed: () => Navigator.of(context, rootNavigator: true)
-                .pop(selectImage(context)),
+            onPressed: () => selectImage(context),
             child: const Text('Uplode image'),
           ),
         )

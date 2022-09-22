@@ -171,7 +171,8 @@ class _BuildBodyState extends State<BuildBody> {
                     page: F_donors(),
                   ),
                   mycard(
-                    cardChild: icondata(label: 'Report', icon: Icons.report),
+                    cardChild:
+                        const icondata(label: 'Report', icon: Icons.report),
                     page: ProfilePage(userId: widget.currentUser.uid),
                   ),
                 ],
@@ -180,7 +181,7 @@ class _BuildBodyState extends State<BuildBody> {
           ),
           //   ],
           // ),
-          Center(
+          const Center(
               child: Text(
             'Twitter feeds.',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
@@ -191,6 +192,7 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const WebViewExample())),
               child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
                 padding: const EdgeInsets.all(10),
                 width: 150,
                 height: 100,
@@ -209,6 +211,7 @@ class _BuildBodyState extends State<BuildBody> {
                             currentUser: widget.currentUser,
                           ))),
               child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
                 padding: const EdgeInsets.all(10),
                 width: 150,
                 height: 100,
