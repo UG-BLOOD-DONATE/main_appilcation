@@ -63,6 +63,7 @@ dependencies:
   animations: ^2.0.4
   google_fonts: ^3.0.1
   shared_preferences: ^2.0.15
+  image:
 
 
 dev_dependencies:
