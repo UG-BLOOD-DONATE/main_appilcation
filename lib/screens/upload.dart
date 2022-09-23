@@ -14,6 +14,8 @@ import 'package:image/image.dart' as Im;
 import 'package:ug_blood_donate/widgets/indicators.dart';
 
 Future<Placemark> getloca() async {
+  // await Geolocator.openAppSettings();
+  // await Geolocator.openLocationSettings();
   Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high);
   List<Placemark> placemarks =
@@ -221,7 +223,7 @@ class _UploadState extends State<Upload> {
           height: 100.0,
           alignment: Alignment.center,
           child: ElevatedButton.icon(
-            onPressed: getUserLocation(),
+            onPressed: () => getUserLocation(),
             icon: const Icon(Icons.my_location),
             label: const Text(
               'get current loc',
@@ -302,7 +304,7 @@ class _UploadState extends State<Upload> {
     });
   }
 
-  getUserLocation() async {
+  Future<dynamic> getUserLocation() async {
     Placemark placemark = await getloca();
     String completeAddress =
         '${placemark..subThoroughfare} ${placemark.administrativeArea} ${placemark.country} ${placemark.postalCode} ${placemark.subLocality}';

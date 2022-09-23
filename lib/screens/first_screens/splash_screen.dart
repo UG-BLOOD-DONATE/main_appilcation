@@ -32,7 +32,10 @@ class _SplashState extends State<Splash> {
                   child: Container(
                       width: 200.0,
                       height: 200.0,
-                      child: Image.asset('assets/images/Picture1.png')),
+                      child: Image.asset(
+                        'assets/images/Picture1.png',
+                        color: Colors.white,
+                      )),
                 ),
                 Container(
                   width: 400.0,

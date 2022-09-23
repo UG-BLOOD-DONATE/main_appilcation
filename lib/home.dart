@@ -208,10 +208,10 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => Create_post(),
-                  // builder: (_) => Upload(
-                  //       currentUser: widget.currentUser,
-                  //     ))
+                  // builder: (_) => Create_post(),
+                  builder: (_) => Upload(
+                    currentUser: widget.currentUser,
+                  ),
                 ),
               ),
               child: Container(
