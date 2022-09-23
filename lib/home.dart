@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
 import 'package:ug_blood_donate/models/tab_icon_data.dart';
+import 'package:ug_blood_donate/posts/create_post.dart';
 import 'package:ug_blood_donate/screens/bottom_navigation.dart';
 import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
@@ -205,11 +206,14 @@ class _BuildBodyState extends State<BuildBody> {
             child: ElevatedButton(
               //   child: WebViewExample(),
               onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => Upload(
-                            currentUser: widget.currentUser,
-                          ))),
+                context,
+                MaterialPageRoute(
+                  builder: (_) => Create_post(),
+                  // builder: (_) => Upload(
+                  //       currentUser: widget.currentUser,
+                  //     ))
+                ),
+              ),
               child: Container(
                 color: Color.fromARGB(0, 251, 251, 251),
                 padding: const EdgeInsets.all(10),
