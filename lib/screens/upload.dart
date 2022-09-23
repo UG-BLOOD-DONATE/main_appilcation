@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +14,8 @@ import 'package:image/image.dart' as Im;
 import 'package:ug_blood_donate/widgets/indicators.dart';
 
 Future<Placemark> getloca() async {
+  // await Geolocator.openAppSettings();
+  // await Geolocator.openLocationSettings();
   Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high);
   List<Placemark> placemarks =
@@ -36,26 +39,47 @@ class _UploadState extends State<Upload> {
   bool isUploading = false;
   String postId = const Uuid().v4();
 
+  File? image;
+
   handleChooseFromGalley() async {
-    Navigator.pop(context);
-    var image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      maxHeight: 675,
-      maxWidth: 960,
-    );
-    setState(() {});
-    file = File(image!.path);
+    // Navigator.pop(context);
+    // var image = await _picker.pickImage(
+    //   source: ImageSource.gallery,
+    //   maxHeight: 675,
+    //   maxWidth: 960,
+    // );
+    // if (mounted) {
+    //   setState(() {});
+    // }
+    // file = File(image!.path);
+    try {
+      var image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 675,
+        maxWidth: 960,
+      );
+      if (image == null) return;
+      file = File(image.path);
+      setState(() {});
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
   }
 
   handleTakePhoto() async {
     Navigator.pop(context);
-    var image = await _picker.pickImage(
-      source: ImageSource.camera,
-      maxHeight: 675,
-      maxWidth: 960,
-    );
-    setState(() {});
-    file = File(image!.path);
+    try {
+      var image = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        maxHeight: 675,
+        maxWidth: 960,
+      );
+      if (image == null) return;
+      file = File(image.path);
+      setState(() {});
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
   }
 
   selectImage(parentcontext) {
@@ -93,20 +117,32 @@ class _UploadState extends State<Upload> {
         Padding(
           padding: const EdgeInsets.only(top: 20.0),
           child: ElevatedButton(
-            onPressed: () => selectImage(context),
-            child: const Text('Uplode image'),
+            onPressed: () => handleTakePhoto(), //selectImage(context),
+            child: const Text('Uplode image from camera'),
           ),
-        )
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: ElevatedButton(
+            onPressed: () => handleChooseFromGalley(), //selectImage(context),
+            child: const Text('Uplode image from galley'),
+          ),
+        ),
       ]),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return file == null ? buildSplashScreen() : buildUploadScreen();
+    return file != null ? buildUploadScreen() : buildSplashScreen();
+    //return buildUploadScreen();
   }
 
   Scaffold buildUploadScreen() {
+    var image_path;
+    if (file != null) {
+      image_path = file;
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white70,
@@ -115,7 +151,7 @@ class _UploadState extends State<Upload> {
             Icons.arrow_back,
             color: Colors.black,
           ),
-          onPressed: clearImage(),
+          onPressed: () => clearImage(),
         ),
         title: const Text(
           'Caption post',
@@ -144,7 +180,7 @@ class _UploadState extends State<Upload> {
               aspectRatio: 16 / 9,
               child: Container(
                 decoration: BoxDecoration(
-                    image: DecorationImage(image: FileImage(file!))),
+                    image: DecorationImage(image: FileImage(image_path))),
               ),
             ),
           ),
@@ -154,8 +190,8 @@ class _UploadState extends State<Upload> {
         ),
         ListTile(
           leading: CircleAvatar(
-            backgroundImage:
-                CachedNetworkImageProvider(widget.currentUser.photoURL!),
+            backgroundImage: CachedNetworkImageProvider(
+                'assets/images/no_img.png'), //widget.currentUser.photoURL!
           ),
           title: Container(
             width: 250,
@@ -187,7 +223,7 @@ class _UploadState extends State<Upload> {
           height: 100.0,
           alignment: Alignment.center,
           child: ElevatedButton.icon(
-            onPressed: getUserLocation(),
+            onPressed: () => getUserLocation(),
             icon: const Icon(Icons.my_location),
             label: const Text(
               'get current loc',
@@ -268,7 +304,7 @@ class _UploadState extends State<Upload> {
     });
   }
 
-  getUserLocation() async {
+  Future<dynamic> getUserLocation() async {
     Placemark placemark = await getloca();
     String completeAddress =
         '${placemark..subThoroughfare} ${placemark.administrativeArea} ${placemark.country} ${placemark.postalCode} ${placemark.subLocality}';

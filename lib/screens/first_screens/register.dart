@@ -1,10 +1,19 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/first_screens/loginScreen.dart';
+
+Future<Placemark> getloca() async {
+  Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high);
+  List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+  return placemarks[0];
+}
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -14,7 +23,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-   bool showProgress = false;
+  bool showProgress = false;
   bool _isObscure = true;
   bool _isObscure2 = true;
   final _formkey = GlobalKey<FormState>();
@@ -26,6 +35,15 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController telno = TextEditingController();
   TextEditingController bloodtype = TextEditingController();
   TextEditingController location = TextEditingController();
+
+  Future<dynamic> getUserLocation() async {
+    Placemark placemark = await getloca();
+    String completeAddress =
+        '${placemark..subThoroughfare} ${placemark.administrativeArea} ${placemark.country} ${placemark.postalCode} ${placemark.subLocality}';
+    String formattedAddress = "${placemark.locality}, ${placemark.country}";
+    print(completeAddress);
+    location.text = formattedAddress;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     BorderSide(width: 2, color: Colors.pink),
                                 borderRadius: BorderRadius.circular(9.0)),
                             hintText: 'Email'),
-                            validator: (value) {
+                        validator: (value) {
                           if (value!.isEmpty) {
                             return "Email cannot be empty";
                           }
@@ -139,17 +157,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                     BorderSide(width: 2, color: Colors.pink),
                                 borderRadius: BorderRadius.circular(9.0)),
                             hintText: 'Password'),
-                            validator: (value) {
-                            RegExp regex = RegExp(r'^.{6,}$');
-                            if (value!.isEmpty) {
-                              return "Password cannot be empty";
-                            }
-                            if (!regex.hasMatch(value)) {
-                              return ("please enter valid password min. 6 character");
-                            } else {
-                              return null;
-                            }
-                          },
+                        validator: (value) {
+                          RegExp regex = RegExp(r'^.{6,}$');
+                          if (value!.isEmpty) {
+                            return "Password cannot be empty";
+                          }
+                          if (!regex.hasMatch(value)) {
+                            return ("please enter valid password min. 6 character");
+                          } else {
+                            return null;
+                          }
+                        },
                         keyboardType: TextInputType.visiblePassword,
                       ),
                       SizedBox(height: 10),
@@ -182,14 +200,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                     BorderSide(width: 2, color: Colors.pink),
                                 borderRadius: BorderRadius.circular(9.0)),
                             hintText: 'Confirm password'),
-                            validator: (value) {
-                            if (password.text !=
-                               confirmpassword.text) {
-                              return "Password did not match";
-                            } else {
-                              return null;
-                            }
-                          },
+                        validator: (value) {
+                          if (password.text != confirmpassword.text) {
+                            return "Password did not match";
+                          } else {
+                            return null;
+                          }
+                        },
                         keyboardType: TextInputType.visiblePassword,
                       ),
                       SizedBox(height: 10),
@@ -255,6 +272,20 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: 'Village, City.'),
                         keyboardType: TextInputType.streetAddress,
                       ),
+                      Divider(),
+                      Container(
+                        width: 200.0,
+                        height: 100.0,
+                        alignment: Alignment.center,
+                        child: ElevatedButton.icon(
+                          onPressed: () => getUserLocation(),
+                          icon: const Icon(Icons.my_location),
+                          label: const Text(
+                            'get current loc',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -265,29 +296,29 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: ElevatedButton(
                                   onPressed: () {
                                     setState(() {
-                                  showProgress = true;
-                                });
-                                Future.delayed(Duration(seconds: 3), (() {
-                                  setState(() {
-                                    showProgress = false;
-                                  });
-                                }));
-                                    
+                                      showProgress = true;
+                                    });
+                                    Future.delayed(Duration(seconds: 3), (() {
+                                      setState(() {
+                                        showProgress = false;
+                                      });
+                                    }));
+
                                     signUp(
                                       email.text,
                                       password.text,
                                     );
                                   },
                                   child: showProgress
-                                  ? CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                  :Text(
-                                    'REGISTER',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
+                                      ? CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : Text(
+                                          'REGISTER',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
                                   style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
@@ -342,55 +373,42 @@ class _RegisterPageState extends State<RegisterPage> {
 
   signUp(String email, String password) async {
     if (_formkey.currentState!.validate()) {
-      
-        UserCredential userCredential =
-            (await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        ).then((value) => {
-          postDetailsToFirestore()
-        }).catchError((e)
-        {
-           Fluttertoast.showToast(msg: e!.message);
-        })) as UserCredential;
-       
-      
+      UserCredential userCredential = (await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          )
+          .then((value) => {postDetailsToFirestore()})
+          .catchError((e) {
+        Fluttertoast.showToast(msg: e!.message);
+      })) as UserCredential;
     }
   }
-  
-  postDetailsToFirestore() async
-   {
-FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-User? user = _auth.currentUser;
 
-UserModel userModel = UserModel();
+  postDetailsToFirestore() async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = _auth.currentUser;
 
+    UserModel userModel = UserModel();
 
-userModel.email = user!.email;
-userModel.uid = user.uid;
-userModel.fullname = name.text;
-userModel.phonenumber = telno.text;
-userModel.bloodType = bloodtype.text;
-userModel.location = location.text;
+    userModel.email = user!.email;
+    userModel.uid = user.uid;
+    userModel.fullname = name.text;
+    userModel.phonenumber = telno.text;
+    userModel.bloodType = bloodtype.text;
+    userModel.location = location.text;
 
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap());
+    Fluttertoast.showToast(msg: "Account created successfully");
 
-await firebaseFirestore
-   .collection("users")
-   .doc(user.uid)
-   .set(userModel.toMap());
-Fluttertoast.showToast(msg: "Account created successfully");
-
-Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginScreen(),
-          ),
-        );
-
-
-
-
-
-
-   }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+    );
+  }
 }
