@@ -1,9 +1,55 @@
 // ignore_for_file: unnecessary_new
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:async';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+
+class DonerProfilePage extends StatefulWidget {
+  const DonerProfilePage({super.key});
+
+  @override
+  State<DonerProfilePage> createState() => _DonerProfilePageState();
+}
+
+class _DonerProfilePageState extends State<DonerProfilePage> {
+  MapType _currentMapType = MapType.normal;
+  late GoogleMapController mapController;
+  Completer<GoogleMapController> _controller = Completer();
+
+  static const LatLng sourceLocation = LatLng(0.3272399, 32.57796);
+  static const LatLng destination = LatLng(0.312222, 32.585556);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  void initState() {
+    getcurrentLocation();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  List<LatLng> polylineCoordinates = [];
+  LocationData? currentLocation;
+  void getcurrentLocation() async {
+    Location location = Location();
+    location.getLocation().then((location) => currentLocation = location);
+    GoogleMapController googleMapController = await _controller.future;
+    location.onLocationChanged.listen((newlock) {
+      googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(
+              tilt: 0.0,
+              zoom: 17.5,
+              target: LatLng(newlock.latitude!, newlock.longitude!))));
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,13 +263,28 @@ class RegisterPage extends StatelessWidget {
           Stack(
             children: <Widget>[
               new Container(
-                  padding: EdgeInsets.zero,
-                  child: new Image.asset(
-                    'lib/images/map.jpg',
-                    width: 600,
-                    height: 250,
-                    fit: BoxFit.fitWidth,
-                  )),
+                padding: EdgeInsets.zero,
+                child: GoogleMap(
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                  compassEnabled: true,
+                  mapType: MapType.hybrid,
+                  initialCameraPosition: CameraPosition(
+                      tilt: 0.0,
+                      target: LatLng(currentLocation!.latitude!,
+                          currentLocation!.longitude!),
+                      zoom: 10.5),
+                  markers: {
+                    Marker(
+                      markerId: const MarkerId("currentLocation"),
+                      // icon: currentLocationIcon,
+                      position: LatLng(currentLocation!.latitude!,
+                          currentLocation!.longitude!),
+                    ),
+                  },
+                ),
+              ),
               Positioned(
                 right: 12,
                 bottom: 20,

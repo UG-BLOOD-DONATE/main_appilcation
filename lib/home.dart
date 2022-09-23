@@ -12,8 +12,10 @@ import 'package:ug_blood_donate/models/tab_icon_data.dart';
 import 'package:ug_blood_donate/posts/create_post.dart';
 import 'package:ug_blood_donate/screens/bottom_navigation.dart';
 import 'package:ug_blood_donate/screens/chat/chartpage.dart';
+import 'package:ug_blood_donate/screens/doner_profile.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
+import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
 import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
@@ -150,7 +152,7 @@ class _BuildBodyState extends State<BuildBody> {
                   mycard(
                     cardChild: icondata(
                         label: 'Campaign', icon: Icons.campaign_outlined),
-                    page: F_donors(),
+                    page: DonerProfilePage(),
                   ),
                 ],
               ),
@@ -169,7 +171,7 @@ class _BuildBodyState extends State<BuildBody> {
                   ),
                   const mycard(
                     cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
-                    page: F_donors(),
+                    page: OrderTrackingPage(),
                   ),
                   mycard(
                     cardChild:
