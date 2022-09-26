@@ -157,7 +157,6 @@ class _BuildBodyState extends State<BuildBody> {
                     cardChild: icondata(
                         label: 'Campaign', icon: Icons.campaign_outlined),
                     page: UserNotification(),
-                    //  page: DonerProfilePage(),
                   ),
                 ],
               ),
@@ -183,6 +182,15 @@ class _BuildBodyState extends State<BuildBody> {
                         const icondata(label: 'Report', icon: Icons.report),
                     page: ProfilePage(userId: widget.currentUser.uid),
                   ),
+                  Row(
+                    children: [
+                      mycard(
+                        cardChild:
+                            const icondata(label: 'Report', icon: Icons.report),
+                        page: DonerProfilePage(),
+                      ),
+                    ],
+                  )
                 ],
               )
             ],
@@ -251,6 +259,7 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           ),
+
           //const CreatePost(),
         ],
       ),
