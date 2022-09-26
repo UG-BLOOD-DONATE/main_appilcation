@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:ug_blood_donate/models/tab_icon_data.dart';
 import 'package:ug_blood_donate/posts/create_post.dart';
 import 'package:ug_blood_donate/posts/get_nofications.dart';
+import 'package:ug_blood_donate/posts/timeline.dart';
 import 'package:ug_blood_donate/screens/bottom_navigation.dart';
 import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/doner_profile.dart';
@@ -33,6 +34,8 @@ final List<String> imgList = [
 
 final storageRef = FirebaseStorage.instance.ref();
 final postRef = FirebaseFirestore.instance.collection('posts');
+final userRef = FirebaseFirestore.instance.collection('users');
+final timelineRef = FirebaseFirestore.instance.collection('timeline');
 //User currentUser;
 
 class Home extends StatefulWidget {
@@ -224,6 +227,27 @@ class _BuildBodyState extends State<BuildBody> {
                 width: 150,
                 height: 100,
                 child: const Text('upload post >>>'),
+              ),
+            ),
+          ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  // builder: (_) => Create_post(),
+                  builder: (_) => Timeline(
+                    currentUser: widget.currentUser,
+                  ),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('view timeline >>>'),
               ),
             ),
           ),
