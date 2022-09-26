@@ -10,6 +10,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
 import 'package:ug_blood_donate/models/tab_icon_data.dart';
 import 'package:ug_blood_donate/posts/create_post.dart';
+import 'package:ug_blood_donate/posts/get_nofications.dart';
 import 'package:ug_blood_donate/screens/bottom_navigation.dart';
 import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/doner_profile.dart';
@@ -136,7 +137,7 @@ class _BuildBodyState extends State<BuildBody> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
+                children: [
                   mycard(
                     cardChild: icondata(
                       label: 'Find Donors',
@@ -152,7 +153,8 @@ class _BuildBodyState extends State<BuildBody> {
                   mycard(
                     cardChild: icondata(
                         label: 'Campaign', icon: Icons.campaign_outlined),
-                    page: DonerProfilePage(),
+                    page: UserNotification(),
+                    //  page: DonerProfilePage(),
                   ),
                 ],
               ),
@@ -169,7 +171,7 @@ class _BuildBodyState extends State<BuildBody> {
                       title: 'Assistant',
                     ),
                   ),
-                  const mycard(
+                  mycard(
                     cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
                     page: OrderTrackingPage(),
                   ),
@@ -317,7 +319,7 @@ class mycard extends StatelessWidget {
   final Widget cardChild;
   final Widget page;
 
-  const mycard({super.key, required this.cardChild, required this.page});
+  mycard({super.key, required this.cardChild, required this.page});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

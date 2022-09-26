@@ -67,7 +67,7 @@ class _UploadState extends State<Upload> {
   }
 
   handleTakePhoto() async {
-    Navigator.pop(context);
+    //Navigator.pop(context);
     try {
       var image = await ImagePicker().pickImage(
         source: ImageSource.camera,
