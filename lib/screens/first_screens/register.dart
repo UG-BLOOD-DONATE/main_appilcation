@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/first_screens/loginScreen.dart';
 
@@ -359,16 +360,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                           password.text,
                                         );
                                       },
-                                      child: showProgress
-                                          ? CircularProgressIndicator(
-                                              color: Colors.white,
-                                            )
-                                          : Text(
-                                              'REGISTER',
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                              ),
-                                            ),
                                       style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
@@ -379,7 +370,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 BorderRadius.circular(25),
                                           ),
                                         ),
-                                      )))
+                                      ),
+                                      child: showProgress
+                                          ? CircularProgressIndicator(
+                                              color: Colors.white,
+                                            )
+                                          : Text(
+                                              'REGISTER',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            )))
                             ],
                           ),
                           SizedBox(
@@ -438,28 +439,32 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  uploadImage(img) async {
-    // Initialize Firebase once again
-    await Firebase.initializeApp();
-    var random = new Random();
-    var rand = random.nextInt(1000000000);
-    // Give the image a random name
-    String name = "image:$rand";
-    try {
-      await FirebaseStorage.instance
-          // Give the image a name
-          .ref('$name.jpg')
-          // Upload image to firebase
-          .putFile(img);
-      print("Uploaded image");
-    } on FirebaseException catch (e) {
-      print(e);
-    }
+  // uploadImage(img) async {
+  // Initialize Firebase once again
+  // await Firebase.initializeApp();
+  // var random = Random();
+  // var rand = random.nextInt(1000000000);
+  // // Give the image a random name
+  // String name = "image:$rand";
+  // try {
+  //   await FirebaseStorage.instance
+  //       // Give the image a name
+  //       .ref('$name.jpg')
+  //       // Upload image to firebase
+  //       .putFile(img);
+  //   print("Uploaded image");
+  // } on FirebaseException catch (e) {
+  //   print(e);
+  // }
+  Future<String> uploadImage(imageFile) async {
+    UploadTask uploadTask = storageRef.child("$name.jpg").putFile(imageFile);
+    var imageUrl = await (await uploadTask).ref.getDownloadURL();
+    return imageUrl.toString();
   }
 
   postDetailsToFirestore() async {
     if (_image != null) {
-      return uploadImage(_image);
+      uploadImage(_image);
     }
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
