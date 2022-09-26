@@ -83,6 +83,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
 
   @override
   Widget build(BuildContext context) {
+    getcurrentLocation();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
