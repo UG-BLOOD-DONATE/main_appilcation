@@ -49,11 +49,7 @@ class _FindDonorsState extends State<FindDonors> {
         leading: IconButton(
           color: Colors.black,
           icon: const Icon(Icons.arrow_back, size: 32.0),
-          onPressed: () => Navigator.pop(context, true
-              // MaterialPageRoute(
-              //   builder: (_) => const Home(),
-              // ),
-              ),
+          onPressed: () => Navigator.pop(context, true),
         ),
         centerTitle: true,
         title: const Text(
