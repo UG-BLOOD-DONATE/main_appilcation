@@ -158,46 +158,72 @@ class _MyRequestState extends State<MyRequest> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print("no user in");
+      } else {
+        currentUser = user;
+        print("user in");
+      }
+    });
     CollectionReference bloodrequests =
         FirebaseFirestore.instance.collection('bloodrequests');
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, size: 32.0),
-          onPressed: () => Navigator.pop(context, true
-              // MaterialPageRoute(
-              //   builder: (_) => Home(
-              //     currentUser: user,
-              //   ),
-              // ),
-              ),
-        ),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        title: const Text(
-          "Create A Request",
-          style: TextStyle(
-            color: Color.fromARGB(0, 10, 10, 10),
-          ),
-        ),
-        // actions: <Widget>[
-        //   IconButton(
-        //     icon: const Icon(Icons.account_circle, size: 32.0),
-        //     tooltip: 'Profile',
-        //     onPressed: () {
-        //       Navigator.push(
-        //           context,
-        //           MaterialPageRoute(
-        //             builder: (context) => MyProfilePage(),
-        //           ));
-        //     },
-        //   ),
-        // ],
-      ),
+      // appBar: AppBar(
+      //   centerTitle: true,
+      // leading: IconButton(
+      //   icon: const Icon(Icons.arrow_back, size: 32.0),
+      //   onPressed: () => Navigator.push(
+      //     context, //true
+      //     MaterialPageRoute(
+      //       builder: (_) => Home(
+      //         currentUser: currentUser,
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      // title: Text(
+      //   "Create A Request",
+      //     // style: TextStyle(
+      //     //   color: Color.fromARGB(0, 10, 10, 10),
+      //     // ),
+      //   ),
+      //   // actions: <Widget>[
+      //   //   IconButton(
+      //   //     icon: const Icon(Icons.account_circle, size: 32.0),
+      //   //     tooltip: 'Profile',
+      //   //     onPressed: () {
+      //   //       Navigator.push(
+      //   //           context,
+      //   //           MaterialPageRoute(
+      //   //             builder: (context) => MyProfilePage(),
+      //   //           ));
+      //   //     },
+      //   //   ),
+      //   // ],
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
+              ListTile(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, size: 32.0),
+                  onPressed: () => Navigator.push(
+                    context, //true
+                    MaterialPageRoute(
+                      builder: (_) => Home(
+                        currentUser: currentUser,
+                      ),
+                    ),
+                  ),
+                ),
+                title: Text(
+                  "Create A Request",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
               // const Align(
               //   alignment: Alignment.topLeft,
               //   child: Text("Enter your data",
