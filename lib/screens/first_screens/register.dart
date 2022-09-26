@@ -78,24 +78,6 @@ class _RegisterPageState extends State<RegisterPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Container(
-                      child: _image == null
-                          ? Center(
-                              child: ElevatedButton(
-                                child: Icon(Icons.add_a_photo_outlined),
-                                onPressed: () => getImage(),
-                              ),
-                            )
-                          : Center(child: Image.file(_image!)),
-                    ),
-                    FloatingActionButton(
-                      child: Icon(Icons.upload),
-                      onPressed: () {
-                        if (_image != null) {
-                          return uploadImage(_image);
-                        }
-                      },
-                    ),
                     Form(
                       key: _formkey,
                       child: Column(
@@ -113,6 +95,33 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ],
                           ),
+                          SizedBox(height: 30),
+                          Container(
+                            child: _image == null
+                                ? Center(
+                                    child: GestureDetector(
+                                      onTap: () => getImage(),
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            Color.fromARGB(255, 236, 34, 98),
+                                        radius: 60,
+                                        child: Icon(Icons.add_a_photo_outlined),
+                                      ),
+                                    ),
+                                  )
+                                : Center(child: Image.file(_image!)),
+                          ),
+                          // Center(
+                          //   child: FloatingActionButton(
+                          //     backgroundColor: Color.fromARGB(255, 236, 34, 98),
+                          //     child: Icon(Icons.upload),
+                          //     onPressed: () {
+                          //       if (_image != null) {
+                          //         return uploadImage(_image);
+                          //       }
+                          //     },
+                          //   ),
+                          // ),
                           SizedBox(height: 30),
                           TextFormField(
                             controller: name,
@@ -388,6 +397,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               TextButton(
                                 onPressed: () {
+                                  if (_image != null) {
+                                    return uploadImage(_image);
+                                  }
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

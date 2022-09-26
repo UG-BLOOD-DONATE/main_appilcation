@@ -69,6 +69,7 @@ dependencies:
   location: ^4.4.0
   flutter_svg: ^1.1.5
   google_sign_in: ^5.4.2
+  permission_handler: ^10.0.1
 
 
 dev_dependencies:

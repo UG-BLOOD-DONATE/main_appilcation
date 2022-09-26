@@ -8,10 +8,13 @@
 
 #include <dialogflow_grpc/dialogflow_grpc_plugin.h>
 #include <geolocator_windows/geolocator_windows.h>
+#include <permission_handler_windows/permission_handler_windows_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   DialogflowGrpcPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("DialogflowGrpcPlugin"));
   GeolocatorWindowsRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("GeolocatorWindows"));
+  PermissionHandlerWindowsPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("PermissionHandlerWindowsPlugin"));
 }

@@ -123,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: primary,
                         ),
                         child: Center(
-                          child: user?.photoURL == null
+                          child: loggedInUser.photoUrl == null
                               ? const Icon(
                                   Icons.person,
                                   color: Colors.white,
@@ -131,7 +131,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
-                                  child: Image.network(user?.photoURL),
+                                  child: Image.network(
+                                      loggedInUser.photoUrl.toString()),
                                 ),
                         ),
                       ),
