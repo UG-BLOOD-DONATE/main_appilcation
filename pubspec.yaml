@@ -68,6 +68,7 @@ dependencies:
   google_maps_flutter: ^2.2.0
   location: ^4.4.0
   flutter_svg: ^1.1.5
+  google_sign_in: ^5.4.2
 
 
 dev_dependencies:
