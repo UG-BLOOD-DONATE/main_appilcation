@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -29,6 +30,7 @@ class FindDonors extends StatefulWidget {
 
 class _FindDonorsState extends State<FindDonors> {
   List _items = [];
+  late User currentUser;
 
   // Fetch content from the json file
   Future<void> readJson() async {
@@ -44,12 +46,27 @@ class _FindDonorsState extends State<FindDonors> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print("no user in");
+      } else {
+        currentUser = user;
+        print("user in");
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           color: Colors.black,
           icon: const Icon(Icons.arrow_back, size: 32.0),
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () => Navigator.push(
+            context, //true
+            MaterialPageRoute(
+              builder: (_) => Home(
+                currentUser: currentUser,
+              ),
+            ),
+          ),
         ),
         centerTitle: true,
         title: const Text(
