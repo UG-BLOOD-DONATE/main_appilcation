@@ -54,19 +54,18 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
-        leading: const Icon(
-          Icons.navigate_before_sharp,
-          color: Colors.black,
-          size: 24.0,
+        appBar: AppBar(
+          leading: const Icon(
+            Icons.navigate_before_sharp,
+            color: Colors.black,
+            size: 24.0,
+          ),
+          title: const Text("Find Donors"),
+          centerTitle: true,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
         ),
-        title: const Text("Find Donors"),
-        centerTitle: true,
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.white,
-      ),
-      body: new ListView(
-        children: [
+        body: new ListView(children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -264,55 +263,87 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
             children: <Widget>[
               new Container(
                 padding: EdgeInsets.zero,
-                child: GoogleMap(
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                  compassEnabled: true,
-                  mapType: MapType.hybrid,
-                  initialCameraPosition: CameraPosition(
-                      tilt: 0.0,
-                      target: LatLng(currentLocation!.latitude!,
-                          currentLocation!.longitude!),
-                      zoom: 10.5),
-                  markers: {
-                    Marker(
-                      markerId: const MarkerId("currentLocation"),
-                      // icon: currentLocationIcon,
-                      position: LatLng(currentLocation!.latitude!,
-                          currentLocation!.longitude!),
-                    ),
-                  },
-                ),
-              ),
-              Positioned(
-                right: 12,
-                bottom: 20,
-                child: new FloatingActionButton(
-                  child: const Icon(
-                    Icons.directions_rounded,
-                    size: 50.0,
-                  ),
-                  backgroundColor: Colors.pink,
-                  onPressed: () {},
-                ),
-              ),
-              Positioned(
-                right: 195,
-                bottom: 150,
-                child: new FloatingActionButton(
-                  child: const Icon(
-                    Icons.location_on_rounded,
-                    size: 25.0,
-                  ),
-                  backgroundColor: Colors.pink,
-                  onPressed: () {},
-                ),
-              ),
+                child: currentLocation == null
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              strokeWidth: 8,
+                            ),
+                            Text('Loading'),
+                          ],
+                        ),
+                      )
+                    : Stack(
+                        children: <Widget>[
+                          GoogleMap(
+                            onMapCreated: (GoogleMapController controller) {
+                              _controller.complete(controller);
+                            },
+                            compassEnabled: true,
+                            mapType: MapType.hybrid,
+                            initialCameraPosition: CameraPosition(
+                                tilt: 9.0,
+                                target: LatLng(currentLocation!.latitude!,
+                                    currentLocation!.longitude!),
+                                zoom: 10.5),
+                            markers: {
+                              Marker(
+                                markerId: const MarkerId("currentLocation"),
+                                // icon: currentLocationIcon,
+                                position: LatLng(currentLocation!.latitude!,
+                                    currentLocation!.longitude!),
+                              ),
+                              // Marker(
+                              //   markerId: MarkerId("source"),
+                              //   icon: sourceIcon,
+                              //   position: sourceLocation,
+                              // ),
+                              // Marker(
+                              //   icon: destinationIcon,
+                              //   markerId: MarkerId("destination"),
+                              //   position: destination,
+                              // ),
+                            },
+                            // polylines: {
+                            //   Polyline(
+                            //     polylineId: PolylineId("route"),
+                            //     points: polylineCoordinates,
+                            //     color: primaryColor,
+                            //     width: 5,
+                            //   ),
+                            // },
+                          ),
+                          Positioned(
+                            right: 12,
+                            bottom: 20,
+                            child: new FloatingActionButton(
+                              child: const Icon(
+                                Icons.directions_rounded,
+                                size: 50.0,
+                              ),
+                              backgroundColor: Colors.pink,
+                              onPressed: () {},
+                            ),
+                          ),
+                          Positioned(
+                            right: 195,
+                            bottom: 150,
+                            child: new FloatingActionButton(
+                              child: const Icon(
+                                Icons.location_on_rounded,
+                                size: 25.0,
+                              ),
+                              backgroundColor: Colors.pink,
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      ),
+              )
             ],
           ),
-        ],
-      ),
-    );
+        ]));
   }
 }
