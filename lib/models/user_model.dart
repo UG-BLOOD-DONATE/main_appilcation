@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class UserModel {
   String? uid;
   String? email;
@@ -5,6 +7,7 @@ class UserModel {
   String? phonenumber;
   String? bloodType;
   String? location;
+  File? photoUrl;
 
   UserModel(
       {this.uid,
@@ -12,7 +15,8 @@ class UserModel {
       this.fullname,
       this.phonenumber,
       this.bloodType,
-      this.location});
+      this.location,
+      this.photoUrl});
 //data from server
   factory UserModel.fromMap(map) {
     return UserModel(
@@ -22,10 +26,11 @@ class UserModel {
       phonenumber: map['phonenumber'],
       bloodType: map['bloodType'],
       location: map['location'],
+      photoUrl: map['photoUrl'],
     );
   }
 
-  get photoUrl => null;
+  //get photoUrl => null;
 //sending to server
   Map<String, dynamic> toMap() {
     return {
@@ -35,6 +40,7 @@ class UserModel {
       'phonenumber': phonenumber,
       'bloodType': bloodType,
       'location': location,
+      'photoUrl': photoUrl,
     };
   }
 }

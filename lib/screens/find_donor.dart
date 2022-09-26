@@ -1,48 +1,18 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:ug_blood_donate/home.dart';
 
-class F_donors extends StatelessWidget {
-  const F_donors({super.key});
-
+class FindDonor extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      // Hide the debug banner
-      debugShowCheckedModeBanner: false,
-      title: 'this section read a local json file',
-      home: FindDonors(),
-    );
-  }
+  _FindDonorState createState() => _FindDonorState();
 }
 
-class FindDonors extends StatefulWidget {
-  const FindDonors({Key? key}) : super(key: key);
-
-  @override
-  State<FindDonors> createState() => _FindDonorsState();
-}
-
-class _FindDonorsState extends State<FindDonors> {
-  List _items = [];
+class _FindDonorState extends State<FindDonor> {
   late User currentUser;
-
-  // Fetch content from the json file
-  Future<void> readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/user_data.json');
-    final data = await json.decode(response);
-    setState(() {
-      _items = data["users"];
-    });
-  }
-
-  TextEditingController textController = TextEditingController();
+  final Stream<QuerySnapshot> _DonorStream = FirebaseFirestore.instance
+      .collection("users")
+      .snapshots(includeMetadataChanges: true);
 
   @override
   Widget build(BuildContext context) {
@@ -55,94 +25,51 @@ class _FindDonorsState extends State<FindDonors> {
       }
     });
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          color: Colors.black,
-          icon: const Icon(Icons.arrow_back, size: 32.0),
-          onPressed: () => Navigator.push(
-            context, //true
-            MaterialPageRoute(
-              builder: (_) => Home(
-                currentUser: currentUser,
+      body: Column(
+        children: [
+          ListTile(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, size: 32.0),
+              onPressed: () => Navigator.push(
+                context, //true
+                MaterialPageRoute(
+                  builder: (_) => Home(
+                    currentUser: currentUser,
+                  ),
+                ),
               ),
+            ),
+            title: Text(
+              "Create A Request",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
           ),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'Find Donors',
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Color.fromARGB(255, 254, 255, 255),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(25),
-        child: Column(
-          children: [
-            AnimSearchBar(
-              width: 400,
-              textController: textController,
-              onSuffixTap: () {
-                setState(() {
-                  textController.clear();
-                });
-              },
-              animationDurationInMilli: 1000,
-              helpText: "find don....",
-              autoFocus: true,
-            ),
+          StreamBuilder(
+            stream: _DonorStream,
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Center(child: Text('Something went wrong'));
+              }
 
-            ElevatedButton(
-              onPressed: readJson,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(234, 239, 52, 83),
-              ),
-              child: const Text('Load Data'),
-            ),
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: Text("Loading"));
+              }
 
-            // Display the data loaded from sample.json
-            _items.isNotEmpty
-                ? Expanded(
-                    child: ListView.builder(
-                      itemCount: _items.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin: const EdgeInsets.all(5),
-                          child: ListTile(
-                            leading: Image.network(
-                              _items[index]["image"],
-                              errorBuilder: (BuildContext context,
-                                  Object exception, StackTrace? strackTrace) {
-                                return Text('error occured');
-                              },
-                            ),
-                            title: Text(_items[index]["name"]),
-                            subtitle: Row(children: [
-                              Icon(
-                                Icons.location_on_rounded,
-                                color: Color.fromARGB(234, 239, 52, 83),
-                              ),
-                              Text(_items[index]["location"])
-                            ]),
-                            trailing: Text(_items[index]["booldtype"]),
-
-                            //   child: Stack(children: <Widget>[
-                            //     Container(
-                            //         height: 50,
-                            //         width: 35,
-                            //         child: Image.asset(
-                            //             'assets/images/Picture1.png')),
-                            //     Center(child: Text(_items[index]["booldtype"])),
-                            //   ]),
-                            // ),
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : Container()
-          ],
-        ),
+              return ListView(
+                children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                  Map<String, dynamic> data =
+                      document.data()! as Map<String, dynamic>;
+                  return ListTile(
+                    title: Text(data['fullname']),
+                    subtitle: Text(data['location']),
+                    trailing: Text(data['bloodtype']),
+                  );
+                }).toList(),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
