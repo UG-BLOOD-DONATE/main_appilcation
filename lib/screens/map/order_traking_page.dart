@@ -96,75 +96,72 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ),
-      body:
-          //  currentLocation == null
-          //     ? Center(
-          //         child: Column(
-          //           mainAxisAlignment: MainAxisAlignment.center,
-          //           children: [
-
-          //             CircularProgressIndicator(
-          //               strokeWidth: 8,
-          //             ),
-          //             Text('Loading'),
-          //           ],
-          //         ),
-          //       )
-          //     :
-          Stack(children: <Widget>[
-        GoogleMap(
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-          compassEnabled: true,
-          mapType: MapType.hybrid,
-          initialCameraPosition: CameraPosition(
-              tilt: 9.0,
-              target: LatLng(
-                  currentLocation!.latitude!, currentLocation!.longitude!),
-              zoom: 10.5),
-          markers: {
-            Marker(
-              markerId: const MarkerId("currentLocation"),
-              // icon: currentLocationIcon,
-              position: LatLng(
-                  currentLocation!.latitude!, currentLocation!.longitude!),
-            ),
-            // Marker(
-            //   markerId: MarkerId("source"),
-            //   icon: sourceIcon,
-            //   position: sourceLocation,
-            // ),
-            // Marker(
-            //   icon: destinationIcon,
-            //   markerId: MarkerId("destination"),
-            //   position: destination,
-            // ),
-          },
-          // polylines: {
-          //   Polyline(
-          //     polylineId: PolylineId("route"),
-          //     points: polylineCoordinates,
-          //     color: primaryColor,
-          //     width: 5,
-          //   ),
-          // },
-        ),
-        // Padding(
-        //   padding: const EdgeInsets.all(16.0),
-        //   child: Align(
-        //     alignment: Alignment.topRight,
-        //     child: FloatingActionButton(
-        //       onPressed: () {
-        //         _onMapTypeButtonPressed;
-        //       },
-        //       materialTapTargetSize: MaterialTapTargetSize.padded,
-        //       backgroundColor: Colors.green,
-        //       child: const Icon(Icons.map, size: 36.0),
-        //     ),
-        //   ),
-        // ),
-      ]),
+      body: currentLocation == null
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    strokeWidth: 8,
+                  ),
+                  Text('Loading'),
+                ],
+              ),
+            )
+          : Stack(children: <Widget>[
+              GoogleMap(
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+                compassEnabled: true,
+                mapType: MapType.hybrid,
+                initialCameraPosition: CameraPosition(
+                    tilt: 9.0,
+                    target: LatLng(currentLocation!.latitude!,
+                        currentLocation!.longitude!),
+                    zoom: 10.5),
+                markers: {
+                  Marker(
+                    markerId: const MarkerId("currentLocation"),
+                    // icon: currentLocationIcon,
+                    position: LatLng(currentLocation!.latitude!,
+                        currentLocation!.longitude!),
+                  ),
+                  // Marker(
+                  //   markerId: MarkerId("source"),
+                  //   icon: sourceIcon,
+                  //   position: sourceLocation,
+                  // ),
+                  // Marker(
+                  //   icon: destinationIcon,
+                  //   markerId: MarkerId("destination"),
+                  //   position: destination,
+                  // ),
+                },
+                // polylines: {
+                //   Polyline(
+                //     polylineId: PolylineId("route"),
+                //     points: polylineCoordinates,
+                //     color: primaryColor,
+                //     width: 5,
+                //   ),
+                // },
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(16.0),
+              //   child: Align(
+              //     alignment: Alignment.topRight,
+              //     child: FloatingActionButton(
+              //       onPressed: () {
+              //         _onMapTypeButtonPressed;
+              //       },
+              //       materialTapTargetSize: MaterialTapTargetSize.padded,
+              //       backgroundColor: Colors.green,
+              //       child: const Icon(Icons.map, size: 36.0),
+              //     ),
+              //   ),
+              // ),
+            ]),
     );
   }
 
