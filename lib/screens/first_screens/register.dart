@@ -397,9 +397,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  if (_image != null) {
-                                    return uploadImage(_image);
-                                  }
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -461,6 +458,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   postDetailsToFirestore() async {
+    if (_image != null) {
+      return uploadImage(_image);
+    }
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 

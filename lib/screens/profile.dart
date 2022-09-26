@@ -131,8 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
-                                  child: Image.network(
-                                      loggedInUser.photoUrl.toString()),
+                                  child: Image.file(loggedInUser.photoUrl!),
                                 ),
                         ),
                       ),
