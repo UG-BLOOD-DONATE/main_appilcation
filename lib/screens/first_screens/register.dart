@@ -75,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
             appBar: null,
             // body is the majority of the screen.
             body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -84,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 34,
                           ),
                           Row(
@@ -96,13 +96,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 30),
+                          const SizedBox(height: 30),
                           Container(
                             child: _image == null
                                 ? Center(
                                     child: GestureDetector(
                                       onTap: () => getImage(),
-                                      child: CircleAvatar(
+                                      child: const CircleAvatar(
                                         backgroundColor:
                                             Color.fromARGB(255, 236, 34, 98),
                                         radius: 60,
@@ -123,43 +123,43 @@ class _RegisterPageState extends State<RegisterPage> {
                           //     },
                           //   ),
                           // ),
-                          SizedBox(height: 30),
+                          const SizedBox(height: 30),
                           TextFormField(
                             controller: name,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.grey[200],
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.person,
                                   color: Colors.pink,
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 3, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 2, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 hintText: 'FullName'),
                             keyboardType: TextInputType.name,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
                             controller: email,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.grey[200],
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.email,
                                   color: Colors.pink,
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 3, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 2, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 hintText: 'Email'),
@@ -177,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                             keyboardType: TextInputType.emailAddress,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
                             controller: password,
                             obscureText: true,
@@ -194,16 +194,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                         _isObscure = !_isObscure;
                                       });
                                     }),
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.lock,
                                   color: Colors.pink,
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 3, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 2, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 hintText: 'Password'),
@@ -220,7 +220,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                             keyboardType: TextInputType.visiblePassword,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
                             controller: confirmpassword,
                             obscureText: true,
@@ -237,16 +237,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                         _isObscure2 = !_isObscure2;
                                       });
                                     }),
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.lock,
                                   color: Colors.pink,
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 3, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 2, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 hintText: 'Confirm password'),
@@ -259,70 +259,70 @@ class _RegisterPageState extends State<RegisterPage> {
                             },
                             keyboardType: TextInputType.visiblePassword,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
                             controller: telno,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.grey[200],
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.phone,
                                   color: Colors.pink,
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 3, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 2, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 hintText: 'Phone number'),
                             keyboardType: TextInputType.phone,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
                             controller: bloodtype,
                             decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 3, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 2, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 filled: true,
                                 fillColor: Colors.grey[200],
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.bloodtype,
                                   color: Colors.pink,
                                 ),
                                 hintText: 'BloodType'),
                             keyboardType: TextInputType.text,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
                             controller: location,
                             decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.grey[200],
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.location_on,
                                   color: Colors.pink,
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 3, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                         width: 2, color: Colors.pink),
                                     borderRadius: BorderRadius.circular(9.0)),
                                 hintText: 'Village, City.'),
                             keyboardType: TextInputType.streetAddress,
                           ),
-                          Divider(),
+                          const Divider(),
                           Container(
                             width: 200.0,
                             height: 100.0,
@@ -336,7 +336,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -345,11 +345,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                   height: 50,
                                   child: ElevatedButton(
                                       onPressed: () {
+                                        if (_image != null) {
+                                          var my_imageUrl = uploadImage(_image);
+                                        }
                                         setState(() {
                                           showProgress = true;
                                         });
-                                        Future.delayed(Duration(seconds: 3),
-                                            (() {
+                                        Future.delayed(
+                                            const Duration(seconds: 3), (() {
                                           setState(() {
                                             showProgress = false;
                                           });
@@ -372,10 +375,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ),
                                       ),
                                       child: showProgress
-                                          ? CircularProgressIndicator(
+                                          ? const CircularProgressIndicator(
                                               color: Colors.white,
                                             )
-                                          : Text(
+                                          : const Text(
                                               'REGISTER',
                                               style: TextStyle(
                                                 fontSize: 20,
@@ -383,13 +386,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                             )))
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
+                              const Text(
                                 "Already have an account?",
                                 style: TextStyle(
                                   color: Colors.grey,
@@ -402,11 +405,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) {
-                                      return LoginScreen();
+                                      return const LoginScreen();
                                     }),
                                   );
                                 },
-                                child: Text(
+                                child: const Text(
                                   'Log In.',
                                   style: TextStyle(
                                     color: Colors.pink,
@@ -463,9 +466,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   postDetailsToFirestore() async {
-    if (_image != null) {
-      uploadImage(_image);
-    }
+    // if (_image != null) {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
@@ -477,7 +478,7 @@ class _RegisterPageState extends State<RegisterPage> {
     userModel.phonenumber = telno.text;
     userModel.bloodType = bloodtype.text;
     userModel.location = location.text;
-    userModel.photoUrl = _image;
+    userModel.photoURL = _image;
 
     await firebaseFirestore
         .collection("users")
@@ -488,8 +489,11 @@ class _RegisterPageState extends State<RegisterPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => LoginScreen(),
+        builder: (context) => const LoginScreen(),
       ),
     );
+    // } else {
+    //   Fluttertoast.showToast(msg: "Add profile pic:");
+    // }
   }
 }

@@ -7,7 +7,7 @@ class UserModel {
   String? phonenumber;
   String? bloodType;
   String? location;
-  File? photoUrl;
+  File? photoURL;
 
   UserModel(
       {this.uid,
@@ -16,7 +16,7 @@ class UserModel {
       this.phonenumber,
       this.bloodType,
       this.location,
-      this.photoUrl});
+      this.photoURL});
 //data from server
   factory UserModel.fromMap(map) {
     return UserModel(
@@ -26,7 +26,7 @@ class UserModel {
       phonenumber: map['phonenumber'],
       bloodType: map['bloodType'],
       location: map['location'],
-      photoUrl: map['photoUrl'],
+      photoURL: map['photoURL'],
     );
   }
 
@@ -40,7 +40,7 @@ class UserModel {
       'phonenumber': phonenumber,
       'bloodType': bloodType,
       'location': location,
-      'photoUrl': photoUrl,
+      'photoURL': photoURL,
     };
   }
 }
