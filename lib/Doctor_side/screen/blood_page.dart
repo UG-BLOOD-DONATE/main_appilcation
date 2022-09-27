@@ -1,6 +1,7 @@
 //import 'package:alan_voice/alan_voice.dart';
 
 import 'package:flutter/material.dart';
+import 'package:ug_blood_donate/Doctor_side/screen/create_event.dart';
 
 void main() {
   runApp(const Request_page());
@@ -69,30 +70,40 @@ class _Request_pageState extends State<Request_page> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Card(
-                        color: Colors.red,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            //color: const Color.fromARGB(255, 243, 248, 247),
-                            borderRadius: BorderRadius.circular(10.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color.fromARGB(255, 182, 2, 2)
-                                    .withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: TextButton(
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyHomePage()),
+                          );
+                        },
+                        child: Card(
+                          color: Colors.red,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              //color: const Color.fromARGB(255, 243, 248, 247),
+                              borderRadius: BorderRadius.circular(10.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color.fromARGB(255, 182, 2, 2)
+                                      .withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: const Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
                             ),
-                            onPressed: () {},
-                            child: const Text('Send Request'),
+                            child: TextButton(
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                              ),
+                              onPressed: () {},
+                              child: const Text('Send Request'),
+                            ),
                           ),
                         ),
                       ),

@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
+import 'package:ug_blood_donate/Doctor_side/screen/create_event.dart';
 import 'package:ug_blood_donate/models/tab_icon_data.dart';
 import 'package:ug_blood_donate/posts/create_post.dart';
 import 'package:ug_blood_donate/posts/get_nofications.dart';
@@ -258,6 +259,24 @@ class _BuildBodyState extends State<BuildBody> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => DonerProfilePage(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('doner profile >>>'),
+              ),
+            ),
+          ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MyHomePage(),
                 ),
               ),
               child: Container(
