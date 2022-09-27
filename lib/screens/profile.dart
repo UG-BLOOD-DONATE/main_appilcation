@@ -31,30 +31,30 @@ class _ProfilePageState extends State<ProfilePage> {
   double screenHeight = 0;
   double screenWidth = 0;
   Color primary = const Color(0xffeef444c);
-  String profilePicLink = "";
+  //String profilePicLink = "";
 
-  void pickUploadProfilePic({String? userId}) async {
-    final image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxHeight: 512,
-      maxWidth: 512,
-      imageQuality: 90,
-    );
-    final postID = DateTime.now().millisecondsSinceEpoch.toString();
-    Reference ref = FirebaseStorage.instance
-        .ref()
-        .child("${widget.userId}/images")
-        .child("post_$postID");
+  // void pickUploadProfilePic({String? userId}) async {
+  //   final image = await ImagePicker().pickImage(
+  //     source: ImageSource.gallery,
+  //     maxHeight: 512,
+  //     maxWidth: 512,
+  //     imageQuality: 90,
+  //   );
+  //   final postID = DateTime.now().millisecondsSinceEpoch.toString();
+  //   Reference ref = FirebaseStorage.instance
+  //       .ref()
+  //       .child("${widget.userId}/images")
+  //       .child("post_$postID");
 
-    await ref.putFile(File(image!.path));
+  //   await ref.putFile(File(image!.path));
 
-    ref.getDownloadURL().then((value) async {
-      setState(() {
-        profilePicLink = value;
-      });
-    });
-    print(profilePicLink);
-  }
+  //   ref.getDownloadURL().then((value) async {
+  //     setState(() {
+  //       profilePicLink = value;
+  //     });
+  //   });
+  //   print(profilePicLink);
+  // }
 
   @override
   void initState() {
@@ -64,7 +64,8 @@ class _ProfilePageState extends State<ProfilePage> {
         .doc(user!.uid)
         .get()
         .then((value) {
-      this.loggedInUser = UserModel.fromMap(value.data());
+      loggedInUser = UserModel.fromMap(value.data());
+      print('hi user');
       setState(() {});
     });
   }
@@ -111,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Center(
                     child: GestureDetector(
                       onDoubleTap: () {
-                        pickUploadProfilePic(userId: loggedInUser.uid);
+                        //pickUploadProfilePic(userId: loggedInUser.uid);
                       },
                       child: Container(
                         margin: const EdgeInsets.fromLTRB(120, 5, 40, 24),
@@ -123,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: primary,
                         ),
                         child: Center(
-                          child: profilePicLink == " "
+                          child: loggedInUser.photoURL == null
                               ? const Icon(
                                   Icons.person,
                                   color: Colors.white,
@@ -131,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
-                                  child: Image.network(profilePicLink),
+                                  child: Image.file(loggedInUser.photoURL!),
                                 ),
                         ),
                       ),

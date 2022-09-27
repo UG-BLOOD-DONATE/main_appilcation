@@ -146,7 +146,7 @@ class _BuildBodyState extends State<BuildBody> {
                       label: 'Find Donors',
                       icon: Icons.search,
                     ),
-                    page: F_donors(),
+                    page: FindDonor(),
                   ),
                   mycard(
                     cardChild:
