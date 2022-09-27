@@ -69,6 +69,12 @@ dependencies:
   location: ^4.4.0
   flutter_svg: ^1.1.5
   google_sign_in: ^5.4.2
+<<<<<<< Updated upstream
+=======
+  permission_handler: ^10.0.1
+  google_maps_webservice: ^0.0.19
+  google_maps_services_dart: ^1.17.1
+>>>>>>> Stashed changes
 
 
 dev_dependencies:

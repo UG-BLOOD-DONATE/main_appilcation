@@ -45,7 +45,7 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
       googleMapController.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(
               tilt: 0.0,
-              zoom: 17.5,
+              zoom: 15.5,
               target: LatLng(newlock.latitude!, newlock.longitude!))));
       setState(() {});
     });
@@ -65,285 +65,240 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
         ),
-        body: new ListView(children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 90.0),
-                  child: Card(
-                    child: Image.asset(
-                      'lib/images/ntanda.jpg',
-                      width: 200,
-                      height: 150,
+        body: Container(
+          child: new ListView(children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 20.0),
+                    child: Card(
+                      child: Image.asset(
+                        'lib/images/ntanda.jpg',
+                        width: 10,
+                        height: 10,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                /*1*/
-                child: Column(
+              ],
+            ),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    /*2*/
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 0),
-                      child: const Text(
-                        'Yiga Gilbert',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25),
-                      ),
+                    const Text(
+                      '                Yiga Gilbert',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
                   ],
                 ),
-              ),
-              /*3*/
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.location_on, color: Colors.pink),
-              const Text("Wakiso, Uganda")
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
-              Column(
-                children: <Widget>[
-                  new Positioned(
-                      child: new Image.asset(
-                    'lib/images/iconsase.png',
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.fitWidth,
-                  )),
-                  Positioned(
-                      child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      ),
-                      // ignore: prefer_const_constructors
-                      Text(
-                        "6",
-                        style: new TextStyle(
-                          color: Colors.pink,
-                          fontSize: 20,
-                        ),
-                      ),
-                      const Text(
-                        " Times donated",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                        ),
-                      )
-                    ],
-                  )),
+                /*3*/
+              ],
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.location_on, color: Colors.pink),
+                  const Text("Wakiso, Uganda")
                 ],
               ),
-              SizedBox(
-                width: 60,
-              ),
-              Column(
-                children: <Widget>[
-                  new Positioned(
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Column(
+                  children: <Widget>[
+                    Center(
                       child: new Image.asset(
-                    'lib/images/icon.png',
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.fitWidth,
-                  )),
-                  Positioned(
-                      child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        'assets/images/iconsase.png',
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.fitWidth,
                       ),
-                      // ignore: prefer_const_constructors
-                      Text(
-                        "Blood Type",
-                        style: new TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
+                    ),
+                    Positioned(
+                        child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         ),
-                      ),
-                      const Text(
-                        " AB+",
-                        style: TextStyle(
-                          color: Colors.pink,
-                          fontSize: 20,
+                        // ignore: prefer_const_constructors
+                        Text(
+                          "6",
+                          style: new TextStyle(
+                            color: Colors.pink,
+                            fontSize: 20,
+                          ),
                         ),
-                      )
+                        const Text(
+                          " Times donated",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                        )
+                      ],
+                    )),
+                  ],
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  children: <Widget>[
+                    new Positioned(
+                        child: new Image.asset(
+                      'assets/images/icon.png',
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.fitWidth,
+                    )),
+                    Positioned(
+                        child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        ),
+                        // ignore: prefer_const_constructors
+                        Text(
+                          "Blood Type",
+                          style: new TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                          ),
+                        ),
+                        const Text(
+                          " AB+",
+                          style: TextStyle(
+                            color: Colors.pink,
+                            fontSize: 20,
+                          ),
+                        )
+                      ],
+                    )),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  /*1*/
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          width: 150,
+                          height: 50,
+                          child: ElevatedButton.icon(
+                              icon: const Icon(
+                                Icons.contact_phone,
+                                color: Colors.white,
+                                size: 24.0,
+                              ),
+                              label: const Text('Call Now'),
+                              onPressed: () {
+                                print('Pressed');
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Color.fromARGB(150, 27, 158, 163)),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                              ))),
                     ],
-                  )),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Row(
-            children: [
-              Expanded(
-                /*1*/
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        width: 150,
-                        height: 50,
-                        child: ElevatedButton.icon(
-                            icon: const Icon(
-                              Icons.contact_phone,
-                              color: Colors.white,
-                              size: 24.0,
-                            ),
-                            label: const Text('Call Now'),
-                            onPressed: () {
-                              print('Pressed');
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color.fromARGB(150, 27, 158, 163)),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                              ),
-                            ))),
-                  ],
+                  ),
                 ),
-              ),
-              Expanded(
-                /*1*/
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        width: 150,
-                        height: 50,
-                        child: ElevatedButton.icon(
-                            icon: const Icon(
-                              Icons.navigate_before_sharp,
-                              color: Colors.white,
-                              size: 24.0,
-                            ),
-                            label: const Text('Request'),
-                            onPressed: () {
-                              print('Pressed');
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color.fromARGB(255, 233, 10, 103)),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                Expanded(
+                  /*1*/
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          width: 150,
+                          height: 50,
+                          child: ElevatedButton.icon(
+                              icon: const Icon(
+                                Icons.navigate_before_sharp,
+                                color: Colors.white,
+                                size: 24.0,
+                              ),
+                              label: const Text('Request'),
+                              onPressed: () {
+                                print('Pressed');
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<
+                                        Color>(
+                                    const Color.fromARGB(255, 233, 10, 103)),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
                                 ),
-                              ),
-                            ))),
-                  ],
+                              ))),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Stack(
-            children: <Widget>[
-              new Container(
-                padding: EdgeInsets.zero,
-                child: currentLocation == null
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(
-                              strokeWidth: 8,
-                            ),
-                            Text('Loading'),
-                          ],
-                        ),
-                      )
-                    : Stack(
-                        children: <Widget>[
-                          GoogleMap(
-                            onMapCreated: (GoogleMapController controller) {
-                              _controller.complete(controller);
-                            },
-                            compassEnabled: true,
-                            mapType: MapType.hybrid,
-                            initialCameraPosition: CameraPosition(
-                                tilt: 9.0,
-                                target: LatLng(currentLocation!.latitude!,
-                                    currentLocation!.longitude!),
-                                zoom: 10.5),
-                            markers: {
-                              Marker(
-                                markerId: const MarkerId("currentLocation"),
-                                // icon: currentLocationIcon,
-                                position: LatLng(currentLocation!.latitude!,
-                                    currentLocation!.longitude!),
-                              ),
-                              // Marker(
-                              //   markerId: MarkerId("source"),
-                              //   icon: sourceIcon,
-                              //   position: sourceLocation,
-                              // ),
-                              // Marker(
-                              //   icon: destinationIcon,
-                              //   markerId: MarkerId("destination"),
-                              //   position: destination,
-                              // ),
-                            },
-                            // polylines: {
-                            //   Polyline(
-                            //     polylineId: PolylineId("route"),
-                            //     points: polylineCoordinates,
-                            //     color: primaryColor,
-                            //     width: 5,
-                            //   ),
-                            // },
+              ],
+            ),
+            new Container(
+              height: 350,
+              width: 200,
+              padding: EdgeInsets.all(10.0),
+              child: currentLocation == null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            strokeWidth: 8,
                           ),
-                          Positioned(
-                            right: 12,
-                            bottom: 20,
-                            child: new FloatingActionButton(
-                              child: const Icon(
-                                Icons.directions_rounded,
-                                size: 50.0,
-                              ),
-                              backgroundColor: Colors.pink,
-                              onPressed: () {},
-                            ),
-                          ),
-                          Positioned(
-                            right: 195,
-                            bottom: 150,
-                            child: new FloatingActionButton(
-                              child: const Icon(
-                                Icons.location_on_rounded,
-                                size: 25.0,
-                              ),
-                              backgroundColor: Colors.pink,
-                              onPressed: () {},
-                            ),
-                          ),
+                          Text('Loading'),
                         ],
                       ),
-              )
-            ],
-          ),
-        ]));
+                    )
+                  : Stack(
+                      children: <Widget>[
+                        GoogleMap(
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                          compassEnabled: true,
+                          mapType: MapType.hybrid,
+                          initialCameraPosition: CameraPosition(
+                              tilt: 9.0,
+                              target: LatLng(currentLocation!.latitude!,
+                                  currentLocation!.longitude!),
+                              zoom: 10.5),
+                          markers: {
+                            Marker(
+                              markerId: const MarkerId("currentLocation"),
+                              position: LatLng(currentLocation!.latitude!,
+                                  currentLocation!.longitude!),
+                            ),
+                          },
+                        ),
+                      ],
+                    ),
+            ),
+          ]),
+        ));
   }
 }
