@@ -15,7 +15,7 @@ import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
 import 'package:path/path.dart' as path;
 
-File? _image;
+//File? _image;
 final picker = ImagePicker();
 
 class ProfilePage extends StatefulWidget {
@@ -70,27 +70,27 @@ class _ProfilePageState extends State<ProfilePage> {
     print(profilePicLink);
   }
 
-  getImage() async {
-    // You can also change the source to gallery like this: "source: ImageSource.camera"
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image has been selected.');
-      }
-    });
-  }
+  // getImage() async {
+  //   // You can also change the source to gallery like this: "source: ImageSource.camera"
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     if (pickedFile != null) {
+  //       _image = File(pickedFile.path);
+  //     } else {
+  //       print('No image has been selected.');
+  //     }
+  //   });
+  // }
 
-  Future<String> uploadImage(imageFile) async {
-    var random = Random();
-    var rand = random.nextInt(1000000000);
-    // Give the image a random name
-    String name = "image:$rand";
-    UploadTask uploadTask = storageRef.child("$name.jpg").putFile(imageFile);
-    var imageUrl = await (await uploadTask).ref.getDownloadURL();
-    return imageUrl.toString();
-  }
+  // Future<String> uploadImage(imageFile) async {
+  //   var random = Random();
+  //   var rand = random.nextInt(1000000000);
+  //   // Give the image a random name
+  //   String name = "image:$rand";
+  //   UploadTask uploadTask = storageRef.child("$name.jpg").putFile(imageFile);
+  //   var imageUrl = await (await uploadTask).ref.getDownloadURL();
+  //   return imageUrl.toString();
+  // }
 
   @override
   void initState() {
@@ -101,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
         .get()
         .then((value) {
       loggedInUser = UserModel.fromMap(value.data());
-      print('hi user');
+      //print('hi user');
       setState(() {});
     });
   }

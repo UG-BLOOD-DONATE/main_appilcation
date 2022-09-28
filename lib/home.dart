@@ -21,6 +21,7 @@ import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
 import 'package:ug_blood_donate/screens/request_blood.dart';
+import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 
@@ -285,6 +286,24 @@ class _BuildBodyState extends State<BuildBody> {
                 width: 150,
                 height: 100,
                 child: const Text('doner profile >>>'),
+              ),
+            ),
+          ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SegmentedControlApp(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('see feeds >>>'),
               ),
             ),
           ),
