@@ -7,7 +7,7 @@ class UserModel {
   String? phonenumber;
   String? bloodType;
   String? location;
-  File? photoURL;
+  String? photoURL;
 
   UserModel(
       {this.uid,

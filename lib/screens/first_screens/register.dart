@@ -53,17 +53,17 @@ class _RegisterPageState extends State<RegisterPage> {
     location.text = formattedAddress;
   }
 
-  getImage() async {
-    // You can also change the source to gallery like this: "source: ImageSource.camera"
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image has been selected.');
-      }
-    });
-  }
+  // getImage() async {
+  //   // You can also change the source to gallery like this: "source: ImageSource.camera"
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     if (pickedFile != null) {
+  //       _image = File(pickedFile.path);
+  //     } else {
+  //       print('No image has been selected.');
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -96,29 +96,29 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 30),
-                          Container(
-                            child: _image == null
-                                ? Center(
-                                    child: GestureDetector(
-                                      onTap: () => getImage(),
-                                      child: const CircleAvatar(
-                                        backgroundColor:
-                                            Color.fromARGB(255, 236, 34, 98),
-                                        radius: 60,
-                                        child: Icon(Icons.add_a_photo_outlined),
-                                      ),
-                                    ),
-                                  )
-                                : Center(child: Image.file(_image!)),
-                          ),
+                          // const SizedBox(height: 30),
+                          // Container(
+                          //   child: _image == null
+                          ///      ? Center(
+                          //           child: GestureDetector(
+                          //             onTap: () => getImage(),
+                          //             child: const CircleAvatar(
+                          //               backgroundColor:
+                          //                   Color.fromARGB(255, 236, 34, 98),
+                          //               radius: 60,
+                          //               child: Icon(Icons.add_a_photo_outlined),
+                          //             ),
+                          //           ),
+                          //         )
+                          //       : Center(child: Image.file(_image!)),
+                          // ),
                           // Center(
                           //   child: FloatingActionButton(
                           //     backgroundColor: Color.fromARGB(255, 236, 34, 98),
                           //     child: Icon(Icons.upload),
                           //     onPressed: () {
                           //       if (_image != null) {
-                          //         return uploadImage(_image);
+                          //         var my_imageUrl = uploadImage(_image);
                           //       }
                           //     },
                           //   ),
@@ -345,9 +345,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                   height: 50,
                                   child: ElevatedButton(
                                       onPressed: () {
-                                        if (_image != null) {
-                                          var my_imageUrl = uploadImage(_image);
-                                        }
                                         setState(() {
                                           showProgress = true;
                                         });
@@ -459,11 +456,11 @@ class _RegisterPageState extends State<RegisterPage> {
   // } on FirebaseException catch (e) {
   //   print(e);
   // }
-  Future<String> uploadImage(imageFile) async {
-    UploadTask uploadTask = storageRef.child("$name.jpg").putFile(imageFile);
-    var imageUrl = await (await uploadTask).ref.getDownloadURL();
-    return imageUrl.toString();
-  }
+  // Future<String> uploadImage(imageFile) async {
+  //   UploadTask uploadTask = storageRef.child("$name.jpg").putFile(imageFile);
+  //   var imageUrl = await (await uploadTask).ref.getDownloadURL();
+  //   return imageUrl.toString();
+  // }
 
   postDetailsToFirestore() async {
     // if (_image != null) {
@@ -478,7 +475,7 @@ class _RegisterPageState extends State<RegisterPage> {
     userModel.phonenumber = telno.text;
     userModel.bloodType = bloodtype.text;
     userModel.location = location.text;
-    userModel.photoURL = _image;
+    userModel.photoURL = null;
 
     await firebaseFirestore
         .collection("users")

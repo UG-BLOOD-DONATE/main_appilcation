@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,10 +9,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ug_blood_donate/components/custom_card.dart';
+import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
 import 'package:path/path.dart' as path;
+
+File? _image;
+final picker = ImagePicker();
 
 class ProfilePage extends StatefulWidget {
   String? userId;
@@ -26,35 +31,66 @@ class _ProfilePageState extends State<ProfilePage> {
     return firebaseAuth.currentUser?.uid;
   }
 
+  final _db = FirebaseFirestore.instance;
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   double screenHeight = 0;
   double screenWidth = 0;
   Color primary = const Color(0xffeef444c);
-  //String profilePicLink = "";
+  String profilePicLink = "";
 
-  // void pickUploadProfilePic({String? userId}) async {
-  //   final image = await ImagePicker().pickImage(
-  //     source: ImageSource.gallery,
-  //     maxHeight: 512,
-  //     maxWidth: 512,
-  //     imageQuality: 90,
-  //   );
-  //   final postID = DateTime.now().millisecondsSinceEpoch.toString();
-  //   Reference ref = FirebaseStorage.instance
-  //       .ref()
-  //       .child("${widget.userId}/images")
-  //       .child("post_$postID");
+  void pickUploadProfilePic({String? userId}) async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 512,
+      maxWidth: 512,
+      imageQuality: 90,
+    );
+    final postID = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child("${widget.userId}/images")
+        .child("post_$postID");
 
-  //   await ref.putFile(File(image!.path));
+    await ref.putFile(File(image!.path));
 
-  //   ref.getDownloadURL().then((value) async {
-  //     setState(() {
-  //       profilePicLink = value;
-  //     });
-  //   });
-  //   print(profilePicLink);
-  // }
+    ref.getDownloadURL().then((value) async {
+      loggedInUser.photoURL = value.toString();
+      await _db.collection("users").doc("${widget.userId}").set(
+            loggedInUser.toMap(),
+            SetOptions(
+              merge: true,
+            ),
+          );
+      setState(() {
+        profilePicLink = value;
+        loggedInUser.photoURL = value.toString();
+      });
+    });
+    print(profilePicLink);
+  }
+
+  getImage() async {
+    // You can also change the source to gallery like this: "source: ImageSource.camera"
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image has been selected.');
+      }
+    });
+  }
+
+  Future<String> uploadImage(imageFile) async {
+    var random = Random();
+    var rand = random.nextInt(1000000000);
+    // Give the image a random name
+    String name = "image:$rand";
+    UploadTask uploadTask = storageRef.child("$name.jpg").putFile(imageFile);
+    var imageUrl = await (await uploadTask).ref.getDownloadURL();
+    return imageUrl.toString();
+  }
 
   @override
   void initState() {
@@ -103,6 +139,33 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Container(
+              //   child: _image == null
+              //       ? Center(
+              //           child: GestureDetector(
+              //             onTap: () => getImage(),
+              //             child: const CircleAvatar(
+              //               backgroundColor: Color.fromARGB(255, 236, 34, 98),
+              //               radius: 60,
+              //               child: Icon(Icons.add_a_photo_outlined),
+              //             ),
+              //           ),
+              //         )
+              //       : Center(child: Image.file(_image!)),
+              // ),
+              // Center(
+              //   child: FloatingActionButton(
+              //     backgroundColor: Color.fromARGB(255, 236, 34, 98),
+              //     child: Icon(Icons.upload),
+              //     onPressed: () {
+              //       if (_image != null) {
+              //         setState(() {
+              //           loggedInUser.photoURL = uploadImage(_image) as String?;
+              //         });
+              //       }
+              //     },
+              //   ),
+              // ),
               const SizedBox(
                 height: 34,
               ),
@@ -112,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Center(
                     child: GestureDetector(
                       onDoubleTap: () {
-                        //pickUploadProfilePic(userId: loggedInUser.uid);
+                        pickUploadProfilePic(userId: loggedInUser.uid);
                       },
                       child: Container(
                         margin: const EdgeInsets.fromLTRB(120, 5, 40, 24),
@@ -132,7 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
-                                  child: Image.file(loggedInUser.photoURL!),
+                                  child: Image.network(loggedInUser.photoURL!),
                                 ),
                         ),
                       ),
