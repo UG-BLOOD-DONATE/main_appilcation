@@ -30,26 +30,26 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
   }
 
   void initState() {
-    getcurrentLocation();
+    // getcurrentLocation();
     // TODO: implement initState
     super.initState();
   }
 
   List<LatLng> polylineCoordinates = [];
   LocationData? currentLocation;
-  void getcurrentLocation() async {
-    Location location = Location();
-    location.getLocation().then((location) => currentLocation = location);
-    GoogleMapController googleMapController = await _controller.future;
-    location.onLocationChanged.listen((newlock) {
-      googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(
-              tilt: 0.0,
-              zoom: 15.5,
-              target: LatLng(newlock.latitude!, newlock.longitude!))));
-      setState(() {});
-    });
-  }
+  // void getcurrentLocation() async {
+  //   Location location = Location();
+  //   location.getLocation().then((location) => currentLocation = location);
+  //   GoogleMapController googleMapController = await _controller.future;
+  //   location.onLocationChanged.listen((newlock) {
+  //     googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+  //         CameraPosition(
+  //             tilt: 0.0,
+  //             zoom: 15.5,
+  //             target: LatLng(newlock.latitude!, newlock.longitude!))));
+  //     setState(() {});
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -284,8 +284,7 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
                           mapType: MapType.hybrid,
                           initialCameraPosition: CameraPosition(
                               tilt: 9.0,
-                              target: LatLng(currentLocation!.latitude!,
-                                  currentLocation!.longitude!),
+                              target: LatLng(0.339504, 32.571199),
                               zoom: 10.5),
                           markers: {
                             Marker(
