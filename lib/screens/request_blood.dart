@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ug_blood_donate/components/constants.dart';
 import 'package:ug_blood_donate/home.dart';
 
 const String myhomepageRoute = '/';
@@ -62,6 +63,16 @@ class _MyRequestState extends State<MyRequest> {
   TextEditingController bloodtype = TextEditingController();
   TextEditingController contact = TextEditingController();
   TextEditingController note = TextEditingController();
+  final List<String> sugars = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'O+',
+    'O-',
+    'AB+',
+    'AB-'
+  ];
 
   //var measure;
 
@@ -86,71 +97,9 @@ class _MyRequestState extends State<MyRequest> {
                 Center(
                   child: Image.asset('assets/back_arr.png'),
                 ),
-                // const Align(
-                //     alignment: Alignment.topLeft,
-                //     child: Text("Full name:",
-                //         style: TextStyle(fontWeight: FontWeight.w700))),
-                // Align(
-                //   alignment: Alignment.topLeft,
-                //   child: Text(firstName + " " + lastName),
-                // ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // const Align(
-                //     alignment: Alignment.topLeft,
-                //     child: Text("Body Temperature:",
-                //         style: TextStyle(fontWeight: FontWeight.w700))),
-                // Align(
-                //   alignment: Alignment.topLeft,
-                //   child: Text("$bodyTemp ${measure == 1 ? "ºC" : "ºF"}"),
-                // )
               ],
             ),
           ),
-          // actions: <Widget>[
-          //   Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //     children: <Widget>[
-          //       TextButton(
-          //         style: TextButton.styleFrom(
-          //           primary: Colors.white,
-          //           backgroundColor: Colors.grey,
-          //           shape: const RoundedRectangleBorder(
-          //               borderRadius: BorderRadius.all(Radius.circular(10))),
-          //         ),
-          //   child: const Text('Go to profile'),
-          //   onPressed: () async {
-          //     FocusScope.of(context)
-          //         .unfocus(); // unfocus last selected input field
-          //     Navigator.pop(context);
-          //     await Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) =>
-          //                     MyProfilePage())) // Open my profile
-          //         .then((_) => _formKey.currentState ?.reset()); // Empty the form fields
-          //     setState(() {});
-          //   }, // so the alert dialog is closed when navigating back to main page
-          // ),
-          // TextButton(
-          //   style: TextButton.styleFrom(
-          //     primary: Colors.white,
-          //     backgroundColor: Colors.blue,
-          //     shape: const RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.all(Radius.circular(10))),
-          //   ),
-          //   child: const Text('OK'),
-          //   onPressed: () {
-          //     Navigator.of(context).pop(); // Close the dialog
-          //     FocusScope.of(context)
-          //         .unfocus(); // Unfocus the last selected input field
-          //     _formKey.currentState?.reset(); // Empty the form fields
-          //   },
-          // )
-          //     ],
-          //   )
-          // ],
         );
       },
     );
@@ -169,39 +118,6 @@ class _MyRequestState extends State<MyRequest> {
     CollectionReference bloodrequests =
         FirebaseFirestore.instance.collection('bloodrequests');
     return Scaffold(
-      // appBar: AppBar(
-      //   centerTitle: true,
-      // leading: IconButton(
-      //   icon: const Icon(Icons.arrow_back, size: 32.0),
-      //   onPressed: () => Navigator.push(
-      //     context, //true
-      //     MaterialPageRoute(
-      //       builder: (_) => Home(
-      //         currentUser: currentUser,
-      //       ),
-      //     ),
-      //   ),
-      // ),
-      // title: Text(
-      //   "Create A Request",
-      //     // style: TextStyle(
-      //     //   color: Color.fromARGB(0, 10, 10, 10),
-      //     // ),
-      //   ),
-      //   // actions: <Widget>[
-      //   //   IconButton(
-      //   //     icon: const Icon(Icons.account_circle, size: 32.0),
-      //   //     tooltip: 'Profile',
-      //   //     onPressed: () {
-      //   //       Navigator.push(
-      //   //           context,
-      //   //           MaterialPageRoute(
-      //   //             builder: (context) => MyProfilePage(),
-      //   //           ));
-      //   //     },
-      //   //   ),
-      //   // ],
-      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -224,13 +140,6 @@ class _MyRequestState extends State<MyRequest> {
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ),
-              // const Align(
-              //   alignment: Alignment.topLeft,
-              //   child: Text("Enter your data",
-              //       style: TextStyle(
-              //         fontSize: 24,
-              //       )),
-              // ),
               const SizedBox(
                 height: 40,
               ),
@@ -297,23 +206,36 @@ class _MyRequestState extends State<MyRequest> {
                     const SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
-                      controller: bloodtype,
-                      decoration: const InputDecoration(
-                          icon: Icon(
-                            Icons.bloodtype_outlined,
-                            color: Color.fromARGB(234, 239, 52, 83),
-                          ),
-                          labelText: 'blood_type',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 0.0),
-                          ),
-                          border: OutlineInputBorder()),
-                      keyboardType: TextInputType.text,
+                    DropdownButtonFormField(
+                      //value: bloodtype == null ? 'Blood Type' : bloodtype,
+                      hint: Text('Blood Type'),
+                      decoration: textInputDecoration,
+                      items: sugars.map((sugar) {
+                        return DropdownMenuItem(
+                          value: sugar,
+                          child: Text('$sugar'),
+                        );
+                      }).toList(),
+                      onChanged: (val) => setState(() =>
+                          bloodtype = val.toString() as TextEditingController),
                     ),
+                    // TextFormField(
+                    //   controller: bloodtype,
+                    //   decoration: const InputDecoration(
+                    //       icon: Icon(
+                    //         Icons.bloodtype_outlined,
+                    //         color: Color.fromARGB(234, 239, 52, 83),
+                    //       ),
+                    //       labelText: 'blood_type',
+                    //       enabledBorder: OutlineInputBorder(
+                    //         borderRadius:
+                    //             BorderRadius.all(Radius.circular(20.0)),
+                    //         borderSide:
+                    //             BorderSide(color: Colors.grey, width: 0.0),
+                    //       ),
+                    //       border: OutlineInputBorder()),
+                    //   keyboardType: TextInputType.text,
+                    // ),
                     const SizedBox(
                       height: 20,
                     ),
