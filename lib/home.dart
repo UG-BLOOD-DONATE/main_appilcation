@@ -20,6 +20,7 @@ import 'package:ug_blood_donate/screens/find_donor.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
+import 'package:ug_blood_donate/screens/report.dart';
 import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
@@ -295,7 +296,7 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => SegmentedControlApp(),
+                  builder: (_) => Report_Page(),
                 ),
               ),
               child: Container(

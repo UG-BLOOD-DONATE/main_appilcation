@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,6 +14,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/first_screens/loginScreen.dart';
+import 'package:ug_blood_donate/services/database_report.dart';
 
 Future<Placemark> getloca() async {
   Position position = await Geolocator.getCurrentPosition(
@@ -452,29 +455,6 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  // uploadImage(img) async {
-  // Initialize Firebase once again
-  // await Firebase.initializeApp();
-  // var random = Random();
-  // var rand = random.nextInt(1000000000);
-  // // Give the image a random name
-  // String name = "image:$rand";
-  // try {
-  //   await FirebaseStorage.instance
-  //       // Give the image a name
-  //       .ref('$name.jpg')
-  //       // Upload image to firebase
-  //       .putFile(img);
-  //   print("Uploaded image");
-  // } on FirebaseException catch (e) {
-  //   print(e);
-  // }
-  // Future<String> uploadImage(imageFile) async {
-  //   UploadTask uploadTask = storageRef.child("$name.jpg").putFile(imageFile);
-  //   var imageUrl = await (await uploadTask).ref.getDownloadURL();
-  //   return imageUrl.toString();
-  // }
-
   postDetailsToFirestore() async {
     // if (_image != null) {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -495,7 +475,8 @@ class _RegisterPageState extends State<RegisterPage> {
         .doc(user.uid)
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully");
-
+    await DatabaseService(uid: user.uid).updateUserRepost(
+        'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty');
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
