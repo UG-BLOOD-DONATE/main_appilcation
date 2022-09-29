@@ -362,7 +362,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           showProgress = true;
                                         });
                                         Future.delayed(
-                                            const Duration(seconds: 3), (() {
+                                            const Duration(seconds: 10), (() {
                                           setState(() {
                                             showProgress = false;
                                           });
