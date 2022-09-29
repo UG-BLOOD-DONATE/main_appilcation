@@ -43,7 +43,8 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController telno = TextEditingController();
   TextEditingController bloodtype = TextEditingController();
   TextEditingController location = TextEditingController();
-
+  final List<String> sugars = ['O', 'A', 'B', 'AB'];
+   String? _currentSugars;
   Future<dynamic> getUserLocation() async {
     Placemark placemark = await getloca();
     String completeAddress =
@@ -281,8 +282,21 @@ class _RegisterPageState extends State<RegisterPage> {
                             keyboardType: TextInputType.phone,
                           ),
                           const SizedBox(height: 10),
-                          TextFormField(
-                            controller: bloodtype,
+                          DropdownButtonFormField(
+                            value: _currentSugars ?? 'A',
+                            items: sugars.map((sugar) {
+                              return DropdownMenuItem(
+                                value: sugar,
+                                child: Text(sugar),
+                              );
+                            }).toList(),
+                            onChanged: (val) =>
+                                setState(() => _currentSugars = val as String),
+                                icon: const Icon(
+                                  Icons.arrow_drop_down_circle_rounded,
+                                  color: Colors.pink,
+                                ),
+                                dropdownColor: Colors.pink[500] ,
                             decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
@@ -299,7 +313,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                   color: Colors.pink,
                                 ),
                                 hintText: 'BloodType'),
-                            keyboardType: TextInputType.text,
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
