@@ -262,41 +262,29 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
               height: 350,
               width: 200,
               padding: EdgeInsets.all(10.0),
-              child: currentLocation == null
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            strokeWidth: 8,
-                          ),
-                          Text('Loading'),
-                        ],
+              child: Stack(
+                children: <Widget>[
+                  GoogleMap(
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                    },
+                    compassEnabled: true,
+                    mapType: MapType.hybrid,
+                    initialCameraPosition: CameraPosition(
+                        tilt: 9.0,
+                        target: LatLng(currentLocation!.latitude!,
+                            currentLocation!.longitude!),
+                        zoom: 10.5),
+                    markers: {
+                      Marker(
+                        markerId: const MarkerId("currentLocation"),
+                        position: LatLng(currentLocation!.latitude!,
+                            currentLocation!.longitude!),
                       ),
-                    )
-                  : Stack(
-                      children: <Widget>[
-                        GoogleMap(
-                          onMapCreated: (GoogleMapController controller) {
-                            _controller.complete(controller);
-                          },
-                          compassEnabled: true,
-                          mapType: MapType.hybrid,
-                          initialCameraPosition: CameraPosition(
-                              tilt: 9.0,
-                              target: LatLng(currentLocation!.latitude!,
-                                  currentLocation!.longitude!),
-                              zoom: 10.5),
-                          markers: {
-                            Marker(
-                              markerId: const MarkerId("currentLocation"),
-                              position: LatLng(currentLocation!.latitude!,
-                                  currentLocation!.longitude!),
-                            ),
-                          },
-                        ),
-                      ],
-                    ),
+                    },
+                  ),
+                ],
+              ),
             ),
           ]),
         ));
