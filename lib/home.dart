@@ -111,23 +111,7 @@ class _BuildBodyState extends State<BuildBody> {
           SizedBox(
             height: 30,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.greenAccent[400],
-                radius: 20,
-              ),
-              SizedBox(
-                width: 280,
-              ),
-              Icon(
-                Icons.notifications,
-                size: 25,
-              )
-            ],
-          ),
+
           const SizedBox(
             height: 10,
           ),
