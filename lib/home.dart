@@ -16,6 +16,7 @@ import 'package:ug_blood_donate/posts/timeline.dart';
 import 'package:ug_blood_donate/screens/bottom_navigation.dart';
 import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/doner_profile.dart';
+import 'package:ug_blood_donate/screens/donorcard.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
@@ -179,7 +180,7 @@ class _BuildBodyState extends State<BuildBody> {
                   ),
                   mycard(
                     cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
-                     page: OrderTrackingPage(),
+                    page: OrderTrackingPage(),
                   ),
                   mycard(
                     cardChild:
@@ -309,6 +310,24 @@ class _BuildBodyState extends State<BuildBody> {
             ),
           ),
           //const CreatePost(),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => DonorCard(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('donor card >>>'),
+              ),
+            ),
+          ),
         ],
       ),
     ));

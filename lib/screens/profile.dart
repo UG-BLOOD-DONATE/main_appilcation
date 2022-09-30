@@ -28,6 +28,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   currentUserId() {
+    print("${firebaseAuth.currentUser?.uid}");
     return firebaseAuth.currentUser?.uid;
   }
 

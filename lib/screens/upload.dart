@@ -307,9 +307,12 @@ class _UploadState extends State<Upload> {
   Future<dynamic> getUserLocation() async {
     Placemark placemark = await getloca();
     String completeAddress =
-        '${placemark..subThoroughfare} ${placemark.administrativeArea} ${placemark.country} ${placemark.postalCode} ${placemark.subLocality}';
+        '${placemark.subThoroughfare} ${placemark.administrativeArea} ${placemark.country} ${placemark.postalCode} ${placemark.subLocality}';
     String formattedAddress = "${placemark.locality}, ${placemark.country}";
     print(completeAddress);
     locationController.text = formattedAddress;
+    setState(() {
+      locationController.text = formattedAddress;
+    });
   }
 }

@@ -47,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController bloodtype = TextEditingController();
   TextEditingController location = TextEditingController();
   final List<String> sugars = ['O', 'A', 'B', 'AB'];
-   String? _currentSugars;
+  String? _currentSugars;
   Future<dynamic> getUserLocation() async {
     Placemark placemark = await getloca();
     String completeAddress =
@@ -55,6 +55,9 @@ class _RegisterPageState extends State<RegisterPage> {
     String formattedAddress = "${placemark.locality}, ${placemark.country}";
     print(completeAddress);
     location.text = formattedAddress;
+    setState(() {
+      location.text = formattedAddress;
+    });
   }
 
   // getImage() async {
@@ -295,11 +298,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             }).toList(),
                             onChanged: (val) =>
                                 setState(() => _currentSugars = val as String),
-                                icon: const Icon(
-                                  Icons.arrow_drop_down_circle_rounded,
-                                  color: Colors.pink,
-                                ),
-                                dropdownColor: Colors.pink[500] ,
+                            icon: const Icon(
+                              Icons.arrow_drop_down_circle_rounded,
+                              color: Colors.pink,
+                            ),
+                            dropdownColor: Colors.pink[500],
                             decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
