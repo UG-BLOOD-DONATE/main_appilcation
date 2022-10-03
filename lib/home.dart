@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
+import 'package:ug_blood_donate/Chatsection/pages/home_page.dart';
 import 'package:ug_blood_donate/Doctor_side/screen/create_event.dart';
 import 'package:ug_blood_donate/models/tab_icon_data.dart';
 import 'package:ug_blood_donate/posts/create_post.dart';
@@ -25,6 +26,7 @@ import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
+import 'package:ug_blood_donate/Chataaaapppp/screens/home_screen.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -179,7 +181,7 @@ class _BuildBodyState extends State<BuildBody> {
                   ),
                   mycard(
                     cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
-                     page: OrderTrackingPage(),
+                    page: OrderTrackingPage(),
                   ),
                   mycard(
                     cardChild:
@@ -308,6 +310,25 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => HomePage(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('chat room >>>'),
+              ),
+            ),
+          )
+
           //const CreatePost(),
         ],
       ),

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DatabaseService {
+class DataBaseService {
   final String uid;
-  DatabaseService({required this.uid});
+  DataBaseService({required this.uid});
 
   // collection reference
   final CollectionReference brewCollection =

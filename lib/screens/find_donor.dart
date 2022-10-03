@@ -13,7 +13,7 @@ class FindDonor extends StatefulWidget {
 class _FindDonorState extends State<FindDonor> {
   final db = FirebaseFirestore.instance;
   User? user = FirebaseAuth.instance.currentUser;
-  UserModel loggedInUser = UserModel();
+  UserModel loggedInUser = UserModel(groups: []);
 
   @override
   Widget build(BuildContext context) {

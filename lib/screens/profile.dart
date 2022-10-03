@@ -33,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   final _db = FirebaseFirestore.instance;
   User? user = FirebaseAuth.instance.currentUser;
-  UserModel loggedInUser = UserModel();
+  UserModel loggedInUser = UserModel(groups: []);
   double screenHeight = 0;
   double screenWidth = 0;
   Color primary = const Color(0xffeef444c);
@@ -423,10 +423,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  subtitle: Text(
-                                    'Requested',
-                                    style: TextStyle(
-                                        fontSize: 8, color: Colors.black),
+                                  subtitle: Flexible(
+                                    child: Text(
+                                      'Requested',
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      overflow: TextOverflow.fade,
+                                      style: TextStyle(
+                                          fontSize: 8, color: Colors.black),
+                                    ),
                                   ),
                                 )))
                       ],
@@ -552,9 +557,32 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       CustomCard(
                         onTap: () {
-                          firebaseAuth.signOut();
-                          Navigator.of(context).push(CupertinoPageRoute(
-                              builder: (_) => const Frist_Home()));
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return CupertinoAlertDialog(
+                                  title: Text('Log out'),
+                                  content: Text('Murife dont run dooont run?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('No')),
+                                    TextButton(
+                                      onPressed: () {
+                                        firebaseAuth.signOut();
+                                        Navigator.of(context).push(
+                                            CupertinoPageRoute(
+                                                builder: (_) =>
+                                                    const Frist_Home()));
+                                      },
+                                      child: Text('Yes'),
+                                    )
+                                  ],
+                                );
+                              });
                         },
                         child: const Text(
                           "Sign Out",
