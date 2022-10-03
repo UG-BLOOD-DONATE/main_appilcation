@@ -54,14 +54,14 @@ class _FindDonorState extends State<FindDonor> {
                       //         ),
                       // ),
                       leading: CustomImage(
-                        imageUrl: loggedInUser.photoURL,
+                        imageUrl: doc['photoURL'],
                         fit: BoxFit.cover,
                         width: 6,
                         height: 6,
                       ),
                       title: Text(doc['fullname']),
                       subtitle: Text(doc['location']),
-                      //trailing: Text(doc['bloodType']),
+                      trailing: Text(doc['bloodType']),
                     ),
                   );
                 }).toList(),

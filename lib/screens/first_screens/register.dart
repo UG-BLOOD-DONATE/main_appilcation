@@ -57,6 +57,9 @@ class _RegisterPageState extends State<RegisterPage> {
     String formattedAddress = "${placemark.locality}, ${placemark.country}";
     print(completeAddress);
     location.text = formattedAddress;
+    setState(() {
+      location.text = formattedAddress;
+    });
   }
 
   // getImage() async {
