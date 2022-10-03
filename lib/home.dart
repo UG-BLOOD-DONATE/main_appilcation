@@ -313,7 +313,7 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           )
-
+,
           //const CreatePost(),
           Center(
             child: ElevatedButton(
