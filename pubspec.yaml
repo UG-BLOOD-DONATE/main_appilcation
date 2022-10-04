@@ -73,6 +73,7 @@ dependencies:
   flutter_local_notifications: ^11.0.1
   flutter_geofence: ^0.4.4
   qr_flutter: ^4.0.0
+  geoflutterfire: ^3.0.2
 
 
 dev_dependencies:
