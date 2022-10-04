@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_new
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
@@ -9,6 +11,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:ug_blood_donate/models/user_model.dart';
 
 class DonerProfilePage extends StatefulWidget {
   const DonerProfilePage({super.key});
@@ -29,13 +32,24 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
     mapController = controller;
   }
 
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   List<LatLng> polylineCoordinates = [];
   LocationData? currentLocation;
+
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel(groups: []);
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedInUser = UserModel.fromMap(value.data());
+      //print('hi user');
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +91,8 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      '                Yiga Gilbert',
+                    Text(
+                      "${loggedInUser.fullname}",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
@@ -92,7 +106,7 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.location_on, color: Colors.pink),
-                  const Text("Wakiso, Uganda")
+                  Text("${loggedInUser.location}")
                 ],
               ),
             ),
@@ -162,8 +176,8 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
                             fontSize: 20,
                           ),
                         ),
-                        const Text(
-                          " AB+",
+                        Text(
+                          "${loggedInUser.bloodType}",
                           style: TextStyle(
                             color: Colors.pink,
                             fontSize: 20,

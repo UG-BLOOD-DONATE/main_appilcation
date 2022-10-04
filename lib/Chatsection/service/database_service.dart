@@ -18,9 +18,9 @@ class DatabaseService {
       "groups": [],
       "photoURL": "",
       "uid": uid,
-      "location": "",
-      "bloodType": "",
-      "phonenumber": "",
+      "location": "kampala,Uganda",
+      "bloodType": "AB",
+      "phonenumber": "0756432123",
     });
   }
 

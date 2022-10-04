@@ -44,6 +44,7 @@ class UserModel {
       'bloodType': bloodType,
       'location': location,
       'photoURL': photoURL,
+      'groups' :groups,
     };
   }
 }

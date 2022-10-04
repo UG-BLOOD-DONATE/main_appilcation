@@ -127,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Colors.black,
               ),
               onPressed: () {
-                // do something
+                 Navigator.pop(context);
               },
             )
           ],

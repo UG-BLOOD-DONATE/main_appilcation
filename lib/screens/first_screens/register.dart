@@ -298,8 +298,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 child: Text(sugar),
                               );
                             }).toList(),
-                            onChanged: (val) =>
-                                setState(() => _currentSugars = val as String),
+                            onChanged: (val) => setState(() =>
+                          bloodtype = val.toString() as TextEditingController),
                             icon: const Icon(
                               Icons.arrow_drop_down_circle_rounded,
                               color: Colors.pink,
