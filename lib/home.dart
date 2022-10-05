@@ -179,7 +179,7 @@ class _BuildBodyState extends State<BuildBody> {
                   ),
                   mycard(
                     cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
-                     page: OrderTrackingPage(),
+                    page: OrderTrackingPage(),
                   ),
                   mycard(
                     cardChild:
@@ -268,7 +268,7 @@ class _BuildBodyState extends State<BuildBody> {
                 padding: const EdgeInsets.all(10),
                 width: 150,
                 height: 100,
-                child: const Text('doner profile >>>'),
+                child: const Text('donor profile >>>'),
               ),
             ),
           ),
