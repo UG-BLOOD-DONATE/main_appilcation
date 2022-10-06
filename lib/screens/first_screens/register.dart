@@ -48,7 +48,16 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController telno = TextEditingController();
   TextEditingController bloodtype = TextEditingController();
   TextEditingController location = TextEditingController();
-  final List<String> sugars = ['O', 'A', 'B', 'AB'];
+  final List<String> sugars = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'O+',
+    'O-',
+    'AB+',
+    'AB-'
+  ];
   String? _currentSugars;
   Future<dynamic> getUserLocation() async {
     Placemark placemark = await getloca();
@@ -291,11 +300,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           const SizedBox(height: 10),
                           DropdownButtonFormField(
-                            value: _currentSugars ?? 'A',
+                            hint: const Text('Blood Type'),
                             items: sugars.map((sugar) {
                               return DropdownMenuItem(
                                 value: sugar,
-                                child: Text(sugar),
+                                child: Text('$sugar'),
                               );
                             }).toList(),
                             onChanged: (val) => setState(() => bloodtype =

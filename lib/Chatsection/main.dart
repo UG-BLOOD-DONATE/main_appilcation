@@ -5,6 +5,7 @@ import 'package:ug_blood_donate/Chatsection/helper/helper_function.dart';
 import 'package:ug_blood_donate/Chatsection/pages/auth/login_page.dart';
 import 'package:ug_blood_donate/Chatsection/pages/home_page.dart';
 import 'package:ug_blood_donate/Chatsection/shared/constants.dart';
+import 'package:ug_blood_donate/screens/first_screens/posts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +57,7 @@ class _MyAppState extends State<MyApp> {
           primaryColor: Constants().primaryColor,
           scaffoldBackgroundColor: Colors.white),
       debugShowCheckedModeBanner: false,
-      home: _isSignedIn ?  HomePage() :  LoginPage(),
+      home: _isSignedIn ?  HomePage() :  displayposts(),
     );
   }
 }
