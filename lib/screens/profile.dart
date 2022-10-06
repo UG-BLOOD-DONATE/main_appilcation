@@ -63,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
     ref.getDownloadURL().then((value) async {
       loggedInUser.photoURL = value.toString();
       await _db.collection("users").doc("${widget.userId}").update({
-        'photoUrl': loggedInUser.photoURL,
+        'photoURL': loggedInUser.photoURL,
         // SetOptions(
         //   merge: true,
         // ),
@@ -130,10 +130,15 @@ class _ProfilePageState extends State<ProfilePage> {
           //return Text("loading");
           return Scaffold(
               appBar: AppBar(
-                leading: const Icon(
-                  Icons.navigate_before_sharp,
-                  color: Colors.black,
-                  size: 24.0,
+                leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.navigate_before_sharp,
+                    color: Colors.black,
+                    size: 24.0,
+                  ),
                 ),
                 title: const Text("Profile"),
                 centerTitle: true,
