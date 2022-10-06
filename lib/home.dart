@@ -24,6 +24,7 @@ import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
+import 'package:alan_voice/alan_voice.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -50,6 +51,36 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setVisuals("first"));
+  }
+
+  void setVisuals(String screen) {
+    var visual = "{\"screen\":\"$screen\"}";
+    AlanVoice.setVisualState(visual);
+  }
+  void _handleCommand(Map<String, dynamic> command) {
+  switch(command["command"]) {
+    case "forward":
+      Navigator.pushNamed(context, '/profile');
+      break;
+    case "back":
+      Navigator.pop(context);
+      break;
+    default:
+      debugPrint("Unknown command");
+  }
+}
+  
+_HomeState() {
+    /// Init Alan Button with project key from Alan Studio
+    AlanVoice.addButton(
+      "bb4a57beebd84d2f03df53878c57c0ad2e956eca572e1d8b807a3e2338fdd0dc/stage");
+
+    /// Handle commands from Alan Studio
+    AlanVoice.onCommand.add((command)  => _handleCommand(command.data));
+  }
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   //final User user = ;
   @override
@@ -307,6 +338,29 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  // builder: (_) => Create_post(),
+                  builder: (_) => Users(
+                  
+                  ),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('view postuser'),
+              ),
+            ),
+          ),
+
+
           //const CreatePost(),
         ],
       ),
@@ -460,3 +514,41 @@ class icondata extends StatelessWidget {
     );
   }
 }
+
+class Users extends StatefulWidget {
+  Users();
+
+  @override
+  State<Users> createState() => _UsersState();
+}
+
+class _UsersState extends State<Users> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: null,
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("userpost").snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if(!snapshot.hasData){
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return ListView(
+            children: snapshot.data!.docs.map((document) {
+              return Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width/1.2,
+                  height: MediaQuery.of(context).size.height/6,
+                  child: Text("OwnerId:"+ document['ownerId']),
+                ),
+              );
+            }).toList(),
+          );
+        }),
+      );
+  }
+}
+

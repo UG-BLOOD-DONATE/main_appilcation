@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:alan_voice/alan_voice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -15,6 +16,8 @@ import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
 import 'package:path/path.dart' as path;
 
+import '../main.dart';
+
 //File? _image;
 final picker = ImagePicker();
 
@@ -26,7 +29,35 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage> with RouteAware {
+   /// Subscribe to RouteObserver
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
+  void dispose(){
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPush() {
+    setVisuals("profile");
+  }
+
+  @override
+  void didPop() {
+    setVisuals("first");
+  }
+
+  void setVisuals(String screen) {
+  var visual = "{\"screen\":\"$screen\"}";
+  AlanVoice.setVisualState(visual);
+}
+
   currentUserId() {
     return firebaseAuth.currentUser?.uid;
   }
