@@ -7,7 +7,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ug_blood_donate/components/custom_card.dart';
 import 'package:ug_blood_donate/home.dart';
@@ -96,101 +95,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold is a layout for
-    // the major Material Components.
-    return Scaffold(
-        appBar: AppBar(
-        title: const Text("Profile"),
-        actions: <Widget>[
-          // IconButton(
-          //   icon: const Icon(Icons.navigate_before_rounded),
-          //   tooltip: 'Back Icon',
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          // ), //IconButton
-          IconButton(
-            icon: const Icon(Icons.settings),
-            tooltip: 'Setting Icon',
-            onPressed: () {},
-          ), //IconButton
-        ], //<Widget>[]
-        backgroundColor: Colors.pinkAccent[400],
-        elevation: 50.0,
-        leading: IconButton(
-          icon: const Icon(Icons.navigate_before_rounded),
-          tooltip: 'Menu Icon',
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-      ),
-        // body is the majority of the screen.
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Container(
-              //   child: _image == null
-              //       ? Center(
-              //           child: GestureDetector(
-              //             onTap: () => getImage(),
-              //             child: const CircleAvatar(
-              //               backgroundColor: Color.fromARGB(255, 236, 34, 98),
-              //               radius: 60,
-              //               child: Icon(Icons.add_a_photo_outlined),
-              //             ),
-              //           ),
-              //         )
-              //       : Center(child: Image.file(_image!)),
-              // ),
-              // Center(
-              //   child: FloatingActionButton(
-              //     backgroundColor: Color.fromARGB(255, 236, 34, 98),
-              //     child: Icon(Icons.upload),
-              //     onPressed: () {
-              //       if (_image != null) {
-              //         setState(() {
-              //           loggedInUser.photoURL = uploadImage(_image) as String?;
-              //         });
-              //       }
-              //     },
-              //   ),
-              // ),
-              const SizedBox(
-                height: 34,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: GestureDetector(
-                      onDoubleTap: () {
-                        pickUploadProfilePic(userId: loggedInUser.uid);
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(120, 5, 40, 24),
-                        height: 120,
-                        width: 120,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: primary,
-                        ),
-                        child: Center(
-                          child: loggedInUser.photoURL == null
-                              ? const Icon(
-                                  Icons.person,
-                                  color: Colors.white,
-                                  size: 80,
-                                )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.network(loggedInUser.photoURL!),
-                                ),
-                        ),
-                      ),
     var g = currentUserId();
     return FutureBuilder<DocumentSnapshot>(
         future: users.doc(currentUserId()).get(),
