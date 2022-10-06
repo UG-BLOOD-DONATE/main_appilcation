@@ -2,12 +2,17 @@
 
 //import 'package:provider/provider.dart';
 
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/services.dart';
+import 'package:ug_blood_donate/Chatsection/pages/home_page.dart';
 import 'package:ug_blood_donate/Doctor_side/screen/create_event.dart';
 import 'package:ug_blood_donate/models/tab_icon_data.dart';
 import 'package:ug_blood_donate/posts/create_post.dart';
@@ -16,16 +21,20 @@ import 'package:ug_blood_donate/posts/timeline.dart';
 import 'package:ug_blood_donate/screens/bottom_navigation.dart';
 import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/doner_profile.dart';
+import 'package:ug_blood_donate/screens/donorcard.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
+import 'package:ug_blood_donate/screens/first_screens/posts.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
+import 'package:ug_blood_donate/screens/map/test_map.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
+import 'package:ug_blood_donate/screens/report.dart';
 import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:alan_voice/alan_voice.dart';
-
+import 'package:ug_blood_donate/Chataaaapppp/screens/home_screen.dart';
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
   'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
@@ -140,23 +149,7 @@ class _BuildBodyState extends State<BuildBody> {
           SizedBox(
             height: 30,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.greenAccent[400],
-                radius: 20,
-              ),
-              SizedBox(
-                width: 280,
-              ),
-              Icon(
-                Icons.notifications,
-                size: 25,
-              )
-            ],
-          ),
+
           const SizedBox(
             height: 10,
           ),
@@ -207,10 +200,11 @@ class _BuildBodyState extends State<BuildBody> {
                       title: 'Assistant',
                     ),
                   ),
-                  // mycard(
-                  //   cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
-                  //   // page: OrderTrackingPage(),
-                  // ),
+                  mycard(
+                    cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
+                    page: GeoApp(),
+                    //OrderTrackingPage(),
+                  ),
                   mycard(
                     cardChild:
                         const icondata(label: 'Report', icon: Icons.report),
@@ -290,7 +284,7 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => DonerProfilePage(),
+                  builder: (_) => DonerProfilePage(documentId: '',),
                 ),
               ),
               child: Container(
@@ -326,7 +320,7 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => SegmentedControlApp(),
+                  builder: (_) => Report_Page(),
                 ),
               ),
               child: Container(
@@ -344,10 +338,8 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  // builder: (_) => Create_post(),
-                  builder: (_) => Users(
-                  
-                  ),
+
+                  builder: (_) => HomePage(),
                 ),
               ),
               child: Container(
@@ -355,13 +347,66 @@ class _BuildBodyState extends State<BuildBody> {
                 padding: const EdgeInsets.all(10),
                 width: 150,
                 height: 100,
-                child: const Text('view postuser'),
+                child: const Text('chat room >>>'),
+              ),
+            ),
+          )
+,
+          //const CreatePost(),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => DonorCard(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('donor card >>>'),
+              ),
+            ),
+          ), Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => displayposts(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('Posts >>>'),
               ),
             ),
           ),
 
-
-          //const CreatePost(),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => test_page(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('map test>>>'),
+              ),
+            ),
+          ),
         ],
       ),
     ));
@@ -514,41 +559,172 @@ class icondata extends StatelessWidget {
     );
   }
 }
+class homeScreen extends StatelessWidget {
+  const homeScreen({super.key});
 
-class Users extends StatefulWidget {
-  Users();
-
-  @override
-  State<Users> createState() => _UsersState();
-}
-
-class _UsersState extends State<Users> {
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      floatingActionButton: null,
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("userpost").snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if(!snapshot.hasData){
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          return ListView(
-            children: snapshot.data!.docs.map((document) {
-              return Center(
-                child: Container(
-                  width: MediaQuery.of(context).size.width/1.2,
-                  height: MediaQuery.of(context).size.height/6,
-                  child: Text("OwnerId:"+ document['ownerId']),
+      backgroundColor: Colors.lightBlueAccent,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(
+                top: 60.0, left: 30.0, right: 30.0, bottom: 30.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.menu),
+                    SizedBox(
+                      width: 160.0,
+                    ),
+                    Icon(Icons.qr_code),
+                    Icon(Icons.notification_add),
+                  ],
                 ),
-              );
-            }).toList(),
-          );
-        }),
-      );
+                ListTile(
+                  title: const Text(
+                    'Welcome home',
+                    style: TextStyle(color: Colors.white54),
+                  ),
+                  subtitle: const Text(
+                    'Batricia Salfiora',
+                    style: TextStyle(color: Colors.white, fontSize: 20.0),
+                  ),
+                  trailing: ClipRRect(
+                    clipBehavior: Clip.hardEdge,
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.asset('images/mark.jpg'),
+                  ),
+                ),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 250, 248, 248),
+                    radius: 50,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.lightBlueAccent,
+                      radius: 36.0,
+                      child: Text(
+                        'AB+',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  title: const Text(
+                    '28 blood bag',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: const Text(
+                    'The total blood you donate',
+                    style: TextStyle(color: Colors.white60),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    child: const ListTile(
+                        title: Text(
+                          'Its time to donor!',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle:
+                            Text('Click to find the loction of the donor!'),
+                        trailing: CircleAvatar(
+                          backgroundColor: Colors.orange,
+                          child: Icon(
+                            Icons.arrow_forward_rounded,
+                            color: Colors.white,
+                          ),
+                        )),
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          topRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0),
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  const Text(
+                    'Service',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  ),
+                  const SizedBox(height: 15),
+                  Container(
+                    height: 250,
+                    width: 120.0,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage("images/rafiki.png"),
+                            fit: BoxFit.cover),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40.0),
+                          topRight: Radius.circular(40.0),
+                          bottomLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0),
+                        )),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(left: 10, bottom: 10),
+                          child: const Card(
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.yellowAccent,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 10, bottom: 20),
+                          child: const Text(
+                            'Find\nPatient',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 20.0),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              decoration: const BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40.0),
+                      topRight: Radius.circular(40.0))),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
-

@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //     Navigator.of(context).pop(); // Close the dialog
           //     FocusScope.of(context)
           //         .unfocus(); // Unfocus the last selected input field
-          //     _formKey.currentState?.reset(); // Empty the form fields
+          //     _formKey.currentState?.res et(); // Empty the form fields
           //   },
           // )
           //     ],

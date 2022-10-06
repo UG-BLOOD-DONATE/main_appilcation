@@ -1,27 +1,21 @@
-// ignore_for_file: deprecated_member_use, library_private_types_in_public_api
+// ignore_for_file: deprecated_member_use
 
-import 'dart:math';
-
-import 'package:alan_voice/alan_voice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ug_blood_donate/components/constants.dart';
 import 'package:ug_blood_donate/home.dart';
 
-import '../main.dart';
-
 const String myhomepageRoute = '/';
-//const String myprofileRoute = 'profile';
+const String myprofileRoute = 'profile';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case myhomepageRoute:
-        return MaterialPageRoute(builder: (_) => const MyRequest());
-      // case myprofileRoute:
-      //   return MaterialPageRoute(builder: (_) => MyProfilePage());
+        return MaterialPageRoute(builder: (_) => const MyHomePage());
+      case myprofileRoute:
+        return MaterialPageRoute(builder: (_) => MyProfilePage());
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(
@@ -31,54 +25,42 @@ class Router {
   }
 }
 
-class Request extends StatefulWidget {
-  const Request({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<Request> createState() => _RequestState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class _RequestState extends State<Request> {
-
-
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    CollectionReference create_event =
+        FirebaseFirestore.instance.collection('create_event');
     return const MaterialApp(
-        title: "Request Blood.",
-        home: MyRequest(),
+        title: "Create event",
+        home: MyHomePage(),
         onGenerateRoute: Router.generateRoute,
         initialRoute: myhomepageRoute);
   }
 }
 
-class MyRequest extends StatefulWidget {
-  const MyRequest({Key? key}) : super(key: key);
-
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
   @override
-  State<MyRequest> createState() => _MyRequestState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyRequestState extends State<MyRequest> {
-  bool showProgress = false;
+class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+
   final _auth = FirebaseAuth.instance;
   late User currentUser;
   TextEditingController location = TextEditingController();
   TextEditingController hospital = TextEditingController();
-  TextEditingController bloodtype = TextEditingController();
+  TextEditingController date = TextEditingController();
   TextEditingController contact = TextEditingController();
   TextEditingController note = TextEditingController();
-  final List<String> sugars = [
-    'A+',
-    'A-',
-    'B+',
-    'B-',
-    'O+',
-    'O-',
-    'AB+',
-    'AB-'
-  ];
-
   //var measure;
 
   void _submit() {
@@ -112,39 +94,27 @@ class _MyRequestState extends State<MyRequest> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        print("no user in");
-      } else {
-        currentUser = user;
-        print("user in");
-      }
-    });
-    CollectionReference bloodrequests =
-        FirebaseFirestore.instance.collection('bloodrequests');
+    CollectionReference create_event =
+        FirebaseFirestore.instance.collection('create_event');
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, size: 32.0, color: Colors.pink),
+          onPressed: () => Navigator.pop(context, true),
+        ),
+        backgroundColor: const Color.fromARGB(255, 254, 255, 255),
+        title: const Text(
+          "Create Event",
+          style: TextStyle(
+            color: Color.fromARGB(0, 11, 11, 11),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
-              ListTile(
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, size: 32.0),
-                  onPressed: () => Navigator.push(
-                    context, //true
-                    MaterialPageRoute(
-                      builder: (_) => Home(
-                        currentUser: currentUser,
-                      ),
-                    ),
-                  ),
-                ),
-                title: const Text(
-                  "Create A Request",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-              ),
               const SizedBox(
                 height: 40,
               ),
@@ -160,7 +130,7 @@ class _MyRequestState extends State<MyRequest> {
                             Icons.location_on_rounded,
                             color: Color.fromARGB(234, 239, 52, 83),
                           ),
-                          labelText: 'City',
+                          labelText: 'Location',
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0)),
@@ -172,10 +142,10 @@ class _MyRequestState extends State<MyRequest> {
                         if (value == null ||
                             value.isEmpty ||
                             value.length < 3) {
-                          return 'First Name must contain at least 3 characters';
+                          return 'location must contain at least 3 characters';
                         } else if (value
                             .contains(RegExp(r'^[0-9_\-=@,\.;]+$'))) {
-                          return 'First Name cannot contain special characters';
+                          return 'location cannot contain special characters';
                         }
                       },
                     ),
@@ -211,18 +181,29 @@ class _MyRequestState extends State<MyRequest> {
                     const SizedBox(
                       height: 20,
                     ),
-                    DropdownButtonFormField(
-                      //value: bloodtype == null ? 'Blood Type' : bloodtype,
-                      hint: const Text('Blood Type'),
-                      decoration: textInputDecoration,
-                      items: sugars.map((sugar) {
-                        return DropdownMenuItem(
-                          value: sugar,
-                          child: Text('$sugar'),
-                        );
-                      }).toList(),
-                      onChanged: (val) => setState(() =>
-                          bloodtype = val.toString() as TextEditingController),
+                    TextFormField(
+                      controller: date,
+                      decoration: const InputDecoration(
+                          icon: Icon(
+                            Icons.calendar_month,
+                            color: Color.fromARGB(234, 239, 52, 83),
+                          ),
+                          labelText: 'Date',
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.0),
+                          ),
+                          border: OutlineInputBorder()),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null ||
+                            value.isEmpty ||
+                            value.contains(RegExp(r'^[a-zA-Z\-]'))) {
+                          return 'Use only numbers!';
+                        }
+                      },
                     ),
                     const SizedBox(
                       height: 20,
@@ -234,7 +215,7 @@ class _MyRequestState extends State<MyRequest> {
                             Icons.phone,
                             color: Color.fromARGB(234, 239, 52, 83),
                           ),
-                          labelText: 'Mobile',
+                          labelText: 'Contact',
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0)),
@@ -242,12 +223,11 @@ class _MyRequestState extends State<MyRequest> {
                                 BorderSide(color: Colors.grey, width: 0.0),
                           ),
                           border: OutlineInputBorder()),
-                      keyboardType: TextInputType.phone,
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
                             value.length < 10) {
-                          return 'mobile number must contain at least 10 characters';
+                          return 'mobile numcer must contain at least 10 characters';
                         } else if (value.contains(RegExp(r'^[_\-=,\.;]$'))) {
                           return 'Description cannot contain special characters';
                         }
@@ -256,99 +236,85 @@ class _MyRequestState extends State<MyRequest> {
                     const SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
-                      controller: note,
-                      decoration: const InputDecoration(
-                          icon: Icon(
-                            Icons.note_outlined,
-                            color: Color.fromARGB(234, 239, 52, 83),
-                          ),
-                          labelText: 'Add note',
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 0.0),
-                          ),
-                          border: OutlineInputBorder()),
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty ||
-                            value.length < 3) {
-                          return 'Description must contain at least 3 characters';
-                        } else if (value
-                            .contains(RegExp(r'^[0-9_\-=@,\.;]+$'))) {
-                          return 'Description cannot contain special characters';
-                        }
-                      },
-                    ),
                     const SizedBox(
                       height: 20,
                     ),
-                    SizedBox(
-                      width: 300,
-                      height: 50,
-                      child: ElevatedButton(
-                        //color: Color.fromARGB(234, 239, 52, 83),
-                        onPressed: () {
-                          const CircularProgressIndicator(
-                            color: Colors.white,
-                          );
-                          setState(() {
-                            showProgress = true;
-                          });
-                          Future.delayed(const Duration(seconds: 3), (() {
-                            setState(() {
-                              showProgress = false;
-                            });
-                          }));
-                          // Validate returns true if the form is valid, or false otherwise.
-                          if (_formKey.currentState!.validate()) {
-                            bloodrequests.add({
-                              'location': location.text,
-                              'hospital': hospital.text,
-                              'bloodtype': bloodtype.text,
-                              'contact': contact.text,
-                              'note': note.text
-                            }).then((value) => Fluttertoast.showToast(
-                                        msg: "Blood request sent successfully")
-                                    .catchError((e) {
-                                  print("Blood request not sent try again");
-                                }));
-                            Navigator.pop(context, true
-                                // MaterialPageRoute(
-                                //   builder: (context) => Home(),
-                                // ),
-                                );
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.pink),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
+                    ElevatedButton(
+                      //color: Color.fromARGB(234, 239, 52, 83),
+                      onPressed: () {
+                        const CircularProgressIndicator(
+                          color: Colors.white,
+                        );
+
+                        // Validate returns true if the form is valid, or false otherwise.
+                        if (_formKey.currentState!.validate()) {
+                          create_event.add({
+                            'location': location.text,
+                            'hospital': hospital.text,
+                            'date': date.text,
+                            'contact': contact.text,
+                            // 'note': note.text
+                          }).then((value) => Fluttertoast.showToast(
+                                      msg: "Event created successfully")
+                                  .catchError((e) {
+                                print("Event not creaetd");
+                              }));
+                          Navigator.pop(context, true
+                              // MaterialPageRoute(
+                              //   builder: (context) => Home(),
+                              // ),
+                              );
+                        }
+                      },
+                      child: const Center(child: Text("ADD EVENT")),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.pink),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
                           ),
                         ),
-                        child: showProgress
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : const Text(
-                                'REQUEST',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyProfilePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _MyProfilePageState();
+}
+
+class _MyProfilePageState extends State<MyProfilePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My profile'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(children: <Widget>[
+          Row(children: <Widget>[
+            const Text("New data",
+                style: TextStyle(
+                  fontSize: 24,
+                )),
+            const Spacer(),
+            ElevatedButton(
+              child: const Text('New'),
+              onPressed: () => Navigator.pop(context),
+            )
+          ]),
+        ]),
       ),
     );
   }

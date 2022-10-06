@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ug_blood_donate/home.dart';
 
 class UserNotification extends StatefulWidget {
   @override

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,7 +13,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
+import 'package:ug_blood_donate/Chatsection/service/database_service.dart';
+
 import 'package:ug_blood_donate/screens/first_screens/loginScreen.dart';
+import 'package:ug_blood_donate/services/database_report.dart';
 
 Future<Placemark> getloca() async {
   Position position = await Geolocator.getCurrentPosition(
@@ -43,7 +48,17 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController telno = TextEditingController();
   TextEditingController bloodtype = TextEditingController();
   TextEditingController location = TextEditingController();
-
+  final List<String> sugars = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'O+',
+    'O-',
+    'AB+',
+    'AB-'
+  ];
+  String? _currentSugars;
   Future<dynamic> getUserLocation() async {
     Placemark placemark = await getloca();
     String completeAddress =
@@ -51,6 +66,9 @@ class _RegisterPageState extends State<RegisterPage> {
     String formattedAddress = "${placemark.locality}, ${placemark.country}";
     print(completeAddress);
     location.text = formattedAddress;
+    setState(() {
+      location.text = formattedAddress;
+    });
   }
 
   // getImage() async {
@@ -281,8 +299,21 @@ class _RegisterPageState extends State<RegisterPage> {
                             keyboardType: TextInputType.phone,
                           ),
                           const SizedBox(height: 10),
-                          TextFormField(
-                            controller: bloodtype,
+                          DropdownButtonFormField(
+                            hint: const Text('Blood Type'),
+                            items: sugars.map((sugar) {
+                              return DropdownMenuItem(
+                                value: sugar,
+                                child: Text('$sugar'),
+                              );
+                            }).toList(),
+                            onChanged: (val) => setState(() => bloodtype =
+                                val.toString() as TextEditingController),
+                            icon: const Icon(
+                              Icons.arrow_drop_down_circle_rounded,
+                              color: Colors.pink,
+                            ),
+                            dropdownColor: Colors.pink[500],
                             decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
@@ -298,8 +329,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   Icons.bloodtype,
                                   color: Colors.pink,
                                 ),
-                                hintText: 'BloodType'),
-                            keyboardType: TextInputType.text,
+                                hintText: 'Bloodtype'),
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
@@ -349,7 +379,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           showProgress = true;
                                         });
                                         Future.delayed(
-                                            const Duration(seconds: 3), (() {
+                                            const Duration(seconds: 10), (() {
                                           setState(() {
                                             showProgress = false;
                                           });
@@ -439,35 +469,12 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  // uploadImage(img) async {
-  // Initialize Firebase once again
-  // await Firebase.initializeApp();
-  // var random = Random();
-  // var rand = random.nextInt(1000000000);
-  // // Give the image a random name
-  // String name = "image:$rand";
-  // try {
-  //   await FirebaseStorage.instance
-  //       // Give the image a name
-  //       .ref('$name.jpg')
-  //       // Upload image to firebase
-  //       .putFile(img);
-  //   print("Uploaded image");
-  // } on FirebaseException catch (e) {
-  //   print(e);
-  // }
-  // Future<String> uploadImage(imageFile) async {
-  //   UploadTask uploadTask = storageRef.child("$name.jpg").putFile(imageFile);
-  //   var imageUrl = await (await uploadTask).ref.getDownloadURL();
-  //   return imageUrl.toString();
-  // }
-
   postDetailsToFirestore() async {
     // if (_image != null) {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-    UserModel userModel = UserModel();
+    UserModel userModel = UserModel(groups: []);
 
     userModel.email = user!.email;
     userModel.uid = user.uid;
@@ -476,12 +483,16 @@ class _RegisterPageState extends State<RegisterPage> {
     userModel.bloodType = bloodtype.text;
     userModel.location = location.text;
     userModel.photoURL = null;
+    userModel.groups = [];
 
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully");
+    await DataBaseService(uid: user.uid).updateUserRepost(
+        'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty');
+    await DatabaseService(uid: user.uid).getUserGroups();
 
     Navigator.pushReplacement(
       context,
