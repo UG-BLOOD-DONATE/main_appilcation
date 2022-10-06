@@ -19,6 +19,7 @@ import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/doner_profile.dart';
 import 'package:ug_blood_donate/screens/donorcard.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
+import 'package:ug_blood_donate/screens/first_screens/posts.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
@@ -247,7 +248,7 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => DonerProfilePage(),
+                  builder: (_) => DonerProfilePage(documentId: '',),
                 ),
               ),
               child: Container(
@@ -332,7 +333,25 @@ class _BuildBodyState extends State<BuildBody> {
                 child: const Text('donor card >>>'),
               ),
             ),
+          ), Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => displayposts(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('Posts >>>'),
+              ),
+            ),
           ),
+
         ],
       ),
     ));

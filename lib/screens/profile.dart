@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ug_blood_donate/components/custom_card.dart';
 import 'package:ug_blood_donate/home.dart';
@@ -113,28 +114,32 @@ class _ProfilePageState extends State<ProfilePage> {
     // the major Material Components.
     return Scaffold(
         appBar: AppBar(
-          leading: const Icon(
-            Icons.navigate_before_sharp,
-            color: Colors.black,
-            size: 24.0,
-          ),
-          title: const Text("Profile"),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.edit_note_sharp,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                 Navigator.pop(context);
-              },
-            )
-          ],
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.white,
+        title: const Text("Profile"),
+        actions: <Widget>[
+          // IconButton(
+          //   icon: const Icon(Icons.navigate_before_rounded),
+          //   tooltip: 'Back Icon',
+          //   onPressed: () {
+          //     Navigator.pop(context);
+          //   },
+          // ), //IconButton
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Setting Icon',
+            onPressed: () {},
+          ), //IconButton
+        ], //<Widget>[]
+        backgroundColor: Colors.pinkAccent[400],
+        elevation: 50.0,
+        leading: IconButton(
+          icon: const Icon(Icons.navigate_before_rounded),
+          tooltip: 'Menu Icon',
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
         // body is the majority of the screen.
         body: SingleChildScrollView(
           child: Column(
