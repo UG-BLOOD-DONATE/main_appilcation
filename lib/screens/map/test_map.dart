@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofence/geofence.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -10,169 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_geofence/geofence.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:permission_handler/permission_handler.dart';
-
-class test_page extends StatefulWidget {
-  @override
-  _test_pageState createState() => _test_pageState();
-}
-
-class _test_pageState extends State<test_page> {
-  String _platformVersion = 'Unknown';
-
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      new FlutterLocalNotificationsPlugin();
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    var initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
-    var initializationSettingsIOS =
-        DarwinInitializationSettings(onDidReceiveLocalNotification: null);
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: null);
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-    Geofence.initialize();
-    Geofence.startListening(GeolocationEvent.entry, (entry) {
-      scheduleNotification("Entry of a georegion", "Welcome to: ${entry.id}");
-    });
-
-    Geofence.startListening(GeolocationEvent.exit, (entry) {
-      scheduleNotification("Exit of a georegion", "Byebye to: ${entry.id}");
-    });
-
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: ListView(
-          children: <Widget>[
-            Text('Running on: $_platformVersion\n'),
-            ElevatedButton(
-              child: Text("Add region"),
-              onPressed: () {
-                Geolocation location = Geolocation(
-                    latitude: 50.853410,
-                    longitude: 3.354470,
-                    radius: 50.0,
-                    id: "Kerkplein13");
-                Geofence.addGeolocation(location, GeolocationEvent.entry)
-                    .then((onValue) {
-                  print("great success");
-                  scheduleNotification(
-                      "Georegion added", "Your geofence has been added!");
-                }).catchError((onError) {
-                  print("great failure");
-                });
-              },
-            ),
-            ElevatedButton(
-              child: Text("Add neighbour region"),
-              onPressed: () {
-                Geolocation location = Geolocation(
-                    latitude: 50.853440,
-                    longitude: 3.354490,
-                    radius: 50.0,
-                    id: "Kerkplein15");
-                Geofence.addGeolocation(location, GeolocationEvent.entry)
-                    .then((onValue) {
-                  print("great success");
-                  scheduleNotification(
-                      "Georegion added", "Your geofence has been added!");
-                }).catchError((onError) {
-                  print("great failure");
-                });
-              },
-            ),
-            ElevatedButton(
-              child: Text("Remove regions"),
-              onPressed: () {
-                Geofence.removeAllGeolocations();
-              },
-            ),
-            ElevatedButton(
-              child: Text("Request Permissions"),
-              onPressed: () {
-                Geofence.requestPermissions();
-              },
-            ),
-            ElevatedButton(
-                child: Text("get user location"),
-                onPressed: () {
-                  Geofence.getCurrentLocation().then((coordinate) {
-                    print(
-                        "great got latitude: ${coordinate?.latitude} and longitude: ${coordinate?.longitude}");
-                  });
-                }),
-            ElevatedButton(
-                child: Text("Listen to background updates"),
-                onPressed: () {
-                  Geofence.startListeningForLocationChanges();
-                  Geofence.backgroundLocationUpdated.stream.listen((event) {
-                    scheduleNotification("You moved significantly",
-                        "a significant location change just happened.");
-                  });
-                }),
-            ElevatedButton(
-                child: Text("Stop listening to background updates"),
-                onPressed: () {
-                  Geofence.stopListeningForLocationChanges();
-                }),
-            ElevatedButton(
-                child: Text("Map"),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => TrackingPage()));
-                }),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void scheduleNotification(String title, String subtitle) {
-    print("scheduling one with $title and $subtitle");
-    var rng = new Random();
-    Future.delayed(Duration(seconds: 5)).then((result) async {
-      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          'your channel id', 'your channel name',
-          importance: Importance.high,
-          priority: Priority.high,
-          icon: "@mipmap/ic_launcher",
-          ticker: 'ticker');
-      var iOSPlatformChannelSpecifics = DarwinNotificationDetails();
-      var platformChannelSpecifics = NotificationDetails(
-          android: androidPlatformChannelSpecifics,
-          iOS: iOSPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(
-          rng.nextInt(100000), title, subtitle, platformChannelSpecifics,
-          payload: 'item x');
-    });
-  }
-}
+import 'package:ug_blood_donate/Chatsection/widgets/widgets.dart';
 
 class TrackingPage extends StatefulWidget {
   @override
@@ -193,13 +36,17 @@ class _TrackingPageState extends State<TrackingPage>
 
   static double _initRadius = 1000.0;
 
+  String placename = 'Centre';
   String _userStatus = "None";
+  final _formkey = GlobalKey<FormState>();
 
   static Geolocation? _location;
-
+  Geoflutterfire geo = Geoflutterfire();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final myController = TextEditingController();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-
+  String event = "";
   @override
   void initState() {
     super.initState();
@@ -239,6 +86,7 @@ class _TrackingPageState extends State<TrackingPage>
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
     removeGeoFenceLocation();
+    myController.dispose();
   }
 
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -313,7 +161,7 @@ class _TrackingPageState extends State<TrackingPage>
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Here is your payload"),
+        title: Text("Open Map to Navigate to Centre"),
         content: Text("Playload : $payload"),
       ),
     );
@@ -331,40 +179,49 @@ class _TrackingPageState extends State<TrackingPage>
     }
   }
 
-  void _setGeofenceRegion(LatLng geofenceMarkerLatLng) {
+  void _setGeofenceRegion(LatLng geofenceMarkerLatLng, String placename) {
     _location = Geolocation(
-      id: "luktm",
+      id: "$placename",
       latitude: geofenceMarkerLatLng.latitude,
       longitude: geofenceMarkerLatLng.longitude,
       radius: _initRadius,
     );
-
+    String name = placename;
     Geofence.addGeolocation(
       _location!,
       GeolocationEvent.entry,
     ).then((value) {
       _scheduleNotification(
-          "Geo region added", "Your blood donation centre has been added!");
+          "Blood Donation Centre Added", "centre has been added at $name");
       print("Georegion added");
     }).catchError((error) {
       print("Added geofence failed, $error");
     });
+    GeoFirePoint geoFirePoint = geo.point(
+        latitude: geofenceMarkerLatLng.latitude,
+        longitude: geofenceMarkerLatLng.longitude);
+    _firestore.collection('Geofences').add({
+      'name': '$name',
+      'radius': _initRadius,
+      'position': geoFirePoint.data
+    }).then((_) {
+      print('added ${geoFirePoint.hash} successfully');
+    });
   }
 
-  Future<void> _addMarkerLongPressed(LatLng latLng) async {
+  Future<void> _addMarkerLongPressed(LatLng latLng, String name) async {
     setState(() {
       _markers = {};
       _geofenceMarkerPosition = latLng;
 
-      _setGeofenceRegion(_geofenceMarkerPosition!);
+      _setGeofenceRegion(_geofenceMarkerPosition, name);
 
       _markers.add(
         Marker(
           icon: BitmapDescriptor.defaultMarker,
-          markerId: MarkerId(_initialPosition.toString()),
+          markerId: MarkerId('$name'),
           position: latLng,
-          infoWindow:
-              InfoWindow(title: "Region Set", snippet: "This is snippet"),
+          infoWindow: InfoWindow(title: "$name", snippet: "This is snippet"),
           onTap: () {
             setState(() {
               _markers = {};
@@ -411,7 +268,8 @@ class _TrackingPageState extends State<TrackingPage>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Geofence'),
+        backgroundColor: Color.fromRGBO(239, 52, 83, 0.918),
+        title: Text('Event Location'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.help_outline),
@@ -419,7 +277,7 @@ class _TrackingPageState extends State<TrackingPage>
               showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                  title: Text("Guideline to use geofence"),
+                  title: Text("Guideline to create a donation Centre"),
                   content: Text(
                       "Long pressed the area you wanted to place marker, Slider will be appear for you to adjust the geofence ranges"),
                   shape: RoundedRectangleBorder(
@@ -445,7 +303,7 @@ class _TrackingPageState extends State<TrackingPage>
                   height: deviceData.size.height,
                   width: deviceData.size.width,
                   child: GoogleMap(
-                    mapType: MapType.normal,
+                    mapType: MapType.hybrid,
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
                     },
@@ -458,7 +316,54 @@ class _TrackingPageState extends State<TrackingPage>
                     myLocationButtonEnabled: true,
                     tiltGesturesEnabled: false,
                     onLongPress: (latLng) {
-                      _addMarkerLongPressed(latLng);
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text(
+                              "Enter name of the Blood  Donation Centre"),
+                          content: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Form(
+                              key: _formkey,
+                              child: TextFormField(
+                                controller: myController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: 'Enter name',
+                                ),
+                              ),
+                            ),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          actions: <Widget>[
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary:
+                                        Color.fromRGBO(239, 52, 83, 0.918)),
+                                child: const Text("Enter"),
+                                onPressed: () {
+                                  setState(() {
+                                    placename = myController.text;
+                                    print(placename);
+                                  });
+                                  if (myController.text != null) {
+                                    Navigator.pop(context);
+                                  } else {
+                                    showSnackbar(
+                                        context,
+                                        Color.fromRGBO(239, 52, 83, 0.918),
+                                        Text('Add Place details'));
+                                  }
+                                })
+                          ],
+                        ),
+                      );
+
+                      if (myController.text != null) {
+                        _addMarkerLongPressed(latLng, placename);
+                      }
                     },
                     markers: _markers,
                     circles:
@@ -480,31 +385,31 @@ class _TrackingPageState extends State<TrackingPage>
                     ),
                   ),
                 ),
-                if (_markers.isNotEmpty)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
                       ),
-                      margin: EdgeInsets.only(bottom: 30, right: 80, left: 30),
-                      padding: EdgeInsets.all(20),
-                      width: double.infinity,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Text(
-                                  "Geofence area: ${(_initRadius / 100).toStringAsFixed(0)}KM"),
-                              Text("Status: $_userStatus")
-                            ],
-                          ),
-                          Slider(
+                    ),
+                    margin: EdgeInsets.only(bottom: 30, right: 80, left: 20),
+                    padding: EdgeInsets.all(20),
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(
+                                "Geofence area: ${(_initRadius / 100).toStringAsFixed(0)}KM"),
+                            Text("Status: $_userStatus")
+                          ],
+                        ),
+                        Center(
+                          child: Slider(
                               value: _initRadius,
                               divisions: 5,
                               min: 100,
@@ -515,30 +420,29 @@ class _TrackingPageState extends State<TrackingPage>
                                   GeolocationEvent.entry,
                                 ).then((value) {
                                   // print("Georegion removed");
-                                  _setGeofenceRegion(_geofenceMarkerPosition!);
+                                  _setGeofenceRegion(
+                                      _geofenceMarkerPosition, placename);
                                 });
                               },
                               onChanged: (newValue) {
                                 setState(() {
-                                  _scheduleNotification(
-                                      "Blood Donation Centre ",
-                                      "Your blood donation centre has been added!");
+                                  // _scheduleNotification(
+                                  //     "Blood Donation Centre ",
+                                  //     "Your blood donation centre has been added!");
                                   _initRadius = newValue;
-                                  Geofence.initialize();
-                                  Geofence.startListening(
-                                      GeolocationEvent.entry, (entry) {
-                                    _scheduleNotification(
-                                        "There is a blood donation centre",
-                                        "at: ${entry.id}");
-                                  });
                                 });
-                              })
-                        ],
-                      ),
+                              }),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
+                )
               ],
             ),
     );
   }
+
+  void _printLatestValue() {}
 }
+
+class _showinput {}

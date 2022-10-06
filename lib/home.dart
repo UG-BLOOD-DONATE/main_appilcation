@@ -167,11 +167,11 @@ class _BuildBodyState extends State<BuildBody> {
                       title: 'Assistant',
                     ),
                   ),
-                  mycard(
-                    cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
-                    page: GeoApp(),
-                    //OrderTrackingPage(),
-                  ),
+                  // mycard(
+                  //   cardChild: icondata(label: 'Map', icon: Icons.map_outlined),
+                  //   page: GeoApp(),
+                  //   //OrderTrackingPage(),
+                  // ),
                   mycard(
                     cardChild:
                         const icondata(label: 'Report', icon: Icons.report),
@@ -299,6 +299,27 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           ),
+<<<<<<< Updated upstream
+=======
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => HomePage(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('chat room >>>'),
+              ),
+            ),
+          ),
+>>>>>>> Stashed changes
           //const CreatePost(),
           Center(
             child: ElevatedButton(
@@ -324,7 +345,7 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => test_page(),
+                  builder: (_) => TrackingPage(),
                 ),
               ),
               child: Container(
@@ -333,6 +354,24 @@ class _BuildBodyState extends State<BuildBody> {
                 width: 150,
                 height: 100,
                 child: const Text('map test>>>'),
+              ),
+            ),
+          ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => UserInformation(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('map user>>>'),
               ),
             ),
           ),
