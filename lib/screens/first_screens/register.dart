@@ -329,7 +329,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   Icons.bloodtype,
                                   color: Colors.pink,
                                 ),
-                                hintText: 'BloodType'),
+                                hintText: 'Bloodtype'),
                           ),
                           const SizedBox(height: 10),
                           TextFormField(

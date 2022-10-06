@@ -7,187 +7,208 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:ug_blood_donate/screens/map/constants.dart';
 
-class OrderTrackingPage extends StatefulWidget {
-  const OrderTrackingPage({Key? key}) : super(key: key);
+// class OrderTrackingPage extends StatefulWidget {
+//   const OrderTrackingPage({Key? key}) : super(key: key);
 
-  @override
-  State<OrderTrackingPage> createState() => OrderTrackingPageState();
-}
+//   @override
+//   State<OrderTrackingPage> createState() => OrderTrackingPageState();
+// }
 
-class OrderTrackingPageState extends State<OrderTrackingPage> {
-  MapType _currentMapType = MapType.normal;
-  late GoogleMapController mapController;
-  Completer<GoogleMapController> _controller = Completer();
+// class OrderTrackingPageState extends State<OrderTrackingPage> {
+//   MapType _currentMapType = MapType.normal;
+//   late GoogleMapController mapController;
+//   Completer<GoogleMapController> _controller = Completer();
 
-  static const LatLng sourceLocation = LatLng(0.3272399, 32.57796);
-  static const LatLng destination = LatLng(0.312222, 32.585556);
+//   static const LatLng sourceLocation = LatLng(0.3272399, 32.57796);
+//   static const LatLng destination = LatLng(0.312222, 32.585556);
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
+//   void _onMapCreated(GoogleMapController controller) {
+//     mapController = controller;
+//   }
 
-  List<LatLng> polylineCoordinates = [];
-  LocationData? currentLocation;
-  void getcurrentLocation() async {
-    Location location = Location();
-    location.getLocation().then((location) => currentLocation = location);
-    GoogleMapController googleMapController = await _controller.future;
-    location.onLocationChanged.listen((newlock) {
-      googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(
-              tilt: 0.0,
-              zoom: 17.5,
-              target: LatLng(newlock.latitude!, newlock.longitude!))));
-      setState(() {});
-    });
-  }
+//   List<LatLng> polylineCoordinates = [];
+//   late LocationData? currentLocation;
+//   Future<LatLng> getcurrentLocation() async {
+//     Location location = Location();
+//     location.getLocation().then((location) => currentLocation = location);
+//     GoogleMapController googleMapController = await _controller.future;
+//     location.onLocationChanged.listen((newlock) {
+//       googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+//           CameraPosition(
+//               tilt: 0.0,
+//               zoom: 17.5,
+//               target: LatLng(newlock.latitude!, newlock.longitude!))));
+//       setState(() {});
+//     });
+//     return LatLng(currentLocation!.latitude!, currentLocation!.longitude!);
+//   }
 
-  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+//   BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
+//   BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
+//   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
 
-  void getPolyPoints() async {
-    PolylinePoints polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      google_api_key,
-      PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
-      PointLatLng(destination.latitude, destination.longitude),
-    );
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) =>
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
-    }
-    setState(() {});
-  }
+//   void getPolyPoints() async {
+//     PolylinePoints polylinePoints = PolylinePoints();
+//     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+//       google_api_key,
+//       PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
+//       PointLatLng(destination.latitude, destination.longitude),
+//     );
+//     if (result.points.isNotEmpty) {
+//       result.points.forEach((PointLatLng point) =>
+//           polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
+//     }
+//     setState(() {});
+//   }
 
-  void setCustomMarkerIcon() {
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/Pin_source.png")
-        .then((icon) => sourceIcon = icon);
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/Pin_destination.png")
-        .then((icon) => destinationIcon = icon);
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/Badge.png")
-        .then((icon) => currentLocationIcon = icon);
-  }
+//   void setCustomMarkerIcon() {
+//     BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration.empty, "assets/Pin_source.png")
+//         .then((icon) => sourceIcon = icon);
+//     BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration.empty, "assets/Pin_destination.png")
+//         .then((icon) => destinationIcon = icon);
+//     BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration.empty, "assets/Badge.png")
+//         .then((icon) => currentLocationIcon = icon);
+//   }
 
-  @override
-  void initState() {
-    getcurrentLocation();
-    setCustomMarkerIcon();
-    // getPolyPoints();
-    // TODO: implement initState
-    super.initState();
-  }
+//   @override
+//   void initState() {
+//     getcurrentLocation();
+//     setCustomMarkerIcon();
+//     // getPolyPoints();
+//     // TODO: implement initState
+//     super.initState();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    getcurrentLocation();
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          color: Colors.black,
-          icon: const Icon(Icons.arrow_back, size: 32.0),
-          onPressed: () => Navigator.pop(context, true),
-        ),
-        title: const Text(
-          "View Donor",
-          style: TextStyle(color: Colors.black, fontSize: 16),
-        ),
-      ),
-      body: currentLocation == null
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    strokeWidth: 8,
-                  ),
-                  Text('Loading'),
-                ],
-              ),
-            )
-          : Stack(children: <Widget>[
-              GoogleMap(
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                },
-                compassEnabled: true,
-                mapType: MapType.hybrid,
-                initialCameraPosition: CameraPosition(
-                    tilt: 9.0,
-                    target: LatLng(currentLocation!.latitude!,
-                        currentLocation!.longitude!),
-                    zoom: 10.5),
-                markers: {
-                  Marker(
-                    markerId: const MarkerId("currentLocation"),
-                    // icon: currentLocationIcon,
-                    position: LatLng(currentLocation!.latitude!,
-                        currentLocation!.longitude!),
-                  ),
-                  // Marker(
-                  //   markerId: MarkerId("source"),
-                  //   icon: sourceIcon,
-                  //   position: sourceLocation,
-                  // ),
-                  // Marker(
-                  //   icon: destinationIcon,
-                  //   markerId: MarkerId("destination"),
-                  //   position: destination,
-                  // ),
-                },
-                // polylines: {
-                //   Polyline(
-                //     polylineId: PolylineId("route"),
-                //     points: polylineCoordinates,
-                //     color: primaryColor,
-                //     width: 5,
-                //   ),
-                // },
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.all(16.0),
-              //   child: Align(
-              //     alignment: Alignment.topRight,
-              //     child: FloatingActionButton(
-              //       onPressed: () {
-              //         _onMapTypeButtonPressed;
-              //       },
-              //       materialTapTargetSize: MaterialTapTargetSize.padded,
-              //       backgroundColor: Colors.green,
-              //       child: const Icon(Icons.map, size: 36.0),
-              //     ),
-              //   ),
-              // ),
-            ]),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     getcurrentLocation();
+//     return Scaffold(
+//       appBar: AppBar(
+//         leading: IconButton(
+//           color: Colors.black,
+//           icon: const Icon(Icons.arrow_back, size: 32.0),
+//           onPressed: () => Navigator.pop(context, true),
+//         ),
+//         title: const Text(
+//           "View Donor",
+//           style: TextStyle(color: Colors.black, fontSize: 16),
+//         ),
+//       ),
+//       body: FutureBuilder<LatLng>(
+//           future: getcurrentLocation(),
+//           builder: (context, snapshot) {
+//             if (snapshot.hasData) {
+//               final locationModel = snapshot.data!;
+//               final latitude = locationModel.latitude;
+//               final longitude = locationModel.longitude;
 
-  // void _onMapTypeButtonPressed() {
-  //   setState(() {
-  //     _currentMapType = _currentMapType == MapType.normal
-  //         ? MapType.satellite
-  //         : MapType.normal;
-  //   });
-  // }
-}
+//               return GoogleMap(
+//                 onMapCreated: (GoogleMapController controller) {
+//                   _controller.complete(controller);
+//                 },
+//                 compassEnabled: true,
+//                 mapType: MapType.hybrid,
+//                 initialCameraPosition: CameraPosition(
+//                     tilt: 9.0,
+//                     target:
+//                         LatLng(locationModel.latitude, locationModel.longitude),
+//                     zoom: 10.5),
+//                 markers: {
+//                   Marker(
+//                     markerId: const MarkerId("currentLocation"),
+//                     // icon: currentLocationIcon,
+//                     position: LatLng(currentLocation!.latitude!,
+//                         currentLocation!.longitude!),
+//                   ),
+//                   // Marker(
+//                   //   markerId: MarkerId("source"),
+//                   //   icon: sourceIcon,
+//                   //   position: sourceLocation,
+//                   // ),
+//                   // Marker(
+//                   //   icon: destinationIcon,
+//                   //   markerId: MarkerId("destination"),
+//                   //   position: destination,
+//                   // ),
+//                 },
+//                 // polylines: {
+//                 //   Polyline(
+//                 //     polylineId: PolylineId("route"),
+//                 //     points: polylineCoordinates,
+//                 //     color: primaryColor,
+//                 //     width: 5,
+//                 //   ),
+//                 // },
+//               );
+//             }
+//             return (Center(
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   CircularProgressIndicator(
+//                     strokeWidth: 8,
+//                   ),
+//                   Text('Loading'),
+//                 ],
+//               ),
+//             ));
+//           }
+//           // Padding(
+//           //   padding: const EdgeInsets.all(16.0),
+//           //   child: Align(
+//           //     alignment: Alignment.topRight,
+//           //     child: FloatingActionButton(
+//           //       onPressed: () {
+//           //         _onMapTypeButtonPressed;
+//           //       },
+//           //       materialTapTargetSize: MaterialTapTargetSize.padded,
+//           //       backgroundColor: Colors.green,
+//           //       child: const Icon(Icons.map, size: 36.0),
+//           //     ),
+//           //   ),
+//           // ),
+//           ),
+//     );
+//   }
 
-// class TestGoogle extends StatelessWidget {
-//   TestGoogle({Key? key}) : super(key: key);
+//   // void _onMapTypeButtonPressed() {
+//   //   setState(() {
+//   //     _currentMapType = _currentMapType == MapType.normal
+//   //         ? MapType.satellite
+//   //         : MapType.normal;
+//   //   });
+//   // }
+// }
+
+// class OrderTrackingPage extends StatelessWidget {
+//   OrderTrackingPage({Key? key}) : super(key: key);
 
 //   late GoogleMapController mapController;
 //   Location location = Location();
 
 //   Future<LatLng> get() async {
 //     final _locationData = await location.getLocation();
-//     return LatLng(_locationData.latitude, _locationData.longitude);
+
+//     return LatLng(_locationData!.latitude!, _locationData!.longitude!);
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
+//       appBar: AppBar(
+//         leading: IconButton(
+//           color: Colors.black,
+//           icon: const Icon(Icons.arrow_back, size: 32.0),
+//           onPressed: () => Navigator.pop(context, true),
+//         ),
+//         title: const Text(
+//           "View Donor",
+//           style: TextStyle(color: Colors.black, fontSize: 16),
+//         ),
+//       ),
 //       body: FutureBuilder<LatLng>(
 //         future: get(),
 //         builder: (context, snapshot) {
@@ -197,14 +218,20 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
 //             final longitude = locationModel.longitude;
 
 //             return GoogleMap(
+
+//               mapType: MapType.normal,
 //               myLocationEnabled: true,
 //               onCameraMove: (CameraPosition cameraPosition) {
 //                 print(cameraPosition.zoom);
 //               },
-//               initialCameraPosition: CameraPosition(target: locationModel, zoom: 15.0),
+//               initialCameraPosition: CameraPosition(
+//                 target: locationModel,
+//                 zoom: 15.0,
+//                 tilt: 9.0,
+//               ),
 //             );
 //           }
-//           return const CircularProgressIndicator();
+//           return Center(child: const CircularProgressIndicator());
 //         },
 //       ),
 //     );
@@ -584,7 +611,6 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:location/location.dart';
 
-
 // class Gmap extends StatefulWidget {
 //   @override
 //   _GmapState createState() => _GmapState();
@@ -745,3 +771,453 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
 //     );
 //   }
 // }
+// import 'package:flutter/material.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// import 'package:location/location.dart';
+
+// import 'package:geoflutterfire/geoflutterfire.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:rxdart/rxdart.dart';
+// import 'dart:async';
+
+// void main() => runApp(MyApp());
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//         home: Scaffold(
+//         body: FireMap(),
+//       )
+//     );
+//   }
+// }
+
+// class FireMap extends StatefulWidget {
+//   State createState() => FireMapState();
+// }
+
+// class FireMapState extends State<FireMap> {
+//   late GoogleMapController mapController;
+//   Location location = new Location();
+
+//   FirebaseFirestore firestore = FirebaseFirestore.instance;
+//   Geoflutterfire geo = Geoflutterfire();
+
+//   // Stateful Data
+//   BehaviorSubject<double> radius = BehaviorSubject(seedValue: 100.0);
+//   late Stream<dynamic> query;
+
+//   // Subscription
+//   late StreamSubscription subscription;
+
+//   build(context) {
+//     return Stack(children: [
+
+//     GoogleMap(
+//           initialCameraPosition: CameraPosition(
+//             target: LatLng(24.142, -110.321),
+//             zoom: 15
+//           ),
+//           onMapCreated: _onMapCreated,
+//           myLocationEnabled: true,
+//           mapType: MapType.hybrid,
+//           compassEnabled: true,
+//          // trackCameraPosition: true,
+//       ),
+//      Positioned(
+//           bottom: 50,
+//           right: 10,
+//           child:
+//           TextButton(
+//             child: Icon(Icons.pin_drop, color: Colors.white),
+//             //color: Colors.green,
+//             onPressed: _addGeoPoint
+//           )
+//       ),
+//       Positioned(
+//         bottom: 50,
+//         left: 10,
+//         child: Slider(
+//           min: 100.0,
+//           max: 500.0,
+//           divisions: 4,
+//           value: radius.value,
+//           label: 'Radius ${radius.value}km',
+//           activeColor: Colors.green,
+//           inactiveColor: Colors.green.withOpacity(0.2),
+//           onChanged: _updateQuery,
+//         )
+//       )
+//     ]);
+//   }
+
+//   // Map Created Lifecycle Hook
+//   _onMapCreated(GoogleMapController controller) {
+//     _startQuery();
+//     setState(() {
+//       mapController = controller;
+//     });
+//   }
+
+//   _addMarker() {
+//     var marker = MarkerOptions(
+//       position: mapController.cameraPosition.target,
+//       icon: BitmapDescriptor.defaultMarker,
+//       infoWindowText: InfoWindowText('Magic Marker', '🍄🍄🍄')
+//     );
+
+//     mapController.addMarker(marker);
+//   }
+
+//   _animateToUser() async {
+//     var pos = await location.getLocation();
+//     mapController.animateCamera(CameraUpdate.newCameraPosition(
+//       CameraPosition(
+//           target: LatLng(pos['latitude'], pos['longitude']),
+//           zoom: 17.0,
+//         )
+//       )
+//     );
+//   }
+
+//   // Set GeoLocation Data
+//   Future<DocumentReference> _addGeoPoint() async {
+//     var pos = await location.getLocation();
+//     GeoFirePoint point = geo.point(latitude: pos['latitude'], longitude: pos['longitude']);
+//     return firestore.collection('locations').add({
+//       'position': point.data,
+//       'name': 'Yay I can be queried!'
+//     });
+//   }
+
+//   void _updateMarkers(List<DocumentSnapshot> documentList) {
+//     print(documentList);
+//     mapController.clearMarkers();
+//     documentList.forEach((DocumentSnapshot document) {
+//         GeoPoint pos = document.data['position']['geopoint'];
+//         double distance = document.data['distance'];
+//         var marker = MarkerOptions(
+//           position: LatLng(pos.latitude, pos.longitude),
+//           icon: BitmapDescriptor.defaultMarker,
+//           infoWindowText: InfoWindowText('Magic Marker', '$distance kilometers from query center')
+//         );
+
+//         mapController.addMarker(marker);
+//     });
+//   }
+
+//   _startQuery() async {
+//     // Get users location
+//     var pos = await location.getLocation();
+//     double lat = pos['latitude'];
+//     double lng = pos['longitude'];
+
+//     // Make a referece to firestore
+//     var ref = firestore.collection('locations');
+//     GeoFirePoint center = geo.point(latitude: lat, longitude: lng);
+
+//     // subscribe to query
+//     subscription = radius.switchMap((rad) {
+//       return geo.collection(collectionRef: ref).within(
+//         center: center,
+//         radius: rad,
+//         field: 'position',
+//         strictMode: true
+//       );
+//     }).listen(_updateMarkers);
+//   }
+
+//   _updateQuery(value) {
+//       final zoomMap = {
+//           100.0: 12.0,
+//           200.0: 10.0,
+//           300.0: 7.0,
+//           400.0: 6.0,
+//           500.0: 5.0
+//       };
+//       final zoom = zoomMap[value];
+//       mapController.moveCamera(CameraUpdate.zoomTo(zoom));
+
+//       setState(() {
+//         radius.add(value);
+//       });
+//   }
+
+//   @override
+//   dispose() {
+//     subscription.cancel();
+//     super.dispose();
+//   }
+
+// }
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:rxdart/rxdart.dart';
+
+import 'streambuilder_test.dart';
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//   runApp(MaterialApp(
+//     title: 'Geo Flutter Fire example',
+//     home: MyApp(),
+//     debugShowCheckedModeBanner: false,
+//   ));
+// }
+
+class GeoApp extends StatefulWidget {
+  @override
+  _GeoAppState createState() => _GeoAppState();
+}
+
+class _GeoAppState extends State<GeoApp> {
+  GoogleMapController? _mapController;
+  TextEditingController? _latitudeController, _longitudeController;
+
+  // firestore init
+  final radius = BehaviorSubject<double>.seeded(1.0);
+  final _firestore = FirebaseFirestore.instance;
+  final markers = <MarkerId, Marker>{};
+
+  late Stream<List<DocumentSnapshot>> stream;
+  late Geoflutterfire geo;
+
+  @override
+  void initState() {
+    super.initState();
+    _latitudeController = TextEditingController();
+    _longitudeController = TextEditingController();
+
+    geo = Geoflutterfire();
+    GeoFirePoint center = geo.point(latitude: 12.960632, longitude: 77.641603);
+    stream = radius.switchMap((rad) {
+      final collectionReference = _firestore.collection('locations');
+
+      return geo.collection(collectionRef: collectionReference).within(
+          center: center, radius: rad, field: 'position', strictMode: true);
+
+      /*
+      ****Example to specify nested object****
+
+      var collectionReference = _firestore.collection('nestedLocations');
+//          .where('name', isEqualTo: 'darshan');
+      return geo.collection(collectionRef: collectionReference).within(
+          center: center, radius: rad, field: 'address.location.position');
+
+      */
+    });
+  }
+
+  @override
+  void dispose() {
+    _latitudeController?.dispose();
+    _longitudeController?.dispose();
+    radius.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('GeoFlutterFire'),
+          actions: <Widget>[
+            IconButton(
+              onPressed: _mapController == null
+                  ? null
+                  : () {
+                      _showHome();
+                    },
+              icon: Icon(Icons.home),
+            )
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            //  // return StreamTestWidget();
+            // }));
+          },
+          child: Icon(Icons.navigate_next),
+        ),
+        body: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                child: Card(
+                  elevation: 4,
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  child: SizedBox(
+                    width: mediaQuery.size.width - 30,
+                    height: mediaQuery.size.height * (1 / 3),
+                    child: GoogleMap(
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: const CameraPosition(
+                        target: LatLng(12.960632, 77.641603),
+                        zoom: 15.0,
+                      ),
+                      markers: Set<Marker>.of(markers.values),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Slider(
+                  min: 1,
+                  max: 200,
+                  divisions: 4,
+                  value: _value,
+                  label: _label,
+                  activeColor: Colors.blue,
+                  inactiveColor: Colors.blue.withOpacity(0.2),
+                  onChanged: (double value) => changed(value),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    width: 100,
+                    child: TextField(
+                      controller: _latitudeController,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                          labelText: 'lat',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          )),
+                    ),
+                  ),
+                  Container(
+                    width: 100,
+                    child: TextField(
+                      controller: _longitudeController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          labelText: 'lng',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          )),
+                    ),
+                  ),
+                  MaterialButton(
+                    color: Colors.blue,
+                    onPressed: () {
+                      final lat =
+                          double.parse(_latitudeController?.text ?? '0.0');
+                      final lng =
+                          double.parse(_longitudeController?.text ?? '0.0');
+                      _addPoint(lat, lng);
+                    },
+                    child: const Text(
+                      'ADD',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+              MaterialButton(
+                color: Colors.amber,
+                child: const Text(
+                  'Add nested ',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  final lat = double.parse(_latitudeController?.text ?? '0.0');
+                  final lng = double.parse(_longitudeController?.text ?? '0.0');
+                  _addNestedPoint(lat, lng);
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    setState(() {
+      _mapController = controller;
+//      _showHome();
+      //start listening after map is created
+      stream.listen((List<DocumentSnapshot> documentList) {
+        _updateMarkers(documentList);
+      });
+    });
+  }
+
+  void _showHome() {
+    _mapController?.animateCamera(CameraUpdate.newCameraPosition(
+      const CameraPosition(
+        target: LatLng(12.960632, 77.641603),
+        zoom: 15.0,
+      ),
+    ));
+  }
+
+  void _addPoint(double lat, double lng) {
+    GeoFirePoint geoFirePoint = geo.point(latitude: lat, longitude: lng);
+    _firestore
+        .collection('locations')
+        .add({'name': 'random name', 'position': geoFirePoint.data}).then((_) {
+      print('added ${geoFirePoint.hash} successfully');
+    });
+  }
+
+  //example to add geoFirePoint inside nested object
+  void _addNestedPoint(double lat, double lng) {
+    GeoFirePoint geoFirePoint = geo.point(latitude: lat, longitude: lng);
+    _firestore.collection('nestedLocations').add({
+      'name': 'random name',
+      'address': {
+        'location': {'position': geoFirePoint.data}
+      }
+    }).then((_) {
+      print('added ${geoFirePoint.hash} successfully');
+    });
+  }
+
+  void _addMarker(double lat, double lng) {
+    final id = MarkerId(lat.toString() + lng.toString());
+    final _marker = Marker(
+      markerId: id,
+      position: LatLng(lat, lng),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+      infoWindow: InfoWindow(title: 'latLng', snippet: '$lat,$lng'),
+    );
+    setState(() {
+      markers[id] = _marker;
+    });
+  }
+
+  void _updateMarkers(List<DocumentSnapshot> documentList) {
+    documentList.forEach((DocumentSnapshot document) {
+      final data = document.data() as Map<String, dynamic>;
+      final GeoPoint point = data['position']['geopoint'];
+      _addMarker(point.latitude, point.longitude);
+    });
+  }
+
+  double _value = 20.0;
+  String _label = '';
+
+  changed(value) {
+    setState(() {
+      _value = value;
+      _label = '${_value.toInt().toString()} kms';
+      markers.clear();
+    });
+    radius.add(value);
+  }
+}

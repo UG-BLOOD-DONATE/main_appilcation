@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ug_blood_donate/components/custom_card.dart';
+import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/qr_generator.dart';
 
 class DonorCard extends StatefulWidget {
@@ -10,6 +13,24 @@ class DonorCard extends StatefulWidget {
 }
 
 class _DonorCardState extends State<DonorCard> {
+  User? user = FirebaseAuth.instance.currentUser;
+
+  UserModel loggedInUser = UserModel(groups: []);
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedInUser = UserModel.fromMap(value.data());
+      //print('hi user');
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Scaffold is a layout for
@@ -41,131 +62,129 @@ class _DonorCardState extends State<DonorCard> {
         // body is the majority of the screen.
         body: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Card(
-                    color: Colors.pink,
-                    child: Column(
+              Card(
+                color: Colors.pink,
+                child: Column(
+                  children: <Widget>[
+                    Positioned(
+                        child: Row(
                       children: <Widget>[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        ),
+                        Text(
+                          "Donor Card",
+                          style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 140,
+                        ),
+                        // const Text(
+                        //   "Blood Donation",
+                        //   style: TextStyle(
+                        //     color: Colors.white,
+                        //     fontSize: 20,
+                        //   ),
+                        // )
+                      ],
+                    )),
+                    Row(
+                      children: const [
                         Positioned(
-                            child: Row(
-                          children: <Widget>[
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          left: 0.0,
+                          child: Text(
+                            "1500",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 70,
                             ),
-                            Text(
-                              "Donor Card",
-                              style: new TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 140,
-                            ),
-                            const Text(
-                              "Blood Donation",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            )
-                          ],
-                        )),
-                        Row(
-                          children: const [
-                            Positioned(
-                              left: 0.0,
-                              child: Text(
-                                "1500",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 70,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              "Points ",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 150,
-                            ),
-                          ],
+                          ),
                         ),
-                        const SizedBox(
-                          height: 10,
+                        Text(
+                          "Points ",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
-                            Positioned(
-                              left: 0.0,
-                              child: Text(
-                                "****** ***** **** ",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                              ),
+                        // SizedBox(
+                        //   width: 150,
+                        // ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: const [
+                        Positioned(
+                          left: 0.0,
+                          child: Text(
+                            "****** ***** **** 7056 ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
                             ),
-                            Text(
-                              "7056 ",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 145,
-                            ),
-                          ],
+                          ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            const Positioned(
-                              left: 0.0,
-                              child: Text(
-                                "MAWEJJE ",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                            const Text(
-                              "MARK WILLIAM ",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 90,
-                            ),
-                            CustomCard(
-                              onTap: () {
-                                Navigator.of(context).push(CupertinoPageRoute(
-                                    builder: (_) => QRGenerator()));
-                              },
-                              child: Image.asset('assets/images/qr.png'),
-                            ),
-                          ],
+                        // Text(
+                        //   "7056 ",
+                        //   style: TextStyle(
+                        //     color: Colors.white,
+                        //     fontSize: 20,
+                        //   ),
+                        // ),
+                        SizedBox(
+                          width: 145,
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        // const Positioned(
+                        //   left: 0.0,
+                        //   child: Text(
+                        //     "MAWEJJE ",
+                        //     style: TextStyle(
+                        //       color: Colors.white,
+                        //       fontSize: 20,
+                        //     ),
+                        //   ),
+                        // ),
+                        Text(
+                          "${loggedInUser.fullname}",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 60,
+                        ),
+                        CustomCard(
+                          onTap: () {
+                            Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (_) => QRGenerator()));
+                          },
+                          child: Image.asset(
+                            'assets/images/qr.png',
+                            width: 60,
+                            height: 60,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
