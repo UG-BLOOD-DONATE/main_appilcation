@@ -298,8 +298,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 child: Text(sugar),
                               );
                             }).toList(),
-                            onChanged: (val) => setState(() =>
-                          bloodtype = val.toString() as TextEditingController),
+                            onChanged: (val) => setState(() => bloodtype =
+                                val.toString() as TextEditingController),
                             icon: const Icon(
                               Icons.arrow_drop_down_circle_rounded,
                               color: Colors.pink,
@@ -320,7 +320,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   Icons.bloodtype,
                                   color: Colors.pink,
                                 ),
-                                hintText: 'BloodType'),
+                                hintText: 'Bloodtype'),
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
