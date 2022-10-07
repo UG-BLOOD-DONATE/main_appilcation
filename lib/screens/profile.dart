@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:alan_voice/alan_voice.dart';
+//import 'package:alan_voice/alan_voice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -30,7 +30,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> with RouteAware {
-   /// Subscribe to RouteObserver
+  /// Subscribe to RouteObserver
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     routeObserver.unsubscribe(this);
     super.dispose();
   }
@@ -54,9 +54,9 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
   }
 
   void setVisuals(String screen) {
-  var visual = "{\"screen\":\"$screen\"}";
-  AlanVoice.setVisualState(visual);
-}
+    var visual = "{\"screen\":\"$screen\"}";
+    //AlanVoice.setVisualState(visual);
+  }
 
   currentUserId() {
     print("${firebaseAuth.currentUser?.uid}");
