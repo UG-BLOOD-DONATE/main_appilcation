@@ -25,6 +25,7 @@ import 'package:ug_blood_donate/screens/donorcard.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
 import 'package:ug_blood_donate/screens/first_screens/posts.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
+import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/map/test_map.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
@@ -35,6 +36,7 @@ import 'package:ug_blood_donate/screens/upload.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:alan_voice/alan_voice.dart';
 import 'package:ug_blood_donate/Chataaaapppp/screens/home_screen.dart';
+
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
   'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
@@ -69,26 +71,27 @@ class _HomeState extends State<Home> {
     var visual = "{\"screen\":\"$screen\"}";
     AlanVoice.setVisualState(visual);
   }
+
   void _handleCommand(Map<String, dynamic> command) {
-  switch(command["command"]) {
-    case "forward":
-      Navigator.pushNamed(context, '/profile');
-      break;
-    case "back":
-      Navigator.pop(context);
-      break;
-    default:
-      debugPrint("Unknown command");
+    switch (command["command"]) {
+      case "forward":
+        Navigator.pushNamed(context, '/profile');
+        break;
+      case "back":
+        Navigator.pop(context);
+        break;
+      default:
+        debugPrint("Unknown command");
+    }
   }
-}
-  
-_HomeState() {
+
+  _HomeState() {
     /// Init Alan Button with project key from Alan Studio
     AlanVoice.addButton(
-      "bb4a57beebd84d2f03df53878c57c0ad2e956eca572e1d8b807a3e2338fdd0dc/stage");
+        "bb4a57beebd84d2f03df53878c57c0ad2e956eca572e1d8b807a3e2338fdd0dc/stage");
 
     /// Handle commands from Alan Studio
-    AlanVoice.onCommand.add((command)  => _handleCommand(command.data));
+    AlanVoice.onCommand.add((command) => _handleCommand(command.data));
   }
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
   //final User user = ;
@@ -284,7 +287,9 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => DonerProfilePage(documentId: '',),
+                  builder: (_) => DonerProfilePage(
+                    documentId: '',
+                  ),
                 ),
               ),
               child: Container(
@@ -338,7 +343,6 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-
                   builder: (_) => HomePage(),
                 ),
               ),
@@ -350,8 +354,7 @@ class _BuildBodyState extends State<BuildBody> {
                 child: const Text('chat room >>>'),
               ),
             ),
-          )
-,
+          ),
           //const CreatePost(),
           Center(
             child: ElevatedButton(
@@ -370,7 +373,8 @@ class _BuildBodyState extends State<BuildBody> {
                 child: const Text('donor card >>>'),
               ),
             ),
-          ), Center(
+          ),
+          Center(
             child: ElevatedButton(
               //   child: WebViewExample(),
               onPressed: () => Navigator.push(
@@ -404,6 +408,24 @@ class _BuildBodyState extends State<BuildBody> {
                 width: 150,
                 height: 100,
                 child: const Text('map test>>>'),
+              ),
+            ),
+          ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MyHomeScreen(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('new home screen>>>'),
               ),
             ),
           ),
@@ -559,6 +581,7 @@ class icondata extends StatelessWidget {
     );
   }
 }
+
 class homeScreen extends StatelessWidget {
   const homeScreen({super.key});
 
