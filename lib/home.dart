@@ -33,6 +33,7 @@ import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/Chataaaapppp/screens/home_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'Chatsection/pages/home_page.dart';
 
@@ -383,6 +384,25 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+//builder: (_) => UserInformation(),
+                  builder: (_) => _launchURLApp(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('Contribute Cash to event >>>'),
+              ),
+            ),
+          ),
         ],
       ),
     ));
@@ -703,5 +723,14 @@ class homeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+_launchURLApp() async {
+  var url = Uri.parse("https://paystack.com/pay/ugblooddonate");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
