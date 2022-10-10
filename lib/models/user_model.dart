@@ -8,6 +8,7 @@ class UserModel {
   String? bloodType;
   String? location;
   String? photoURL;
+  List<String?> groups;
 
   UserModel(
       {this.uid,
@@ -16,7 +17,8 @@ class UserModel {
       this.phonenumber,
       this.bloodType,
       this.location,
-      this.photoURL});
+      this.photoURL,
+      required this.groups});
 //data from server
   factory UserModel.fromMap(map) {
     return UserModel(
@@ -27,6 +29,7 @@ class UserModel {
       bloodType: map['bloodType'],
       location: map['location'],
       photoURL: map['photoURL'],
+      groups: map['groups'],
     );
   }
 
@@ -41,6 +44,7 @@ class UserModel {
       'bloodType': bloodType,
       'location': location,
       'photoURL': photoURL,
+      'groups' :groups,
     };
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ug_blood_donate/home.dart';
+import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:image/image.dart' as Im;
 import 'package:ug_blood_donate/widgets/indicators.dart';
@@ -32,6 +34,9 @@ class Upload extends StatefulWidget {
 }
 
 class _UploadState extends State<Upload> {
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel(groups: []);
+ 
   TextEditingController locationController = TextEditingController();
   TextEditingController captionController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
@@ -40,6 +45,8 @@ class _UploadState extends State<Upload> {
   String postId = const Uuid().v4();
 
   File? image;
+
+  
 
   handleChooseFromGalley() async {
     // Navigator.pop(context);
@@ -130,6 +137,19 @@ class _UploadState extends State<Upload> {
         ),
       ]),
     );
+  }
+ @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedInUser = UserModel.fromMap(value.data());
+      //print('hi user');
+      setState(() {});
+    });
   }
 
   @override
@@ -285,10 +305,37 @@ class _UploadState extends State<Upload> {
     // return downloadUrl;
   }
 
+//getting user data @override
+  Widget body() {
+    return StreamBuilder<QuerySnapshot>(
+      stream:FirebaseFirestore.instance.collection("users").where("uid",isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+
+        return ListView(
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+            return ListTile(
+              title: Text(data['fullname']),
+              subtitle: Image.network(data["photoURL"]),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+  
   createPostInFirestore(
       {required String mediaUrl,
       required String location,
-      required String description}) {
+      required String description
+      }) {
     postRef
         .doc(widget.currentUser.uid)
         .collection("userPosts")
@@ -296,10 +343,12 @@ class _UploadState extends State<Upload> {
         .set({
       "postId": postId,
       "ownerId": widget.currentUser.uid,
-      //"username": widget.currentUser.fullname,
+      "username":loggedInUser.fullname,
+      "profilepic":loggedInUser.photoURL,
       "mediaUrl": mediaUrl,
       "description": description,
-      //"timestamp": timestamp,
+      "location": location,
+      'createdOn': DateTime.now().millisecondsSinceEpoch.toString(),
       "likes": {},
     });
   }
@@ -307,9 +356,12 @@ class _UploadState extends State<Upload> {
   Future<dynamic> getUserLocation() async {
     Placemark placemark = await getloca();
     String completeAddress =
-        '${placemark..subThoroughfare} ${placemark.administrativeArea} ${placemark.country} ${placemark.postalCode} ${placemark.subLocality}';
+        '${placemark.subThoroughfare} ${placemark.administrativeArea} ${placemark.country} ${placemark.postalCode} ${placemark.subLocality}';
     String formattedAddress = "${placemark.locality}, ${placemark.country}";
     print(completeAddress);
     locationController.text = formattedAddress;
+    setState(() {
+      locationController.text = formattedAddress;
+    });
   }
 }

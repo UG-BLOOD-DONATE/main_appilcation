@@ -13,6 +13,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
+import 'package:ug_blood_donate/Chatsection/service/database_service.dart';
+
 import 'package:ug_blood_donate/screens/first_screens/loginScreen.dart';
 import 'package:ug_blood_donate/services/database_report.dart';
 
@@ -46,8 +48,17 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController telno = TextEditingController();
   TextEditingController bloodtype = TextEditingController();
   TextEditingController location = TextEditingController();
-  final List<String> sugars = ['O', 'A', 'B', 'AB'];
-   String? _currentSugars;
+  final List<String> sugars = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'O+',
+    'O-',
+    'AB+',
+    'AB-'
+  ];
+  String? _currentSugars;
   Future<dynamic> getUserLocation() async {
     Placemark placemark = await getloca();
     String completeAddress =
@@ -55,6 +66,9 @@ class _RegisterPageState extends State<RegisterPage> {
     String formattedAddress = "${placemark.locality}, ${placemark.country}";
     print(completeAddress);
     location.text = formattedAddress;
+    setState(() {
+      location.text = formattedAddress;
+    });
   }
 
   // getImage() async {
@@ -286,20 +300,20 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           const SizedBox(height: 10),
                           DropdownButtonFormField(
-                            value: _currentSugars ?? 'A',
+                            hint: const Text('Blood Type'),
                             items: sugars.map((sugar) {
                               return DropdownMenuItem(
                                 value: sugar,
-                                child: Text(sugar),
+                                child: Text('$sugar'),
                               );
                             }).toList(),
-                            onChanged: (val) =>
-                                setState(() => _currentSugars = val as String),
-                                icon: const Icon(
-                                  Icons.arrow_drop_down_circle_rounded,
-                                  color: Colors.pink,
-                                ),
-                                dropdownColor: Colors.pink[500] ,
+                            onChanged: (val) => setState(() => bloodtype =
+                                val.toString() as TextEditingController),
+                            icon: const Icon(
+                              Icons.arrow_drop_down_circle_rounded,
+                              color: Colors.pink,
+                            ),
+                            dropdownColor: Colors.pink[500],
                             decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
@@ -315,7 +329,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   Icons.bloodtype,
                                   color: Colors.pink,
                                 ),
-                                hintText: 'BloodType'),
+                                hintText: 'Bloodtype'),
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
@@ -460,7 +474,7 @@ class _RegisterPageState extends State<RegisterPage> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-    UserModel userModel = UserModel();
+    UserModel userModel = UserModel(groups: []);
 
     userModel.email = user!.email;
     userModel.uid = user.uid;
@@ -469,14 +483,17 @@ class _RegisterPageState extends State<RegisterPage> {
     userModel.bloodType = bloodtype.text;
     userModel.location = location.text;
     userModel.photoURL = null;
+    userModel.groups = [];
 
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully");
-    await DatabaseService(uid: user.uid).updateUserRepost(
+    await DataBaseService(uid: user.uid).updateUserRepost(
         'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty');
+    await DatabaseService(uid: user.uid).getUserGroups();
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

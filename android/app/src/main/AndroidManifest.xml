@@ -16,6 +16,13 @@
     <data android:scheme="tel" />
    </intent>
    </queries>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- Include required permissions for Google Maps API to run. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <application
         android:label="ug_blood_donate"
         android:name="${applicationName}"
@@ -42,6 +49,7 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+          
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
@@ -50,5 +58,14 @@
             android:value="2" />
             <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyBfVy6AcTcPKFNbEBMu30Ws7Cj-kc1-yew"/>
+            <receiver
+                android:name="com.intivoto.flutter_geofence.GeofenceBroadcastReceiver"
+                android:enabled="true"
+                android:exported="true" />
+
+            <service
+                android:name="com.intivoto.flutter_geofence.FlutterGeofencePlugin"
+                android:exported="true"
+                android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 </manifest>

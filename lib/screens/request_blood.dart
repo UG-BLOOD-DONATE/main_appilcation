@@ -2,12 +2,15 @@
 
 import 'dart:math';
 
+import 'package:alan_voice/alan_voice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ug_blood_donate/components/constants.dart';
 import 'package:ug_blood_donate/home.dart';
+
+import '../main.dart';
 
 const String myhomepageRoute = '/';
 //const String myprofileRoute = 'profile';
@@ -36,6 +39,8 @@ class Request extends StatefulWidget {
 }
 
 class _RequestState extends State<Request> {
+
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -90,7 +95,7 @@ class _MyRequestState extends State<MyRequest> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text('Your request has been sent'),
+                const Text('Your request has been sent'),
                 const SizedBox(
                   height: 10,
                 ),
@@ -135,7 +140,7 @@ class _MyRequestState extends State<MyRequest> {
                     ),
                   ),
                 ),
-                title: Text(
+                title: const Text(
                   "Create A Request",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
@@ -208,7 +213,7 @@ class _MyRequestState extends State<MyRequest> {
                     ),
                     DropdownButtonFormField(
                       //value: bloodtype == null ? 'Blood Type' : bloodtype,
-                      hint: Text('Blood Type'),
+                      hint: const Text('Blood Type'),
                       decoration: textInputDecoration,
                       items: sugars.map((sugar) {
                         return DropdownMenuItem(
@@ -219,23 +224,6 @@ class _MyRequestState extends State<MyRequest> {
                       onChanged: (val) => setState(() =>
                           bloodtype = val.toString() as TextEditingController),
                     ),
-                    // TextFormField(
-                    //   controller: bloodtype,
-                    //   decoration: const InputDecoration(
-                    //       icon: Icon(
-                    //         Icons.bloodtype_outlined,
-                    //         color: Color.fromARGB(234, 239, 52, 83),
-                    //       ),
-                    //       labelText: 'blood_type',
-                    //       enabledBorder: OutlineInputBorder(
-                    //         borderRadius:
-                    //             BorderRadius.all(Radius.circular(20.0)),
-                    //         borderSide:
-                    //             BorderSide(color: Colors.grey, width: 0.0),
-                    //       ),
-                    //       border: OutlineInputBorder()),
-                    //   keyboardType: TextInputType.text,
-                    // ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -294,40 +282,6 @@ class _MyRequestState extends State<MyRequest> {
                         }
                       },
                     ),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                    // DropdownButtonFormField(
-                    //     decoration: const InputDecoration(
-                    //         enabledBorder: OutlineInputBorder(
-                    //           borderRadius:
-                    //               BorderRadius.all(Radius.circular(20.0)),
-                    //           borderSide:
-                    //               BorderSide(color: Colors.grey, width: 0.0),
-                    //         ),
-                    //         border: OutlineInputBorder()),
-                    //     items: const [
-                    //       DropdownMenuItem(
-                    //         child: Text("ºC"),
-                    //         value: 1,
-                    //       ),
-                    //       DropdownMenuItem(
-                    //         child: Text("ºF"),
-                    //         value: 2,
-                    //       )
-                    //     ],
-                    //     hint: const Text("Select item"),
-                    //     onChanged: (value) {
-                    //       setState(() {
-                    //         measure = value;
-                    //         // measureList.add(measure);
-                    //       });
-                    //     },
-                    //     onSaved: (value) {
-                    //       setState(() {
-                    //         measure = value;
-                    //       });
-                    //     }),
                     const SizedBox(
                       height: 20,
                     ),
@@ -343,7 +297,7 @@ class _MyRequestState extends State<MyRequest> {
                           setState(() {
                             showProgress = true;
                           });
-                          Future.delayed(Duration(seconds: 3), (() {
+                          Future.delayed(const Duration(seconds: 3), (() {
                             setState(() {
                               showProgress = false;
                             });
@@ -368,16 +322,6 @@ class _MyRequestState extends State<MyRequest> {
                                 );
                           }
                         },
-                        child: showProgress
-                            ? CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : Text(
-                                'REQUEST',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
                         style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all<Color>(Colors.pink),
@@ -387,6 +331,16 @@ class _MyRequestState extends State<MyRequest> {
                             ),
                           ),
                         ),
+                        child: showProgress
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text(
+                                'REQUEST',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
                       ),
                     )
                   ],
@@ -399,38 +353,6 @@ class _MyRequestState extends State<MyRequest> {
     );
   }
 }
-
-// class MyProfilePage extends StatefulWidget {
-//   @override
-//   State<StatefulWidget> createState() => _MyProfilePageState();
-// }
-
-// class _MyProfilePageState extends State<MyProfilePage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('My profile'),
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(children: <Widget>[
-//           Row(children: <Widget>[
-//             const Text("New data",
-//                 style: TextStyle(
-//                   fontSize: 24,
-//                 )),
-//             const Spacer(),
-//             ElevatedButton(
-//               child: const Text('New'),
-//               onPressed: () => Navigator.pop(context),
-//             )
-//           ]),
-//         ]),
-//       ),
-//     );
-//   }
-// }
 
 extension StringExtension on String {
   // Method used for capitalizing the input from the form
