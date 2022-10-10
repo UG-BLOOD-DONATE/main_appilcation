@@ -156,498 +156,509 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
             num = data['phonenumber'];
 
             //return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-          }
 
-          //return Text("loading");
-          return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                leading: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.navigate_before_sharp,
-                    color: Colors.black,
-                    size: 24.0,
-                  ),
-                ),
-                title: const Text(
-                  "Profile",
-                  style: TextStyle(color: Colors.black),
-                ),
-                centerTitle: true,
-                actions: <Widget>[
-                  IconButton(
-                    icon: const Icon(
-                      Icons.edit_note_sharp,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
+            //return Text("loading");
+            return Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  leading: GestureDetector(
+                    onTap: () {
                       Navigator.pop(context);
                     },
-                  )
-                ],
-                //foregroundColor: Colors.black,
-                //backgroundColor: Colors.white,
-              ),
-
-              // body is the majority of the screen.
-              body: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 34,
+                    child: Icon(
+                      Icons.navigate_before_sharp,
+                      color: Colors.black,
+                      size: 24.0,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: GestureDetector(
-                            onDoubleTap: () {
-                              pickUploadProfilePic(userId: currentUserId());
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.fromLTRB(120, 5, 40, 24),
-                              height: 120,
-                              width: 120,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: primary,
-                              ),
-                              child: Center(
-                                child: pic == null
-                                    ? const Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                        size: 80,
-                                      )
-                                    : ClipRRect(
-                                        borderRadius: BorderRadius.circular(20),
-                                        child: Image.network(pic),
-                                      ),
+                  ),
+                  title: const Text(
+                    "Profile",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  centerTitle: true,
+                  actions: <Widget>[
+                    IconButton(
+                      icon: const Icon(
+                        Icons.edit_note_sharp,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                  //foregroundColor: Colors.black,
+                  //backgroundColor: Colors.white,
+                ),
+
+                // body is the majority of the screen.
+                body: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 34,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: GestureDetector(
+                              onDoubleTap: () {
+                                pickUploadProfilePic(userId: currentUserId());
+                              },
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.fromLTRB(120, 5, 40, 24),
+                                height: 120,
+                                width: 120,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: primary,
+                                ),
+                                child: Center(
+                                  child: pic == null
+                                      ? const Icon(
+                                          Icons.person,
+                                          color: Colors.white,
+                                          size: 80,
+                                        )
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          child: Image.network(pic),
+                                        ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          /*1*/
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              /*2*/
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 30),
-                                child: Text(
-                                  "${name}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        /*3*/
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.location_on, color: Colors.pink[500]),
-                        Text(
-                          "${loc}",
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          /*1*/
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                  width: 150,
-                                  height: 50,
-                                  child: ElevatedButton.icon(
-                                      icon: const Icon(
-                                        Icons.contact_phone,
-                                        color: Colors.white,
-                                        size: 24.0,
-                                      ),
-                                      label: const Text('Call Now'),
-                                      onPressed: () {
-                                        print('Pressed');
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                const Color.fromARGB(
-                                                    150, 27, 158, 163)),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                        ),
-                                      ))),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          /*1*/
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                  width: 150,
-                                  height: 50,
-                                  child: ElevatedButton.icon(
-                                      icon: const Icon(
-                                        Icons.navigate_before_sharp,
-                                        color: Colors.white,
-                                        size: 24.0,
-                                      ),
-                                      label: const Text('Request'),
-                                      onPressed: () {
-                                        print('Pressed');
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                const Color.fromARGB(
-                                                    255, 233, 10, 103)),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                        ),
-                                      ))),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                            width: 105,
-                            height: 100,
-                            child: ElevatedButton(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.white),
-                                  shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            /*1*/
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                /*2*/
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 30),
+                                  child: Text(
+                                    "${name}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25),
                                   ),
                                 ),
-                                child: ListTile(
-                                  title: Text(
-                                    "${blood}",
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
+                              ],
+                            ),
+                          ),
+                          /*3*/
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.location_on, color: Colors.pink[500]),
+                          Text(
+                            "${loc}",
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            /*1*/
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                    width: 150,
+                                    height: 50,
+                                    child: ElevatedButton.icon(
+                                        icon: const Icon(
+                                          Icons.contact_phone,
+                                          color: Colors.white,
+                                          size: 24.0,
+                                        ),
+                                        label: const Text('Call Now'),
+                                        onPressed: () {
+                                          print('Pressed');
+                                        },
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  const Color.fromARGB(
+                                                      150, 27, 158, 163)),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                          ),
+                                        ))),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                            /*1*/
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                    width: 150,
+                                    height: 50,
+                                    child: ElevatedButton.icon(
+                                        icon: const Icon(
+                                          Icons.navigate_before_sharp,
+                                          color: Colors.white,
+                                          size: 24.0,
+                                        ),
+                                        label: const Text('Request'),
+                                        onPressed: () {
+                                          print('Pressed');
+                                        },
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  const Color.fromARGB(
+                                                      255, 233, 10, 103)),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                          ),
+                                        ))),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                              width: 105,
+                              height: 100,
+                              child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.white),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
                                     ),
                                   ),
-                                  subtitle: Text(
-                                    'Blood Type',
-                                    style: TextStyle(
-                                        fontSize: 8, color: Colors.black),
-                                  ),
-                                ))),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          /*1*/
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                  width: 100,
-                                  height: 105,
-                                  child: ElevatedButton(
-                                      onPressed: () {},
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.white),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
-                                          ),
-                                        ),
+                                  child: ListTile(
+                                    title: Text(
+                                      "${blood}",
+                                      style: TextStyle(
+                                        fontSize: 30,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      child: const ListTile(
-                                        title: Text(
-                                          '05',
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        subtitle: Text(
-                                          'Donated',
-                                          style: TextStyle(
-                                              fontSize: 8, color: Colors.black),
-                                        ),
-                                      ))),
-                            ],
+                                    ),
+                                    subtitle: Text(
+                                      'Blood Type',
+                                      style: TextStyle(
+                                          fontSize: 8, color: Colors.black),
+                                    ),
+                                  ))),
+                          const SizedBox(
+                            width: 10,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          /*1*/
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                  width: 100,
-                                  height: 110,
-                                  child: ElevatedButton(
-                                      onPressed: () {},
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.white),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
+                          Expanded(
+                            /*1*/
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                    width: 100,
+                                    height: 105,
+                                    child: ElevatedButton(
+                                        onPressed: () {},
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.white),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      child: const ListTile(
-                                        title: Text(
-                                          '02',
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
+                                        child: const ListTile(
+                                          title: Text(
+                                            '05',
+                                            style: TextStyle(
+                                              fontSize: 30,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        ),
-                                        subtitle: Flexible(
-                                          child: Text(
-                                            'Requested',
-                                            maxLines: 1,
-                                            softWrap: false,
-                                            overflow: TextOverflow.fade,
+                                          subtitle: Text(
+                                            'Donated',
                                             style: TextStyle(
                                                 fontSize: 8,
                                                 color: Colors.black),
                                           ),
+                                        ))),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            /*1*/
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                    width: 100,
+                                    height: 110,
+                                    child: ElevatedButton(
+                                        onPressed: () {},
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Colors.white),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                            ),
+                                          ),
                                         ),
-                                      )))
+                                        child: const ListTile(
+                                          title: Text(
+                                            '02',
+                                            style: TextStyle(
+                                              fontSize: 30,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          subtitle: Flexible(
+                                            child: Text(
+                                              'Requested',
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              overflow: TextOverflow.fade,
+                                              style: TextStyle(
+                                                  fontSize: 8,
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        )))
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Card(
+                        child: Container(
+                          height: 60,
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Icon(
+                                Icons.calendar_month_outlined,
+                                color: Colors.pink,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                /*1*/
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    SizedBox(
+                                      height: 25,
+                                    ),
+                                    Text(
+                                      'Available for donate',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              /*3*/
+                              Icon(
+                                Icons.toggle_on,
+                                color: Colors.pink[500],
+                                size: 50,
+                              ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Card(
-                      child: Container(
-                        height: 60,
-                        child: Row(
-                          children: [
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Icon(
-                              Icons.calendar_month_outlined,
-                              color: Colors.pink,
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              /*1*/
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  SizedBox(
-                                    height: 25,
-                                  ),
-                                  Text(
-                                    'Available for donate',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            /*3*/
-                            Icon(
-                              Icons.toggle_on,
-                              color: Colors.pink[500],
-                              size: 50,
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Card(
-                      child: Container(
-                        height: 60,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Icon(Icons.messenger, color: Colors.pink[500]),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Text(
-                              "Invite a friend",
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                            )
-                          ],
-                        ),
+                      const SizedBox(
+                        height: 5,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Card(
-                      child: Container(
-                        height: 60,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Icon(Icons.info, color: Colors.pink[500]),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Text(
-                              "Get help",
-                              style: TextStyle(
-                                fontSize: 20,
+                      Card(
+                        child: Container(
+                          height: 60,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              const SizedBox(
+                                width: 10,
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Card(
-                      child: Container(
-                        height: 60,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Icon(Icons.logout_rounded, color: Colors.pink[500]),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            CustomCard(
-                              onTap: () {
-                                showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) {
-                                      return CupertinoAlertDialog(
-                                        title: Text('Log out'),
-                                        content:
-                                            Text('Murife dont run dooont run?'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('No')),
-                                          TextButton(
-                                            onPressed: () {
-                                              firebaseAuth.signOut();
-                                              Navigator.of(context).push(
-                                                  CupertinoPageRoute(
-                                                      builder: (_) =>
-                                                          const Frist_Home()));
-                                            },
-                                            child: Text('Yes'),
-                                          )
-                                        ],
-                                      );
-                                    });
-                              },
-                              child: const Text(
-                                "Sign Out",
+                              Icon(Icons.messenger, color: Colors.pink[500]),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                "Invite a friend",
                                 style: TextStyle(
                                   fontSize: 20,
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ));
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Card(
+                        child: Container(
+                          height: 60,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Icon(Icons.info, color: Colors.pink[500]),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text(
+                                "Get help",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Card(
+                        child: Container(
+                          height: 60,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Icon(Icons.logout_rounded,
+                                  color: Colors.pink[500]),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              CustomCard(
+                                onTap: () {
+                                  showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (context) {
+                                        return CupertinoAlertDialog(
+                                          title: Text('Log out'),
+                                          content: Text(
+                                              'Murife dont run dooont run?'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('No')),
+                                            TextButton(
+                                              onPressed: () {
+                                                firebaseAuth.signOut();
+                                                Navigator.of(context).push(
+                                                    CupertinoPageRoute(
+                                                        builder: (_) =>
+                                                            const Frist_Home()));
+                                              },
+                                              child: Text('Yes'),
+                                            )
+                                          ],
+                                        );
+                                      });
+                                },
+                                child: const Text(
+                                  "Sign Out",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                ));
+          }
+          return Scaffold(
+            body: Container(
+              child: CircularProgressIndicator(
+                color: Colors.pink,
+              ),
+            ),
+          );
         });
   }
 }
