@@ -25,6 +25,7 @@ import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -311,18 +312,13 @@ class _BuildBodyState extends State<BuildBody> {
           Center(
             child: ElevatedButton(
               //   child: WebViewExample(),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => Report_Page(),
-                ),
-              ),
+              onPressed: _launchURLApp,
               child: Container(
                 color: Color.fromARGB(0, 251, 251, 251),
                 padding: const EdgeInsets.all(10),
                 width: 150,
                 height: 100,
-                child: const Text('Contribute to event >>>'),
+                child: const Text('Donate to event >>>'),
               ),
             ),
           ),
@@ -477,5 +473,25 @@ class icondata extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+//a function for rendering the payment page in browser
+_launchURLBrowser() async {
+  var url = Uri.parse("https://paystack.com/pay/ugblooddonate");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+//In App function for rendering the payment page
+_launchURLApp() async {
+  var url = Uri.parse("https://paystack.com/pay/ugblooddonate");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
