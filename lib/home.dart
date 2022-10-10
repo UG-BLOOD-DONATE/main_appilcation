@@ -24,7 +24,8 @@ import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/doner_profile.dart';
 import 'package:ug_blood_donate/screens/donorcard.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
-import 'package:ug_blood_donate/screens/first_screens/posts.dart';
+import 'package:ug_blood_donate/screens/first_screens/getposts.dart';
+
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';

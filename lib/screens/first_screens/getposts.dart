@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/view_image.dart';
+import 'package:getwidget/getwidget.dart';
 
 class displayposts extends StatefulWidget {
   displayposts({super.key});
@@ -15,6 +17,8 @@ class displayposts extends StatefulWidget {
 }
 
 class _displaypostsState extends State<displayposts> {
+  String? description;
+  String? image;
   // User? user = FirebaseAuth.instance.currentUser;
   // UserModel loggedInUser = UserModel(groups: []);
   // void retrievePosts() {
@@ -97,6 +101,7 @@ class _displaypostsState extends State<displayposts> {
             // .collection('posts')
             // .doc(FirebaseAuth.instance.currentUser!.uid)
             .collectionGroup('userPosts')
+            
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
@@ -110,13 +115,12 @@ class _displaypostsState extends State<displayposts> {
                 .map((DocumentSnapshot document) {
                   Map<String, dynamic> data =
                       document.data()! as Map<String, dynamic>;
-                  return ListTile(
-                    leading: Image.network(data['mediaUrl']),
-                    title: Text(data['description']),
-                  );
+                  return listOfTweets(description = data["description"],
+                      image = data["mediaUrl"]);
                 })
                 .toList()
-                .cast(),
+                .cast()
+                ,
           );
         },
       ),
@@ -139,4 +143,111 @@ class _displaypostsState extends State<displayposts> {
   //     });
   //   });
   // }
+
+  Widget listOfTweets(String description, String image) {
+    return SingleChildScrollView(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          tweetAvatar(),
+          tweetBody(description, image),
+        ],
+      ),
+    );
+  }
+
+  Widget tweetAvatar() {
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      child: CircleAvatar(
+        backgroundImage: NetworkImage(
+            "https://images.wallpapersden.com/image/download/evil-thanos-smile_bGtnbWuUmZqaraWkpJRnamtlrWZpaWU.jpg"),
+      ),
+    );
+  }
+
+  Widget tweetBody(String description, String image) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          tweetHeader(),
+          tweetText(description),
+          SizedBox(height: 25),
+          tweetButtons(image),
+        ],
+      ),
+    );
+  }
+
+  Widget tweetHeader() {
+    return Row(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(right: 5.0),
+          child: Text(
+            "UG Blood Donate",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Text(
+          '@thanosak ·5m ',
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+        Spacer(),
+        IconButton(
+          icon: Icon(
+            Icons.arrow_downward,
+            size: 14.0,
+            color: Colors.grey,
+          ),
+          onPressed: () {},
+        ),
+      ],
+    );
+  }
+
+  Widget tweetText(String description) {
+    return Text(
+      description,
+      overflow: TextOverflow.clip,
+    );
+  }
+
+  Widget tweetButtons(String image) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: Image.network(
+        image,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
+  Widget tweetIconButton(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 16.0,
+          color: Colors.black45,
+        ),
+        Container(
+          margin: const EdgeInsets.all(6.0),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.black45,
+              fontSize: 14.0,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

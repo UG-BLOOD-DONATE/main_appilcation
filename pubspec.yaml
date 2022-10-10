@@ -76,6 +76,7 @@ dependencies:
   geoflutterfire: ^3.0.2
   bubble_bottom_bar: ^2.0.0
   bottom_bar_with_sheet: ^2.4.0
+  getwidget: ^3.0.1
 
 
 dev_dependencies:
