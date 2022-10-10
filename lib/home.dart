@@ -34,6 +34,8 @@ import 'package:ug_blood_donate/models/user_model.dart';
 <<<<<<< Updated upstream
 =======
 import 'package:ug_blood_donate/Chataaaapppp/screens/home_screen.dart';
+
+import 'Chatsection/pages/home_page.dart';
 >>>>>>> Stashed changes
 
 final List<String> imgList = [
@@ -252,16 +254,16 @@ class _BuildBodyState extends State<BuildBody> {
           Center(
             child: ElevatedButton(
               //   child: WebViewExample(),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-<<<<<<< Updated upstream
-                  builder: (_) => DonerProfilePage(),
-=======
-                  builder: (_) => ProfilePage(),
->>>>>>> Stashed changes
-                ),
-              ),
+              onPressed: (){} ,
+              // => Navigator.push(
+              //   // context,
+              //   // MaterialPageRoute
+              //   //  // builder: (_) => DonerProfilePage(),
+
+              //   //   builder: (_) => ProfilePage(),
+
+              //   ),
+              
               child: Container(
                 color: Color.fromARGB(0, 251, 251, 251),
                 padding: const EdgeInsets.all(10),
@@ -307,8 +309,7 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           ),
-<<<<<<< Updated upstream
-=======
+
           Center(
             child: ElevatedButton(
               //   child: WebViewExample(),
@@ -327,10 +328,7 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           ),
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
           //const CreatePost(),
           Center(
             child: ElevatedButton(
@@ -374,11 +372,8 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-<<<<<<< Updated upstream
-                  builder: (_) => UserInformation(),
-=======
+//builder: (_) => UserInformation(),
                   builder: (_) => MapPage(),
->>>>>>> Stashed changes
                 ),
               ),
               child: Container(

@@ -1,6 +1,6 @@
 import 'package:bottom_bar_with_sheet/bottom_bar_with_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:ug_blood_donate/screens/home_screen.dart';
+//import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
@@ -36,8 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final _bottomBarController = BottomBarWithSheetController(initialIndex: 0);
   int index = 0;
   final screens = [
-    const MyHomeScreen(),
-    GeoApp(),
+    //const MyHomeScreen(),
+    // GeoApp(),
     UserNotification(),
     const Report_Page(),
     const WebViewExample(),
