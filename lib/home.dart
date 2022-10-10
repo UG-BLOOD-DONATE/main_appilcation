@@ -22,6 +22,7 @@ import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/doner_profile.dart';
 import 'package:ug_blood_donate/screens/donorcard.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
+import 'package:ug_blood_donate/screens/first_screens/image_upload.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/map/test_map.dart';
@@ -31,12 +32,9 @@ import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
-<<<<<<< Updated upstream
-=======
-import 'package:ug_blood_donate/Chataaaapppp/screens/home_screen.dart';
+//import 'package:ug_blood_donate/Chataaaapppp/screens/home_screen.dart';
 
-import 'Chatsection/pages/home_page.dart';
->>>>>>> Stashed changes
+//import 'Chatsection/pages/home_page.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -254,7 +252,7 @@ class _BuildBodyState extends State<BuildBody> {
           Center(
             child: ElevatedButton(
               //   child: WebViewExample(),
-              onPressed: (){} ,
+              onPressed: () {},
               // => Navigator.push(
               //   // context,
               //   // MaterialPageRoute
@@ -263,7 +261,7 @@ class _BuildBodyState extends State<BuildBody> {
               //   //   builder: (_) => ProfilePage(),
 
               //   ),
-              
+
               child: Container(
                 color: Color.fromARGB(0, 251, 251, 251),
                 padding: const EdgeInsets.all(10),

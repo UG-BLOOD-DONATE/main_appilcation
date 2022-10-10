@@ -1240,7 +1240,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 import 'package:permission_handler/permission_handler.dart';
-import 'package:ug_blood_donate/Chatsection/widgets/widgets.dart';
+//import 'package:ug_blood_donate/Chatsection/widgets/widgets.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -1803,10 +1803,10 @@ class _UsersGeoPageState extends State<UsersGeoPage>
                                   if (myController.text != null) {
                                     Navigator.pop(context);
                                   } else {
-                                    showSnackbar(
-                                        context,
-                                        Color.fromRGBO(239, 52, 83, 0.918),
-                                        Text('Add Place details'));
+                                    // showSnackbar(
+                                    //     context,
+                                    //     Color.fromRGBO(239, 52, 83, 0.918),
+                                    //     Text('Add Place details'));
                                   }
                                 })
                           ],
