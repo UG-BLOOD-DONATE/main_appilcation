@@ -74,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
   var pic;
   var loc;
   var blood;
-  var num;
+  var pnum;
 
   void pickUploadProfilePic({String? userId}) async {
     final image = await ImagePicker().pickImage(
@@ -137,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
           blood = data['bloodType'];
           loc = data['location'];
           pic = data['photoURL'];
-          num = data['phonenumber'];
+          pnum = data['phonenumber'];
           if (snapshot.hasError) {
             return Text("Something went wrong");
           }
@@ -153,8 +153,14 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
             blood = data['bloodType'];
             loc = data['location'];
             pic = data['photoURL'];
-            num = data['phonenumber'];
-
+            pnum = data['phonenumber'];
+            return Scaffold(
+                body: Container(
+                    alignment: Alignment.topCenter,
+                    margin: EdgeInsets.only(top: 20),
+                    child: CircularProgressIndicator(
+                      value: 0.8,
+                    )));
             //return Text("Full Name: ${data['full_name']} ${data['last_name']}");
 
             //return Text("loading");
