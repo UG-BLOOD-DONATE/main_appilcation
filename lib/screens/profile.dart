@@ -161,6 +161,8 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
           //return Text("loading");
           return Scaffold(
               appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
                 leading: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
@@ -171,7 +173,10 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                     size: 24.0,
                   ),
                 ),
-                title: const Text("Profile"),
+                title: const Text(
+                  "Profile",
+                  style: TextStyle(color: Colors.black),
+                ),
                 centerTitle: true,
                 actions: <Widget>[
                   IconButton(
@@ -184,8 +189,8 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                     },
                   )
                 ],
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
+                //foregroundColor: Colors.black,
+                //backgroundColor: Colors.white,
               ),
 
               // body is the majority of the screen.

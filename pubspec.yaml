@@ -74,6 +74,8 @@ dependencies:
   flutter_geofence: ^0.4.4
   qr_flutter: ^4.0.0
   geoflutterfire: ^3.0.2
+  bubble_bottom_bar: ^2.0.0
+  bottom_bar_with_sheet: ^2.4.0
 
 
 dev_dependencies:

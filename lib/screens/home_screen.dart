@@ -1,6 +1,15 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ug_blood_donate/screens/find_donor.dart';
+import 'package:ug_blood_donate/screens/request_blood.dart';
+import 'package:ug_blood_donate/screens/view_image.dart';
+import 'package:ug_blood_donate/utils/firebase.dart';
+
+import '../models/user_model.dart';
+
+//var currentUser = firebaseAuth.currentUser!;
 
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({super.key});
@@ -10,6 +19,23 @@ class MyHomeScreen extends StatefulWidget {
 }
 
 class _MyHomeScreenState extends State<MyHomeScreen> {
+  var currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUserId())
+        .get()
+        .then((value) {
+      //print('hi user');
+      setState(() {
+        currentUser = UserModel.fromMap(value.data());
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -19,13 +45,13 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               width: 260.0,
             ),
-            Divider(),
+            const Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Icon(
                   Icons.menu,
                   size: 30.0,
@@ -45,12 +71,13 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
             ),
             ListTile(
               // leading: Image.network(''),
-              title: const Text(
+              title: Text(
                 'Welcome home',
                 style: TextStyle(color: Colors.white54),
               ),
-              subtitle: const Text(
-                'Batricia Salfiora',
+              subtitle: Text(
+                'Donor Name',
+                //'${currentUser.fullname}',
                 style: TextStyle(color: Colors.white, fontSize: 20.0),
               ),
               // trailing: ClipRRect(
@@ -140,265 +167,108 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        height: 250,
-                        width: 120.0,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/images/rafiki.png"),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40.0),
-                              topRight: Radius.circular(40.0),
-                              bottomLeft: Radius.circular(20.0),
-                              bottomRight: Radius.circular(20.0),
-                            )),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 10),
-                              child: const Card(
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.yellowAccent,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 20),
-                              child: const Text(
-                                'Find\nPatient',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 20.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
+                      const SizedBox(
                         width: 2.0,
                       ),
-                      Container(
-                        height: 250,
-                        width: 120.0,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/images/rafiki.png"),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40.0),
-                              topRight: Radius.circular(40.0),
-                              bottomLeft: Radius.circular(20.0),
-                              bottomRight: Radius.circular(20.0),
-                            )),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 10),
-                              child: const Card(
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.yellowAccent,
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const Request(),
+                          ),
+                        ),
+                        child: Container(
+                          height: 250,
+                          width: 120.0,
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage("assets/images/rafiki.png"),
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40.0),
+                                topRight: Radius.circular(40.0),
+                                bottomLeft: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0),
+                              )),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, bottom: 10),
+                                child: const Card(
+                                  child: Icon(
+                                    Icons.search,
+                                    color: Colors.yellowAccent,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 20),
-                              child: const Text(
-                                'Find\nPatient',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 20.0),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, bottom: 20),
+                                child: const Text(
+                                  'Create\nRequest',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 20.0),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 2.0,
                       ),
-                      Container(
-                        height: 250,
-                        width: 120.0,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/images/rafiki.png"),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40.0),
-                              topRight: Radius.circular(40.0),
-                              bottomLeft: Radius.circular(20.0),
-                              bottomRight: Radius.circular(20.0),
-                            )),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 10),
-                              child: const Card(
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.yellowAccent,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 20),
-                              child: const Text(
-                                'Find\nPatient',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 20.0),
-                              ),
-                            ),
-                          ],
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => FindDonor(),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 2.0,
-                      ),
-                      Container(
-                        height: 250,
-                        width: 120.0,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/images/rafiki.png"),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40.0),
-                              topRight: Radius.circular(40.0),
-                              bottomLeft: Radius.circular(20.0),
-                              bottomRight: Radius.circular(20.0),
-                            )),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 10),
-                              child: const Card(
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.yellowAccent,
+                        child: Container(
+                          height: 250,
+                          width: 120.0,
+                          decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage("assets/images/rafiki.png"),
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40.0),
+                                topRight: Radius.circular(40.0),
+                                bottomLeft: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0),
+                              )),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, bottom: 10),
+                                child: const Card(
+                                  child: Icon(
+                                    Icons.search,
+                                    color: Colors.yellowAccent,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 20),
-                              child: const Text(
-                                'Find\nPatient',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 20.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 2.0,
-                      ),
-                      Container(
-                        height: 250,
-                        width: 120.0,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/images/rafiki.png"),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40.0),
-                              topRight: Radius.circular(40.0),
-                              bottomLeft: Radius.circular(20.0),
-                              bottomRight: Radius.circular(20.0),
-                            )),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 10),
-                              child: const Card(
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.yellowAccent,
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, bottom: 20),
+                                child: const Text(
+                                  'Find\nPatient',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 20.0),
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 20),
-                              child: const Text(
-                                'Find\nPatient',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 20.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 2.0,
-                      ),
-                      Container(
-                        height: 250,
-                        width: 120.0,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/images/rafiki.png"),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40.0),
-                              topRight: Radius.circular(40.0),
-                              bottomLeft: Radius.circular(20.0),
-                              bottomRight: Radius.circular(20.0),
-                            )),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 10),
-                              child: const Card(
-                                child: Icon(
-                                  Icons.search,
-                                  color: Colors.yellowAccent,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 20),
-                              child: const Text(
-                                'Find\nPatient',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 20.0),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
