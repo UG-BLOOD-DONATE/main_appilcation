@@ -28,7 +28,7 @@ class _TrackingPageState extends State<TrackingPage>
 
   Completer<GoogleMapController> _controller = Completer();
 
-  static LatLng _initialPosition = LatLng(0, 0);
+  static LatLng _initialPosition = LatLng(0.339535, 32.571199);
 
   Set<Marker> _markers = {};
 
@@ -141,7 +141,8 @@ class _TrackingPageState extends State<TrackingPage>
     Geofence.initialize();
 
     Geofence.startListening(GeolocationEvent.entry, (entry) {
-      _scheduleNotification("Inside GeoFence", "Welcome to: ${entry.id}");
+      _scheduleNotification(
+          "There is a blood donation Centre nearby", "Just go to: ${entry.id}");
       setState(() {
         _userStatus = "inside";
       });
@@ -197,16 +198,18 @@ class _TrackingPageState extends State<TrackingPage>
     }).catchError((error) {
       print("Added geofence failed, $error");
     });
-    GeoFirePoint geoFirePoint = geo.point(
-        latitude: geofenceMarkerLatLng.latitude,
-        longitude: geofenceMarkerLatLng.longitude);
-    _firestore.collection('Geofences').add({
-      'name': '$name',
-      'radius': _initRadius,
-      'position': geoFirePoint.data
-    }).then((_) {
-      print('added ${geoFirePoint.hash} successfully');
-    });
+    if (name != 'Centre') {
+      GeoFirePoint geoFirePoint = geo.point(
+          latitude: geofenceMarkerLatLng.latitude,
+          longitude: geofenceMarkerLatLng.longitude);
+      _firestore.collection('Geofences').add({
+        'name': '$name',
+        'radius': _initRadius,
+        'position': geoFirePoint.data
+      }).then((_) {
+        print('added ${geoFirePoint.hash} successfully');
+      });
+    }
   }
 
   Future<void> _addMarkerLongPressed(LatLng latLng, String name) async {
@@ -346,6 +349,7 @@ class _TrackingPageState extends State<TrackingPage>
                                 onPressed: () {
                                   setState(() {
                                     placename = myController.text;
+                                    _addMarkerLongPressed(latLng, placename);
                                     print(placename);
                                   });
                                   if (myController.text != null) {
@@ -360,10 +364,6 @@ class _TrackingPageState extends State<TrackingPage>
                           ],
                         ),
                       );
-
-                      if (myController.text != null) {
-                        _addMarkerLongPressed(latLng, placename);
-                      }
                     },
                     markers: _markers,
                     circles:
@@ -374,7 +374,7 @@ class _TrackingPageState extends State<TrackingPage>
                       [
                         Circle(
                           fillColor: ThemeData().primaryColor.withOpacity(0.2),
-                          strokeColor: Color.fromARGB(0, 255, 3, 3),
+                          strokeColor: const Color.fromARGB(0, 255, 3, 3),
                           center: _geofenceMarkerPosition,
                           radius: _initRadius,
                           circleId: CircleId(
@@ -418,11 +418,12 @@ class _TrackingPageState extends State<TrackingPage>
                                 Geofence.removeGeolocation(
                                   _location!,
                                   GeolocationEvent.entry,
-                                ).then((value) {
-                                  // print("Georegion removed");
-                                  _setGeofenceRegion(
-                                      _geofenceMarkerPosition, placename);
-                                });
+                                );
+                                // .then((value) {
+                                //   // print("Georegion removed");
+                                //   _setGeofenceRegion(
+                                //       _geofenceMarkerPosition, placename);
+                                // });
                               },
                               onChanged: (newValue) {
                                 setState(() {

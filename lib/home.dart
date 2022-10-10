@@ -31,6 +31,10 @@ import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:ug_blood_donate/Chataaaapppp/screens/home_screen.dart';
+>>>>>>> Stashed changes
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -251,7 +255,11 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
+<<<<<<< Updated upstream
                   builder: (_) => DonerProfilePage(),
+=======
+                  builder: (_) => ProfilePage(),
+>>>>>>> Stashed changes
                 ),
               ),
               child: Container(
@@ -319,6 +327,9 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           ),
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
           //const CreatePost(),
           Center(
@@ -363,7 +374,11 @@ class _BuildBodyState extends State<BuildBody> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
+<<<<<<< Updated upstream
                   builder: (_) => UserInformation(),
+=======
+                  builder: (_) => MapPage(),
+>>>>>>> Stashed changes
                 ),
               ),
               child: Container(
