@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int index = 0;
   final screens = [
     const MyHomeScreen(),
-
+    UserNotification(),
     //GeoApp(),
     UserNotification(),
     const Report_Page(),
