@@ -308,6 +308,24 @@ class _BuildBodyState extends State<BuildBody> {
               ),
             ),
           ),
+          Center(
+            child: ElevatedButton(
+              //   child: WebViewExample(),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => Report_Page(),
+                ),
+              ),
+              child: Container(
+                color: Color.fromARGB(0, 251, 251, 251),
+                padding: const EdgeInsets.all(10),
+                width: 150,
+                height: 100,
+                child: const Text('Contribute to event >>>'),
+              ),
+            ),
+          ),
           //const CreatePost(),
         ],
       ),
