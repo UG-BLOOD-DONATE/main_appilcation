@@ -77,6 +77,7 @@ dependencies:
   google_geocoding: ^0.2.0
   alan_voice: ^3.7.0
   bottom_bar_with_sheet: ^2.4.0
+  getwidget: ^3.0.1
 
 
 dev_dependencies:

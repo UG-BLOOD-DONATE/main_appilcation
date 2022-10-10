@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_geofence/geofence.dart';
 import 'dart:async';
 import 'dart:math';
 
@@ -13,16 +15,20 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_geofence/geofence.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
-//import 'package:ug_blood_donate/Chatsection/widgets/widgets.dart';
 
-class TrackingPage extends StatefulWidget {
+class UsersGeoPage extends StatefulWidget {
+  //UsersGeoPage({super.key});
+  late String placename;
+  late LatLng position;
+
+  late double _initRadius;
   @override
-  _TrackingPageState createState() => _TrackingPageState();
+  _UsersGeoPageState createState() => _UsersGeoPageState();
 }
 
-class _TrackingPageState extends State<TrackingPage>
+class _UsersGeoPageState extends State<UsersGeoPage>
     with WidgetsBindingObserver {
   String _platformVersion = Platform.isAndroid ? "Android" : "ios";
 
@@ -75,7 +81,7 @@ class _TrackingPageState extends State<TrackingPage>
   }
 
   @override
-  void didUpdateWidget(TrackingPage oldWidget) {
+  void didUpdateWidget(UsersGeoPage oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     print("oldwidget $oldWidget");
@@ -272,31 +278,7 @@ class _TrackingPageState extends State<TrackingPage>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(239, 52, 83, 0.918),
-        title: Text('Event Location'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.help_outline),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: Text("Guideline to create a donation Centre"),
-                  content: Text(
-                      "Long pressed the area you wanted to place marker, Slider will be appear for you to adjust the geofence ranges"),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  actions: <Widget>[
-                    ElevatedButton(
-                      child: Text("OK"),
-                      onPressed: () => Navigator.pop(context),
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
+        title: Text('Go to Donation Centre'),
       ),
       body: _initialPosition == null
           ? Center(child: CircularProgressIndicator())
@@ -407,32 +389,6 @@ class _TrackingPageState extends State<TrackingPage>
                                 "Geofence area: ${(_initRadius / 100).toStringAsFixed(0)}KM"),
                             Text("Status: $_userStatus")
                           ],
-                        ),
-                        Center(
-                          child: Slider(
-                              value: _initRadius,
-                              divisions: 5,
-                              min: 100,
-                              max: 1000,
-                              onChangeEnd: (_) {
-                                Geofence.removeGeolocation(
-                                  _location!,
-                                  GeolocationEvent.entry,
-                                );
-                                // .then((value) {
-                                //   // print("Georegion removed");
-                                //   _setGeofenceRegion(
-                                //       _geofenceMarkerPosition, placename);
-                                // });
-                              },
-                              onChanged: (newValue) {
-                                setState(() {
-                                  // _scheduleNotification(
-                                  //     "Blood Donation Centre ",
-                                  //     "Your blood donation centre has been added!");
-                                  _initRadius = newValue;
-                                });
-                              }),
                         ),
                       ],
                     ),
