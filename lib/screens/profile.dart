@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:alan_voice/alan_voice.dart';
+//import 'package:alan_voice/alan_voice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -30,7 +30,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> with RouteAware {
-   /// Subscribe to RouteObserver
+  /// Subscribe to RouteObserver
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     routeObserver.unsubscribe(this);
     super.dispose();
   }
@@ -54,9 +54,9 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
   }
 
   void setVisuals(String screen) {
-  var visual = "{\"screen\":\"$screen\"}";
-  AlanVoice.setVisualState(visual);
-}
+    var visual = "{\"screen\":\"$screen\"}";
+    //AlanVoice.setVisualState(visual);
+  }
 
   currentUserId() {
     print("${firebaseAuth.currentUser?.uid}");
@@ -161,6 +161,8 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
           //return Text("loading");
           return Scaffold(
               appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
                 leading: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
@@ -171,7 +173,10 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                     size: 24.0,
                   ),
                 ),
-                title: const Text("Profile"),
+                title: const Text(
+                  "Profile",
+                  style: TextStyle(color: Colors.black),
+                ),
                 centerTitle: true,
                 actions: <Widget>[
                   IconButton(
@@ -184,8 +189,8 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                     },
                   )
                 ],
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
+                //foregroundColor: Colors.black,
+                //backgroundColor: Colors.white,
               ),
 
               // body is the majority of the screen.
