@@ -4,7 +4,6 @@ import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
-import 'package:ug_blood_donate/screens/find_donor.dart';
 import 'package:ug_blood_donate/screens/donorcard.dart';
 import 'package:ug_blood_donate/screens/report.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
@@ -37,7 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int index = 0;
   final screens = [
     const MyHomeScreen(),
-    GeoApp(),
+
+    //GeoApp(),
     UserNotification(),
     const Report_Page(),
     const WebViewExample(),

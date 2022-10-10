@@ -101,7 +101,6 @@ class _displaypostsState extends State<displayposts> {
             // .collection('posts')
             // .doc(FirebaseAuth.instance.currentUser!.uid)
             .collectionGroup('userPosts')
-            
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
@@ -119,8 +118,7 @@ class _displaypostsState extends State<displayposts> {
                       image = data["mediaUrl"]);
                 })
                 .toList()
-                .cast()
-                ,
+                .cast(),
           );
         },
       ),
