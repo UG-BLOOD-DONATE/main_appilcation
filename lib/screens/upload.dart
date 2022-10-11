@@ -35,7 +35,7 @@ class Upload extends StatefulWidget {
 
 class _UploadState extends State<Upload> {
   User? user = FirebaseAuth.instance.currentUser;
-  UserModel loggedInUser = UserModel(groups: []);
+  UserModel loggedInUser = UserModel();
  
   TextEditingController locationController = TextEditingController();
   TextEditingController captionController = TextEditingController();
@@ -138,6 +138,9 @@ class _UploadState extends State<Upload> {
       ]),
     );
   }
+  
+
+  
  @override
   void initState() {
     super.initState();
@@ -344,8 +347,8 @@ class _UploadState extends State<Upload> {
       "postId": postId,
       "ownerId": widget.currentUser.uid,
       "username":loggedInUser.fullname,
-      "profilepic":loggedInUser.photoURL,
-      "mediaUrl": mediaUrl,
+      // "profilepic":loggedInUser.photoURL,
+      // "mediaUrl": mediaUrl,
       "description": description,
       "location": location,
       'createdOn': DateTime.now().millisecondsSinceEpoch.toString(),

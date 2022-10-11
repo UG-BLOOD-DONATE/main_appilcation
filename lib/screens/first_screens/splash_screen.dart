@@ -22,6 +22,8 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: 'Raleway'),
+       debugShowCheckedModeBanner: false,
       home: Scaffold(
           backgroundColor: Colors.pink,
           body: SafeArea(

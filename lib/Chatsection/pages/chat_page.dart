@@ -52,7 +52,7 @@ class _ChatPageState extends State<ChatPage> {
         centerTitle: true,
         elevation: 0,
         title: Text(widget.groupName),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.pink,
         actions: [
           IconButton(
               onPressed: () {
@@ -100,7 +100,7 @@ class _ChatPageState extends State<ChatPage> {
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
+                      color: Colors.pink,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: const Center(
