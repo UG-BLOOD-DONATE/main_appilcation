@@ -7,7 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/view_image.dart';
-import 'package:getwidget/getwidget.dart';
+
 
 class displayposts extends StatefulWidget {
   displayposts({super.key});

@@ -76,6 +76,7 @@ dependencies:
   geoflutterfire: ^3.0.2
   google_geocoding: ^0.2.0
   font_awesome_flutter: ^10.2.1
+  bottom_bar_with_sheet: ^2.4.0
 
 
 dev_dependencies:
