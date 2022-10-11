@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ug_blood_donate/components/buttom_navigation_left_button.dart';
 import 'package:ug_blood_donate/screens/first_screens/ForgotPassword.dart';
 import '../../home.dart';
 import 'register.dart';
@@ -273,9 +274,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Home(
-              currentUser: currentUser,
-            ),
+            builder: (context) => LeftButton(),
           ),
         );
       } on FirebaseAuthException catch (e) {
