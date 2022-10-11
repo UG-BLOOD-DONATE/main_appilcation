@@ -24,29 +24,41 @@ class TrackingPage extends StatefulWidget {
 
 class _TrackingPageState extends State<TrackingPage>
     with WidgetsBindingObserver {
-  String _platformVersion = Platform.isAndroid ? "Android" : "ios";
-
-  Completer<GoogleMapController> _controller = Completer();
-
-  static LatLng _initialPosition = LatLng(0.339535, 32.571199);
-
-  Set<Marker> _markers = {};
-
-  static LatLng _geofenceMarkerPosition = LatLng(0, 0);
-
-  static double _initRadius = 1000.0;
-
-  String placename = 'Centre';
-  String _userStatus = "None";
-  final _formkey = GlobalKey<FormState>();
-
-  static Geolocation? _location;
-  Geoflutterfire geo = Geoflutterfire();
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final myController = TextEditingController();
+  String event = "";
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  String event = "";
+
+  Geoflutterfire geo = Geoflutterfire();
+  final myController = TextEditingController();
+  String placename = 'Centre';
+
+  static LatLng _geofenceMarkerPosition = LatLng(0, 0);
+  static double _initRadius = 1000.0;
+  static LatLng _initialPosition = LatLng(0.339535, 32.571199);
+  static Geolocation? _location;
+
+  Completer<GoogleMapController> _controller = Completer();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final _formkey = GlobalKey<FormState>();
+  Set<Marker> _markers = {};
+  String _platformVersion = Platform.isAndroid ? "Android" : "ios";
+  String _userStatus = "None";
+
+  @override
+  void didUpdateWidget(TrackingPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    print("oldwidget $oldWidget");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    removeGeoFenceLocation();
+    myController.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -72,21 +84,6 @@ class _TrackingPageState extends State<TrackingPage>
       initializationSettings,
       onDidReceiveNotificationResponse: null,
     );
-  }
-
-  @override
-  void didUpdateWidget(TrackingPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    print("oldwidget $oldWidget");
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-    removeGeoFenceLocation();
-    myController.dispose();
   }
 
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -205,7 +202,9 @@ class _TrackingPageState extends State<TrackingPage>
       _firestore.collection('Geofences').add({
         'name': '$name',
         'radius': _initRadius,
-        'position': geoFirePoint.data
+        'latitude': geoFirePoint.latitude,
+        'longitude': geoFirePoint.longitude,
+        // 'coordinates': geofenceMarkerLatLng,
       }).then((_) {
         print('added ${geoFirePoint.hash} successfully');
       });
@@ -263,6 +262,8 @@ class _TrackingPageState extends State<TrackingPage>
     });
   }
 
+  void _printLatestValue() {}
+
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
@@ -311,6 +312,7 @@ class _TrackingPageState extends State<TrackingPage>
                       _controller.complete(controller);
                     },
                     initialCameraPosition: CameraPosition(
+                      tilt: 50,
                       target: _initialPosition,
                       zoom: 14.4746,
                     ),
@@ -442,8 +444,6 @@ class _TrackingPageState extends State<TrackingPage>
             ),
     );
   }
-
-  void _printLatestValue() {}
 }
 
 class _showinput {}

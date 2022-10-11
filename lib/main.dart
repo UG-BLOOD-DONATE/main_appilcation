@@ -8,5 +8,23 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+<<<<<<< Updated upstream
   runApp(MaterialApp(home: Splash()));
 }
+=======
+  runApp(MaterialApp(
+      home: Splash(),
+
+      /// Register RouteObserver
+      navigatorObservers: [routeObserver],
+
+      /// Define the app routes
+      initialRoute: '/',
+      routes: {
+        '/profile': (context) => ProfilePage(),
+      }));
+}
+
+/// Register RouteObserver
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+>>>>>>> Stashed changes

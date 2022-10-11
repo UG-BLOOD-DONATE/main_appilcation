@@ -78,6 +78,12 @@ dependencies:
   alan_voice: ^3.7.0
   bottom_bar_with_sheet: ^2.4.0
   getwidget: ^3.0.1
+<<<<<<< Updated upstream
+=======
+  alan_voice: ^3.7.0
+  google_maps_place_picker_mb: ^2.0.0-mb.22
+
+>>>>>>> Stashed changes
 
 
 dev_dependencies:
