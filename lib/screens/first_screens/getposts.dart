@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/view_image.dart';
+import 'package:getwidget/getwidget.dart';
 
 class displayposts extends StatefulWidget {
   displayposts({super.key});
@@ -67,63 +68,59 @@ class _displaypostsState extends State<displayposts> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(fontFamily: 'Raleway'),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Posts"),
-          actions: <Widget>[
-            // IconButton(
-            //   icon: const Icon(Icons.navigate_before_rounded),
-            //   tooltip: 'Back Icon',
-            //   onPressed: () {
-            //     Navigator.pop(context);
-            //   },
-            // ), //IconButton
-            IconButton(
-              icon: const Icon(Icons.settings),
-              tooltip: 'Setting Icon',
-              onPressed: () {},
-            ), //IconButton
-          ], //<Widget>[]
-          backgroundColor: Colors.pinkAccent[400],
-          elevation: 50.0,
-          leading: IconButton(
-            icon: const Icon(Icons.navigate_before_rounded),
-            tooltip: 'Menu Icon',
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-        ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              // .collection('posts')
-              // .doc(FirebaseAuth.instance.currentUser!.uid)
-              .collectionGroup('userPosts')
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return const Text('Something went wrong');
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: const CircularProgressIndicator());
-            }
-            return ListView(
-              children: snapshot.data!.docs
-                  .map((DocumentSnapshot document) {
-                    Map<String, dynamic> data =
-                        document.data()! as Map<String, dynamic>;
-                    return listOfTweets(description = data["description"],
-                        image = data["mediaUrl"]);
-                  })
-                  .toList()
-                  .cast(),
-            );
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Posts"),
+        actions: <Widget>[
+          // IconButton(
+          //   icon: const Icon(Icons.navigate_before_rounded),
+          //   tooltip: 'Back Icon',
+          //   onPressed: () {
+          //     Navigator.pop(context);
+          //   },
+          // ), //IconButton
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Setting Icon',
+            onPressed: () {},
+          ), //IconButton
+        ], //<Widget>[]
+        backgroundColor: Colors.pinkAccent[400],
+        elevation: 50.0,
+        leading: IconButton(
+          icon: const Icon(Icons.navigate_before_rounded),
+          tooltip: 'Menu Icon',
+          onPressed: () {
+            Navigator.pop(context);
           },
         ),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            // .collection('posts')
+            // .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collectionGroup('userPosts')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: const CircularProgressIndicator());
+          }
+          return ListView(
+            children: snapshot.data!.docs
+                .map((DocumentSnapshot document) {
+                  Map<String, dynamic> data =
+                      document.data()! as Map<String, dynamic>;
+                  return listOfTweets(description = data["description"],
+                      image = data["mediaUrl"]);
+                })
+                .toList()
+                .cast(),
+          );
+        },
       ),
     );
   }
@@ -176,7 +173,6 @@ class _displaypostsState extends State<displayposts> {
           tweetText(description),
           SizedBox(height: 25),
           tweetButtons(image),
-          tweetButtons2(),
         ],
       ),
     );
@@ -250,29 +246,6 @@ class _displaypostsState extends State<displayposts> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget tweetButtons2() {
-    return Container(
-      margin: const EdgeInsets.only(top: 10.0, right: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.favorite_outlined,
-                color: Colors.pink,
-              )),
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.comment_rounded,
-                color: Colors.blue,
-              )),
-        ],
-      ),
     );
   }
 }

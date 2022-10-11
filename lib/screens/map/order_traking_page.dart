@@ -1231,16 +1231,14 @@ import 'package:flutter_geofence/geofence.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_geofence/geofence.dart';
+
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 import 'package:permission_handler/permission_handler.dart';
-import 'package:ug_blood_donate/Chatsection/widgets/widgets.dart';
+import 'package:ug_blood_donate/screens/map/user_geofences.dart';
+//import 'package:ug_blood_donate/Chatsection/widgets/widgets.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -1445,7 +1443,6 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
         if (snapshot.hasError) {
           return const Text('Something went wrong');
         }
-
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(body: const Text("Loading"));
         }
@@ -1461,6 +1458,17 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
                   Map<String, dynamic> data =
                       document.data()! as Map<String, dynamic>;
                   return GestureDetector(
+                    onTap: () {
+                      {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UsersGeoPage(
+                                data['name'], data['position'], data['radius']),
+                          ),
+                        );
+                      }
+                    },
                     child: Card(
                       elevation: 5,
                       child: ListTile(
@@ -1487,15 +1495,18 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   void _printLatestValue() {}
 }
 
+// ignore: must_be_immutable
 class UsersGeoPage extends StatefulWidget {
-  const UsersGeoPage({super.key});
-
+  //UsersGeoPage({super.key});
+  String name;
+  LatLng position;
+  double radius;
+  UsersGeoPage(this.name, this.position, this.radius);
   @override
   _UsersGeoPageState createState() => _UsersGeoPageState();
 }
 
-class _UsersGeoPageState extends State<UsersGeoPage>
-    with WidgetsBindingObserver {
+class _UsersGeoPageState extends State<UsersGeoPage> {
   String _platformVersion = Platform.isAndroid ? "Android" : "ios";
 
   Completer<GoogleMapController> _controller = Completer();
@@ -1506,7 +1517,7 @@ class _UsersGeoPageState extends State<UsersGeoPage>
 
   static LatLng _geofenceMarkerPosition = LatLng(0, 0);
 
-  static double _initRadius = 1000.0;
+  static double _initRadius = 1000;
 
   String placename = 'Centre';
   String _userStatus = "None";
@@ -1523,7 +1534,7 @@ class _UsersGeoPageState extends State<UsersGeoPage>
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addObserver(this);
+    //WidgetsBinding.instance.addObserver(this);
     Geofence.requestPermissions();
     _initPlatformState();
 
@@ -1556,7 +1567,7 @@ class _UsersGeoPageState extends State<UsersGeoPage>
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    // WidgetsBinding.instance.removeObserver(this);
     removeGeoFenceLocation();
     myController.dispose();
   }
@@ -1738,13 +1749,16 @@ class _UsersGeoPageState extends State<UsersGeoPage>
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
+    setState(() {
+      _initRadius = widget.radius;
+    });
 
 // ignore_for_file: prefer_const_constructors;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(239, 52, 83, 0.918),
-        title: Text('Go to Donation Centre'),
+        title: Text('$widget.name'),
       ),
       body: _initialPosition == null
           ? Center(child: CircularProgressIndicator())
@@ -1803,10 +1817,10 @@ class _UsersGeoPageState extends State<UsersGeoPage>
                                   if (myController.text != null) {
                                     Navigator.pop(context);
                                   } else {
-                                    showSnackbar(
-                                        context,
-                                        Color.fromRGBO(239, 52, 83, 0.918),
-                                        Text('Add Place details'));
+                                    // showSnackbar(
+                                    //     context,
+                                    //     Color.fromRGBO(239, 52, 83, 0.918),
+                                    //     Text('Add Place details'));
                                   }
                                 })
                           ],
