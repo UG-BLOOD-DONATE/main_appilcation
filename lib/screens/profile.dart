@@ -180,7 +180,8 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                   ),
                   title: const Text(
                     "Profile",
-                    style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                   centerTitle: true,
                   actions: <Widget>[
