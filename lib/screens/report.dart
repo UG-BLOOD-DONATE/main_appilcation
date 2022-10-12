@@ -37,9 +37,9 @@ class _Report_PageState extends State<Report_Page> {
           cholesterol = data['cholesterol'];
           bilirubin = data['bilirubin'];
           bloodtype = data['bloodtype'];
-          rbc = data['rbc'];
-          mvc = data['mvc'];
-          platelets = data['platelets'];
+          rbc = data['RBC'];
+          mvc = data['MVC'];
+          platelets = data['Platelets'];
           hospital = data['hospital'];
 
           // name = data['fullname'];

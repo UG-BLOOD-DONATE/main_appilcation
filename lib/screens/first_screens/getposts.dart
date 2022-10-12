@@ -8,7 +8,6 @@ import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/view_image.dart';
 
-
 class displayposts extends StatefulWidget {
   displayposts({super.key});
 
@@ -19,15 +18,8 @@ class displayposts extends StatefulWidget {
 class _displaypostsState extends State<displayposts> {
   String? description;
   String? image;
-  // User? user = FirebaseAuth.instance.currentUser;
-  // UserModel loggedInUser = UserModel(groups: []);
-  // void retrievePosts() {
-  //   FirebaseFirestore.instance.collection("posts").get().then((value) {
-  //     value.docs.forEach((result) {
-  //       print(result.data());
-  //     });
-  //   });
-  // }
+  String? profilepic;
+  String? username;
 
   //  retrieveSubPosts() {
   //   FirebaseFirestore.instance.collection("users").get().then((value) {
@@ -114,8 +106,11 @@ class _displaypostsState extends State<displayposts> {
                 .map((DocumentSnapshot document) {
                   Map<String, dynamic> data =
                       document.data()! as Map<String, dynamic>;
-                  return listOfTweets(description = data["description"],
-                      image = data["mediaUrl"]);
+                  return listOfTweets(
+                      description = data["description"],
+                      image = data["mediaUrl"],
+                      profilepic = data["profilepic"],
+                      username = data["username"]);
                 })
                 .toList()
                 .cast(),
@@ -142,26 +137,24 @@ class _displaypostsState extends State<displayposts> {
   //   });
   // }
 
-  Widget listOfTweets(String description, String image) {
+  Widget listOfTweets(description, image, profilepic, username) {
     return SingleChildScrollView(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          tweetAvatar(),
+          tweetAvatar(profilepic),
           tweetBody(description, image),
         ],
       ),
     );
   }
 
-  Widget tweetAvatar() {
+  Widget tweetAvatar(profilepic) {
     return Container(
-      margin: const EdgeInsets.all(10.0),
-      child: CircleAvatar(
-        backgroundImage: NetworkImage(
-            "https://images.wallpapersden.com/image/download/evil-thanos-smile_bGtnbWuUmZqaraWkpJRnamtlrWZpaWU.jpg"),
-      ),
-    );
+        margin: const EdgeInsets.all(10.0),
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(profilepic),
+        ));
   }
 
   Widget tweetBody(String description, String image) {
@@ -169,16 +162,19 @@ class _displaypostsState extends State<displayposts> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          tweetHeader(),
+          tweetHeader(username),
           tweetText(description),
           SizedBox(height: 25),
           tweetButtons(image),
+          Divider(
+            height: 10,
+          ),
         ],
       ),
     );
   }
 
-  Widget tweetHeader() {
+  Widget tweetHeader(username) {
     return Row(
       children: [
         Container(
@@ -192,7 +188,19 @@ class _displaypostsState extends State<displayposts> {
           ),
         ),
         Text(
-          '@thanosak ·5m ',
+          '@ ',
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+        Text(
+          username,
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+        Text(
+          ' ·5m ',
           style: TextStyle(
             color: Colors.grey,
           ),
