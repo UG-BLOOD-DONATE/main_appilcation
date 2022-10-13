@@ -22,6 +22,7 @@ Future<void> main() async {
   );
 }
 
+
 /// Register RouteObserver
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
