@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new, prefer_typing_uninitialized_variables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -32,11 +33,6 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
     mapController = controller;
   }
 
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   List<LatLng> polylineCoordinates = [];
   LocationData? currentLocation;
   var name;
@@ -44,6 +40,29 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
   var loc;
   var blood;
   var num;
+  String? fullname = "";
+  String? location = "";
+  String? bloodType = "";
+  String? photoUrl = "";
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(widget.documentId)
+        .get()
+        .then((value) {
+      //print('hi user');
+      if (value.exists) {
+        setState(() {
+          fullname = value.data()!["fullname"];
+          location = value.data()!["location"];
+          photoUrl = value.data()!["photoURL"];
+          bloodType = value.data()!["bloodType"];
+        });
+      }
+    });
+  }
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
@@ -75,39 +94,40 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
         //return Text("loading");
         return Scaffold(
             appBar: AppBar(
-        title: const Text("Profile"),
-        actions: <Widget>[
-          // IconButton(
-          //   icon: const Icon(Icons.navigate_before_rounded),
-          //   tooltip: 'Back Icon',
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          // ), //IconButton
-          // IconButton(
-          //   icon: const Icon(Icons.settings),
-          //   tooltip: 'Setting Icon',
-          //   onPressed: () {},
-          // ), //IconButton
-        ], //<Widget>[]
-        backgroundColor: Colors.pinkAccent[400],
-        elevation: 50.0,
-        leading: IconButton(
-          icon: const Icon(Icons.navigate_before_rounded),
-          tooltip: 'Menu Icon',
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-      ),
-            body: Container(
+              title: const Text("Profile"),
+              actions: <Widget>[
+                // IconButton(
+                //   icon: const Icon(Icons.navigate_before_rounded),
+                //   tooltip: 'Back Icon',
+                //   onPressed: () {
+                //     Navigator.pop(context);
+                //   },
+                // ), //IconButton
+                // IconButton(
+                //   icon: const Icon(Icons.settings),
+                //   tooltip: 'Setting Icon',
+                //   onPressed: () {},
+                // ), //IconButton
+              ], //<Widget>[]
+              backgroundColor: Colors.pinkAccent[400],
+              elevation: 50.0,
+              leading: IconButton(
+                icon: const Icon(Icons.navigate_before_rounded),
+                tooltip: 'Menu Icon',
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+            ),
+            body: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
               child: new ListView(children: [
                 Center(
                   child: Image.network(
-                    pic,
+                    photoUrl!,
                     width: 80,
-                    height: 60,
+                    height: 90,
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -117,7 +137,7 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          '                ${name}',
+                          fullname!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
@@ -131,7 +151,7 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.location_on, color: Colors.pink),
-                      Text("${loc}"),
+                      Text(location!),
                     ],
                   ),
                 ),
@@ -204,7 +224,7 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
                                 ),
                               ),
                               Text(
-                                " ${blood}",
+                                bloodType!,
                                 style: TextStyle(
                                   color: Colors.pink,
                                   fontSize: 20,

@@ -13,23 +13,30 @@ class DonorCard extends StatefulWidget {
 }
 
 class _DonorCardState extends State<DonorCard> {
-  User? user = FirebaseAuth.instance.currentUser;
-
-  UserModel loggedInUser = UserModel(groups: []);
-
-  @override
+ String? fullname = "";
+  String? location = "";
+  String? bloodType = "";
+  String? photoUrl = "";
+   @override
   void initState() {
     super.initState();
     FirebaseFirestore.instance
         .collection("users")
-        .doc(user!.uid)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
       //print('hi user');
-      setState(() {});
+      if (value.exists) {
+        setState(() {
+          fullname = value.data()!["fullname"];
+          location = value.data()!["location"];
+          photoUrl = value.data()!["photoURL"];
+          bloodType = value.data()!["bloodType"];
+        });
+      }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +168,7 @@ class _DonorCardState extends State<DonorCard> {
                         //   ),
                         // ),
                         Text(
-                          "${loggedInUser.fullname}",
+                          fullname!,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,

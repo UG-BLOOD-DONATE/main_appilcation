@@ -474,7 +474,7 @@ class _RegisterPageState extends State<RegisterPage> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-    UserModel userModel = UserModel(groups: []);
+    UserModel userModel = UserModel();
 
     userModel.email = user!.email;
     userModel.uid = user.uid;

@@ -18,58 +18,70 @@ class _FindDonorState extends State<FindDonor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Find Donors"),
-        centerTitle: true,
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: db.collection('users').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return ListView(
-              children: snapshot.data!.docs.map((doc) {
-                return CustomCard(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => DonerProfilePage(
-                        documentId: doc['uid'],
+    return MaterialApp(
+       theme: ThemeData(fontFamily: 'Raleway',
+       textTheme: const TextTheme(
+        headline1: TextStyle(fontSize: 72.0,fontWeight: FontWeight.bold),
+        headline6: TextStyle(fontSize: 36.0,fontStyle:FontStyle.italic),
+        bodyText2: TextStyle(fontSize: 14.0,fontWeight: FontWeight.w900)
+       ),
+       brightness: Brightness.light,
+       primaryColor: Colors.pink
+       ),
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.pink,
+          title: Text("Find Donors"),
+          centerTitle: true,
+        ),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: db.collection('users').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return ListView(
+                children: snapshot.data!.docs.map((doc) {
+                  return CustomCard(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => DonerProfilePage(
+                          documentId: doc['uid'],
+                        ),
                       ),
                     ),
-                  ),
-                  child: ListTile(
-                    // leading: Center(
-                    //   child: loggedInUser.photoURL == null
-                    //       ? const Icon(
-                    //           Icons.person,
-                    //           color: Colors.white,
-                    //           size: 20,
-                    //         )
-                    //       : ClipRRect(
-                    //           borderRadius: BorderRadius.circular(9.0),
-                    //           child: Image.network(loggedInUser.photoURL!),
-                    //         ),
-                    // ),
-                    leading: CustomImage(
-                      imageUrl: doc['photoURL'],
-                      fit: BoxFit.cover,
-                      width: 60,
-                      height: 60,
+                    child: ListTile(
+                      // leading: Center(
+                      //   child: loggedInUser.photoURL == null
+                      //       ? const Icon(
+                      //           Icons.person,
+                      //           color: Colors.white,
+                      //           size: 20,
+                      //         )
+                      //       : ClipRRect(
+                      //           borderRadius: BorderRadius.circular(9.0),
+                      //           child: Image.network(loggedInUser.photoURL!),
+                      //         ),
+                      // ),
+                      leading: CustomImage(
+                        imageUrl: doc['photoURL'],
+                        fit: BoxFit.cover,
+                        width: 60,
+                        height: 60,
+                      ),
+                      title: Text(doc['fullname']),
+                      subtitle: Text(doc['location']),
+                      trailing: Text(doc['bloodType']),
                     ),
-                    title: Text(doc['fullname']),
-                    subtitle: Text(doc['location']),
-                    trailing: Text(doc['bloodType']),
-                  ),
-                );
-              }).toList(),
-            );
-          }
-        },
+                  );
+                }).toList(),
+              );
+            }
+          },
+        ),
       ),
     );
   }

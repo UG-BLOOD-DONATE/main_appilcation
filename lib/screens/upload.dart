@@ -45,8 +45,12 @@ class _UploadState extends State<Upload> {
   String postId = const Uuid().v4();
 
   File? image;
-
+String? fullname = "";
+  String? location = "";
+  String? bloodType = "";
+  String? photoUrl = "";
   
+ 
 
   handleChooseFromGalley() async {
     // Navigator.pop(context);
@@ -141,19 +145,7 @@ class _UploadState extends State<Upload> {
   
 
   
- @override
-  void initState() {
-    super.initState();
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
-      //print('hi user');
-      setState(() {});
-    });
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -307,32 +299,26 @@ class _UploadState extends State<Upload> {
     // String downloadUrl = await storageSnap.ref.getDownloadURL();
     // return downloadUrl;
   }
-
-//getting user data @override
-  Widget body() {
-    return StreamBuilder<QuerySnapshot>(
-      stream:FirebaseFirestore.instance.collection("users").where("uid",isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Text('Something went wrong');
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
-        }
-
-        return ListView(
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
-          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-            return ListTile(
-              title: Text(data['fullname']),
-              subtitle: Image.network(data["photoURL"]),
-            );
-          }).toList(),
-        );
-      },
-    );
+ @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      //print('hi user');
+      if (value.exists) {
+        setState(() {
+          fullname = value.data()!["fullname"];
+          location = value.data()!["location"];
+          photoUrl = value.data()!["photoURL"];
+          bloodType = value.data()!["bloodType"];
+        });
+      }
+    });
   }
+
   
   createPostInFirestore(
       {required String mediaUrl,
@@ -346,9 +332,9 @@ class _UploadState extends State<Upload> {
         .set({
       "postId": postId,
       "ownerId": widget.currentUser.uid,
-      "username":loggedInUser.fullname,
-      // "profilepic":loggedInUser.photoURL,
-      // "mediaUrl": mediaUrl,
+      "username":fullname,
+      "profilepic":photoUrl,
+      "mediaUrl": mediaUrl,
       "description": description,
       "location": location,
       'createdOn': DateTime.now().millisecondsSinceEpoch.toString(),

@@ -67,7 +67,15 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-       theme: ThemeData(fontFamily: 'Raleway'),
+       theme: ThemeData(fontFamily: 'Raleway',
+       textTheme: const TextTheme(
+        headline1: TextStyle(fontSize: 72.0,fontWeight: FontWeight.bold),
+        headline6: TextStyle(fontSize: 36.0,fontStyle:FontStyle.italic),
+        bodyText2: TextStyle(fontSize: 14.0,fontWeight: FontWeight.w900)
+       ),
+       brightness: Brightness.light,
+       primaryColor: Colors.pink
+       ),
         debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
