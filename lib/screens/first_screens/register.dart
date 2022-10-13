@@ -493,7 +493,8 @@ class _RegisterPageState extends State<RegisterPage> {
     await DataBaseService(uid: user.uid).updateUserRepost(
         'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty', 'empty');
     await DatabaseService(uid: user.uid).getUserGroups();
-
+    await DataBaseService(uid: user.uid)
+        .updateDonorHistory('0', '0', '0', '0', '0', '0');
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
