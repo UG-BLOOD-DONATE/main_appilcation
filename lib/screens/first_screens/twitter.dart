@@ -94,7 +94,7 @@ class _WebViewExampleState extends State<WebViewExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 143, 135),
+      backgroundColor: Color.fromARGB(255, 248, 2, 76),
       appBar: AppBar(
         shadowColor: Colors.transparent,
         foregroundColor: Colors.transparent,
@@ -117,7 +117,7 @@ class _WebViewExampleState extends State<WebViewExample> {
           _controller.complete(webViewController);
         },
         onProgress: (int progress) {
-          print('WebView is loading (progress : $progress%)');
+          print('Twitter is loading');
         },
         javascriptChannels: <JavascriptChannel>{
           _toasterJavascriptChannel(context),

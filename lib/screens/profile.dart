@@ -15,6 +15,7 @@ import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
 import 'package:path/path.dart' as path;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
 
@@ -296,12 +297,12 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                                 ),
                                 label: const Text('Call Now'),
                                 onPressed: () {
-                                  print('Pressed');
+                                  _makingPhoneCall();
                                 },
                                 style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<
-                                          Color>(
-                                      const Color.fromARGB(150, 27, 158, 163)),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Color.fromARGB(190, 68, 219, 30)),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
@@ -328,9 +329,9 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                                   color: Colors.white,
                                   size: 24.0,
                                 ),
-                                label: const Text('Request'),
+                                label: const Text('Donate Cash'),
                                 onPressed: () {
-                                  print('Pressed');
+                                  _launchURLApp();
                                 },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all<
@@ -651,6 +652,23 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
   }
 }
 
-
 //   Future<void> _upload(String inputSource) async {}
 // }
+//Paystack intergration function
+_launchURLApp() async {
+  var url = Uri.parse("https://paystack.com/pay/ugblooddonate");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+//Making a phonecall
+_makingPhoneCall() async {
+  var url = Uri.parse("tel:9776765434");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}

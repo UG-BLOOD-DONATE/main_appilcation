@@ -28,6 +28,27 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formkey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  @override
+  void initState() {
+    // var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+    // //   if (user == null) {
+    // //     print('User is currently signed out!');
+    // //   } else {
+    // //     print('User is signed in!');
+
+    // //     Navigator.pushReplacement(
+    // //       context,
+    // //       MaterialPageRoute(
+    // //         builder: (context) => Home(
+    // //           currentUser: user,
+    // //         ),
+    // //       ),
+    // //     );
+    // //   }
+    // //   ;
+    // });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

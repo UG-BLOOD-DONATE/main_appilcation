@@ -33,44 +33,46 @@ class _QRGeneratorState extends State<QRGenerator> {
         backgroundColor: Colors.pink,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              // TextFormField(
-              //   decoration: const InputDecoration(
-              //     labelText: 'Enter your text for QR code',
-              //   ),
-              //   onChanged: (val) {
-              //     setTextValue(val);
-              //   },
-              //   maxLines: 1,
-              //   keyboardType: TextInputType.text,
-              // ),
-              QrImage(
-                data: text,
-                version: QrVersions.auto,
-                size: 200.0,
-              ),
-              // ElevatedButton(
-              //   onPressed: () => Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (BuildContext context) {
-              //       return const qrscanner();
-              //     }),
-              //   ),
-              //   child: const Text('Scanner'),
-              //   style: ButtonStyle(
-              //     backgroundColor:
-              //         MaterialStateProperty.all<Color>(Colors.pink),
-              //     shape: MaterialStateProperty.all(
-              //       RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(25),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                // TextFormField(
+                //   decoration: const InputDecoration(
+                //     labelText: 'Enter your text for QR code',
+                //   ),
+                //   onChanged: (val) {
+                //     setTextValue(val);
+                //   },
+                //   maxLines: 1,
+                //   keyboardType: TextInputType.text,
+                // ),
+                QrImage(
+                  data: text,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                ),
+                // ElevatedButton(
+                //   onPressed: () => Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (BuildContext context) {
+                //       return const qrscanner();
+                //     }),
+                //   ),
+                //   child: const Text('Scanner'),
+                //   style: ButtonStyle(
+                //     backgroundColor:
+                //         MaterialStateProperty.all<Color>(Colors.pink),
+                //     shape: MaterialStateProperty.all(
+                //       RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(25),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),

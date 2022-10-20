@@ -268,8 +268,20 @@ class ChatMessage extends StatelessWidget {
           children: <Widget>[
             Text(this.name, style: TextStyle(fontWeight: FontWeight.bold)),
             Container(
+              decoration: BoxDecoration(
+                  color: Color.fromARGB(234, 43, 39, 40),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0),
+                  )),
               margin: const EdgeInsets.only(top: 5.0),
-              child: Text(text),
+              padding: EdgeInsets.all(8),
+              child: Text(
+                text,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
@@ -283,9 +295,18 @@ class ChatMessage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            Text(this.name, style: Theme.of(context).textTheme.subtitle1),
+            Text(this.name, style: TextStyle(fontWeight: FontWeight.bold)),
             Container(
+              decoration: BoxDecoration(
+                  color: Color.fromARGB(181, 88, 74, 76),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(10.0),
+                    bottomRight: Radius.circular(10.0),
+                  )),
               margin: const EdgeInsets.only(top: 5.0),
+              padding: EdgeInsets.all(8),
               child: Text(text),
             ),
           ],
@@ -306,6 +327,9 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+          // color: Color.fromARGB(181, 238, 231, 232),
+          borderRadius: BorderRadius.only()),
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

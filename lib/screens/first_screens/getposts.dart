@@ -2,12 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:ug_blood_donate/home.dart';
-import 'package:ug_blood_donate/models/user_model.dart';
-import 'package:ug_blood_donate/screens/view_image.dart';
-//import 'package:getwidget/getwidget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ug_blood_donate/screens/upload.dart';
 
 class displayposts extends StatefulWidget {
   displayposts({super.key});
@@ -19,15 +15,14 @@ class displayposts extends StatefulWidget {
 class _displaypostsState extends State<displayposts> {
   String? description;
   String? image;
-  // User? user = FirebaseAuth.instance.currentUser;
-  // UserModel loggedInUser = UserModel(groups: []);
-  // void retrievePosts() {
-  //   FirebaseFirestore.instance.collection("posts").get().then((value) {
-  //     value.docs.forEach((result) {
-  //       print(result.data());
-  //     });
-  //   });
-  // }
+  String? profilepic;
+  String? username;
+  String? postId;
+  String? ownerId;
+
+  int likeCount = 0;
+  Map likes = {};
+  bool isLiked = false;
 
   //  retrieveSubPosts() {
   //   FirebaseFirestore.instance.collection("users").get().then((value) {
@@ -65,6 +60,7 @@ class _displaypostsState extends State<displayposts> {
   //     setState(() {});
   //   });
   // }
+  User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +76,19 @@ class _displaypostsState extends State<displayposts> {
           //   },
           // ), //IconButton
           IconButton(
-            icon: const Icon(Icons.settings),
-            tooltip: 'Setting Icon',
-            onPressed: () {},
+            icon: const Icon(Icons.add_a_photo_outlined),
+            tooltip: 'add a photo',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Upload(
+                    currentUser: FirebaseAuth.instance.currentUser!,
+                  ),
+                ),
+              );
+              // Upload();
+            },
           ), //IconButton
         ], //<Widget>[]
         backgroundColor: Colors.pinkAccent[400],
@@ -101,10 +107,11 @@ class _displaypostsState extends State<displayposts> {
             // .collection('posts')
             // .doc(FirebaseAuth.instance.currentUser!.uid)
             .collectionGroup('userPosts')
+            // .orderBy("createdOn", descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return const Text('Something went wrong');
+            return Center(child: const Text('Something went wrong'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: const CircularProgressIndicator());
@@ -114,8 +121,13 @@ class _displaypostsState extends State<displayposts> {
                 .map((DocumentSnapshot document) {
                   Map<String, dynamic> data =
                       document.data()! as Map<String, dynamic>;
-                  return listOfTweets(description = data["description"],
-                      image = data["mediaUrl"]);
+                  return listOfTweets(
+                      description = data["description"],
+                      image = data["mediaUrl"],
+                      profilepic = data["profilepic"],
+                      username = data["username"],
+                      postId = data["postId"],
+                      ownerId = data["ownerId"]);
                 })
                 .toList()
                 .cast(),
@@ -142,26 +154,25 @@ class _displaypostsState extends State<displayposts> {
   //   });
   // }
 
-  Widget listOfTweets(String description, String image) {
+  Widget listOfTweets(
+      description, image, profilepic, username, param4, param5) {
     return SingleChildScrollView(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          tweetAvatar(),
+          tweetAvatar(profilepic),
           tweetBody(description, image),
         ],
       ),
     );
   }
 
-  Widget tweetAvatar() {
+  Widget tweetAvatar(profilepic) {
     return Container(
-      margin: const EdgeInsets.all(10.0),
-      child: CircleAvatar(
-        backgroundImage: NetworkImage(
-            "https://images.wallpapersden.com/image/download/evil-thanos-smile_bGtnbWuUmZqaraWkpJRnamtlrWZpaWU.jpg"),
-      ),
-    );
+        margin: const EdgeInsets.all(10.0),
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(profilepic),
+        ));
   }
 
   Widget tweetBody(String description, String image) {
@@ -169,16 +180,20 @@ class _displaypostsState extends State<displayposts> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          tweetHeader(),
+          tweetHeader(username),
           tweetText(description),
           SizedBox(height: 25),
           tweetButtons(image),
+          tweetButtons2(),
+          Divider(
+            height: 10,
+          ),
         ],
       ),
     );
   }
 
-  Widget tweetHeader() {
+  Widget tweetHeader(username) {
     return Row(
       children: [
         Container(
@@ -188,11 +203,24 @@ class _displaypostsState extends State<displayposts> {
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
+              fontSize: 15.0,
             ),
           ),
         ),
         Text(
-          '@thanosak ·5m ',
+          '@ ',
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+        Text(
+          username,
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+        Text(
+          ' ·5m ',
           style: TextStyle(
             color: Colors.grey,
           ),
@@ -200,7 +228,7 @@ class _displaypostsState extends State<displayposts> {
         Spacer(),
         IconButton(
           icon: Icon(
-            Icons.arrow_downward,
+            FontAwesomeIcons.angleDown,
             size: 14.0,
             color: Colors.grey,
           ),
@@ -219,10 +247,30 @@ class _displaypostsState extends State<displayposts> {
 
   Widget tweetButtons(String image) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(20.0),
       child: Image.network(
         image,
         fit: BoxFit.cover,
+      ),
+    );
+  }
+
+  Widget tweetButtons2() {
+    return Container(
+      margin: const EdgeInsets.only(top: 10.0, right: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+              onTap: () {
+                print("uuuuuuuuuuu");
+                handleLikePost(ownerId, postId!);
+              },
+              child: tweetIconButton(FontAwesomeIcons.heart, '')),
+          tweetIconButton(FontAwesomeIcons.comment, ''),
+          tweetIconButton(FontAwesomeIcons.retweet, ''),
+          tweetIconButton(FontAwesomeIcons.share, ''),
+        ],
       ),
     );
   }
@@ -247,5 +295,35 @@ class _displaypostsState extends State<displayposts> {
         ),
       ],
     );
+  }
+
+  handleLikePost(String? ownerId, String postId) {
+    bool _isLiked = likes[FirebaseAuth.instance.currentUser!.uid] == true;
+
+    if (_isLiked) {
+      FirebaseFirestore.instance
+          .collection("posts")
+          .doc(ownerId)
+          .collection("userPosts")
+          .doc(postId)
+          .set({'likes.$FirebaseAuth.instance.currentUser!.uid': false});
+      setState(() {
+        likeCount -= 1;
+        isLiked = false;
+        likes[FirebaseAuth.instance.currentUser!.uid] = false;
+      });
+    } else if (!_isLiked) {
+      FirebaseFirestore.instance
+          .collection("posts")
+          .doc(ownerId)
+          .collection("userPosts")
+          .doc(postId)
+          .update({'likes.$FirebaseAuth.instance.currentUser!.uid': true});
+      setState(() {
+        likeCount += 1;
+        isLiked = true;
+        likes[FirebaseAuth.instance.currentUser!.uid] = true;
+      });
+    }
   }
 }

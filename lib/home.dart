@@ -17,7 +17,7 @@ import 'package:ug_blood_donate/models/tab_icon_data.dart';
 import 'package:ug_blood_donate/posts/create_post.dart';
 import 'package:ug_blood_donate/posts/get_nofications.dart';
 import 'package:ug_blood_donate/posts/timeline.dart';
-import 'package:ug_blood_donate/screens/bottom_navigation.dart';
+//import 'package:ug_blood_donate/screens/bottom_navigation.dart';
 import 'package:ug_blood_donate/screens/chat/chartpage.dart';
 import 'package:ug_blood_donate/screens/doner_profile.dart';
 import 'package:ug_blood_donate/screens/donorcard.dart';
@@ -31,10 +31,7 @@ import 'package:ug_blood_donate/screens/report.dart';
 import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/social_media_news_feeds.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
-import 'package:ug_blood_donate/models/user_model.dart';
-import 'package:ug_blood_donate/Chataaaapppp/screens/home_screen.dart';
-import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
-import 'package:ug_blood_donate/screens/doner_profile.dart';
+
 import 'Chatsection/pages/home_page.dart';
 
 final List<String> imgList = [
@@ -66,17 +63,17 @@ class _HomeState extends State<Home> {
   //final User user = ;
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-       theme: ThemeData(fontFamily: 'Raleway',
-       textTheme: const TextTheme(
-        headline1: TextStyle(fontSize: 72.0,fontWeight: FontWeight.bold),
-        headline6: TextStyle(fontSize: 36.0,fontStyle:FontStyle.italic),
-        bodyText2: TextStyle(fontSize: 14.0,fontWeight: FontWeight.w900)
-       ),
-       brightness: Brightness.light,
-       primaryColor: Colors.pink
-       ),
-        debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      theme: ThemeData(
+          fontFamily: 'Raleway',
+          textTheme: const TextTheme(
+              headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+              headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+              bodyText2:
+                  TextStyle(fontSize: 14.0, fontWeight: FontWeight.w900)),
+          brightness: Brightness.light,
+          primaryColor: Colors.pink),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           actions: <Widget>[
@@ -103,8 +100,8 @@ class _HomeState extends State<Home> {
             child: BuildBody(currentUser: widget.currentUser),
           ),
         ),
-        bottomNavigationBar: SizedBox(
-            height: 62, child: BottomBarView(tabIconsList: tabIconsList)),
+        //   bottomNavigationBar: SizedBox(
+        //       height: 62, child: BottomBarView(tabIconsList: tabIconsList)),
       ),
     );
   }
@@ -358,12 +355,14 @@ class _BuildBodyState extends State<BuildBody> {
           Center(
             child: ElevatedButton(
               //   child: WebViewExample(),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => TrackingPage(),
-                ),
-              ),
+              onPressed: () {},
+              //  => Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+
+              //     builder: (_) => TrackingPage(),
+              //   ),
+              // ),
               child: Container(
                 color: Color.fromARGB(0, 251, 251, 251),
                 padding: const EdgeInsets.all(10),
@@ -376,12 +375,13 @@ class _BuildBodyState extends State<BuildBody> {
           Center(
             child: ElevatedButton(
               //   child: WebViewExample(),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => displayposts(),
-                ),
-              ),
+              onPressed: () {},
+              // => Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (_) => displayposts(),
+              //   ),
+              // ),
               child: Container(
                 color: Color.fromARGB(0, 251, 251, 251),
                 padding: const EdgeInsets.all(10),
@@ -394,12 +394,13 @@ class _BuildBodyState extends State<BuildBody> {
           Center(
             child: ElevatedButton(
               //   child: WebViewExample(),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MapPage(),
-                ),
-              ),
+              onPressed: () {},
+              //  => Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (_) => MapPage(),
+              //   ),
+              // ),
               child: Container(
                 color: Color.fromARGB(0, 251, 251, 251),
                 padding: const EdgeInsets.all(10),

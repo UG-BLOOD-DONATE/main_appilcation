@@ -1,4 +1,5 @@
 import 'package:bottom_bar_with_sheet/bottom_bar_with_sheet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
@@ -9,6 +10,10 @@ import 'package:ug_blood_donate/screens/report.dart';
 import 'package:ug_blood_donate/screens/first_screens/twitter.dart';
 import 'package:ug_blood_donate/posts/get_nofications.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
+
+import '../Chatsection/main.dart';
+import '../Chatsection/pages/home_page.dart';
+import '../screens/first_screens/getposts.dart';
 
 //void main() => runApp(const LeftButtonExample());
 
@@ -34,17 +39,20 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _bottomBarController = BottomBarWithSheetController(initialIndex: 0);
   int index = 0;
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
   final screens = [
-    const MyHomeScreen(),
-    UserNotification(),
+    MyHomeScreen(
+      currentUser: FirebaseAuth.instance.currentUser,
+    ),
+    //UserNotification(),
     //GeoApp(),
-    UserNotification(),
+    //UserNotification(),
     const Report_Page(),
     const WebViewExample(),
-    DonorCard(),
-    Upload(
-      currentUser: firebaseAuth.currentUser!,
-    ),
+    // DonorCard(),
+    displayposts(),
+    HomePage(),
     ProfilePage(),
   ];
 
@@ -75,25 +83,28 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         bottomBarTheme: const BottomBarTheme(
-          height: 70,
-          heightClosed: 70,
-          heightOpened: 300,
-          mainButtonPosition: MainButtonPosition.left,
+          isVerticalItemLabel: false,
+          height: 50,
+          // heightClosed: 0,
+          // heightOpened: 0,
+          mainButtonPosition: MainButtonPosition.middle,
           selectedItemIconColor: Colors.black,
           itemIconColor: Colors.white,
+          itemIconSize: 28,
           decoration: BoxDecoration(
-            color: Colors.lightBlueAccent,
+            color: Color.fromARGB(255, 248, 2, 76),
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
+              bottomLeft: Radius.circular(30.0),
+              bottomRight: Radius.circular(30.0),
             ),
           ),
         ),
         mainActionButtonTheme: MainActionButtonTheme(
           size: 55,
-          color: Colors.green,
-          splash: Colors.green[800],
+          //color: Colors.green,
+          //splash: Colors.green[800],
           icon: IconButton(
-            onPressed: () => _bottomBarController.toggleSheet(),
+            onPressed: () {},
             icon: Icon(Icons.add),
             color: Colors.white,
             iconSize: 35,
@@ -106,12 +117,12 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         items: const [
           BottomBarWithSheetItem(icon: Icons.home_rounded),
-          BottomBarWithSheetItem(icon: Icons.maps_home_work),
-          BottomBarWithSheetItem(icon: Icons.notifications_active_outlined),
+          //BottomBarWithSheetItem(icon: Icons.maps_home_work),
+          //, BottomBarWithSheetItem(icon: Icons.notifications_active_outlined),
           BottomBarWithSheetItem(icon: Icons.receipt_long_rounded),
           BottomBarWithSheetItem(icon: Icons.feed),
           BottomBarWithSheetItem(icon: Icons.card_membership),
-          BottomBarWithSheetItem(icon: Icons.backup_rounded),
+          BottomBarWithSheetItem(icon: Icons.chat),
           BottomBarWithSheetItem(icon: Icons.person_outline_outlined),
         ],
       ),

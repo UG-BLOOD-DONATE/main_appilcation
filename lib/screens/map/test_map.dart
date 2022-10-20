@@ -5,48 +5,66 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofence/geofence.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_geofence/geofence.dart';
+
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:ug_blood_donate/screens/map/constants.dart';
+import 'package:ug_blood_donate/screens/map/user_geofences.dart';
 //import 'package:ug_blood_donate/Chatsection/widgets/widgets.dart';
 
-class TrackingPage extends StatefulWidget {
+class MapPage extends StatefulWidget {
   @override
-  _TrackingPageState createState() => _TrackingPageState();
+  _MapPageState createState() => _MapPageState();
 }
 
-class _TrackingPageState extends State<TrackingPage>
-    with WidgetsBindingObserver {
-  String _platformVersion = Platform.isAndroid ? "Android" : "ios";
-
-  Completer<GoogleMapController> _controller = Completer();
-
-  static LatLng _initialPosition = LatLng(0.339535, 32.571199);
-
-  Set<Marker> _markers = {};
-
-  static LatLng _geofenceMarkerPosition = LatLng(0, 0);
-
-  static double _initRadius = 1000.0;
-
-  String placename = 'Centre';
-  String _userStatus = "None";
-  final _formkey = GlobalKey<FormState>();
-
-  static Geolocation? _location;
-  Geoflutterfire geo = Geoflutterfire();
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final myController = TextEditingController();
+class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
+  String event = "";
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  String event = "";
+
+  late Geoflutterfire geo;
+  final myController = TextEditingController();
+  String placename = 'Centre';
+  late Stream<List<DocumentSnapshot>> stream;
+
+  static LatLng _geofenceMarkerPosition = LatLng(0, 0);
+  static double _initRadius = 1000.0;
+  //DatabaseReference ref = FirebaseDatabase.instance.ref();
+  static LatLng _initialPosition = LatLng(0, 0);
+
+  static Geolocation? _location;
+
+  Completer<GoogleMapController> _controller = Completer();
+  //Geoflutterfire geo = Geoflutterfire();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Set<Marker> _markers = {};
+  String _platformVersion = Platform.isAndroid ? "Android" : "ios";
+  String _userStatus = "None";
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('Geofences').snapshots();
+
+  @override
+  void didUpdateWidget(MapPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    print("oldwidget $oldWidget");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    removeGeoFenceLocation();
+    myController.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -74,8 +92,235 @@ class _TrackingPageState extends State<TrackingPage>
     );
   }
 
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print("resumed");
+        _listenForPersmissionStatus();
+        break;
+      case AppLifecycleState.detached:
+        print("detached");
+        break;
+      case AppLifecycleState.inactive:
+        print("inactive");
+        removeGeoFenceLocation();
+        setState(() {
+          _markers = {};
+          _geofenceMarkerPosition;
+        });
+        break;
+      case AppLifecycleState.paused:
+        print("paused");
+        break;
+      default:
+        print("Lifecycle error occur");
+    }
+  }
+
+  void removeGeoFenceLocation() {
+    if (_location != null) {
+      Geofence.removeGeolocation(_location!, GeolocationEvent.entry);
+    }
+  }
+
+  void addmarkesmult() {}
+
+  Future<void> _listenForPersmissionStatus() async {
+    try {
+      final _status = await Permission.locationWhenInUse.serviceStatus;
+
+      if (_status.isEnabled) {
+        print("permission granted");
+        _getUserLocation();
+      } else {
+        print("permission denied");
+      }
+    } catch (error) {
+      print("get permission status error: $error");
+    }
+  }
+
+  Future<void> _initPlatformState() async {
+    if (!mounted) return;
+
+    Geofence.initialize();
+
+//LatLng position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    Geofence.startListening(GeolocationEvent.entry, (entry) {
+      _scheduleNotification("Inside GeoFence", "Welcome to: ${entry.id}");
+      setState(() {
+        _userStatus = "inside";
+      });
+    });
+
+    Geofence.startListening(GeolocationEvent.exit, (entry) {
+      _scheduleNotification("Outside GeoFence", "Byebye to: ${entry.id}");
+      setState(() {
+        _userStatus = "outside";
+      });
+    });
+
+    setState(() {});
+  }
+
+  Future _onSelectNotification(String payload) async {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Open Map to Navigate to Centre"),
+        content: Text("Playload : $payload"),
+      ),
+    );
+  }
+
+  Future<void> _getUserLocation() async {
+    try {
+      final Coordinate? userLoc = await Geofence.getCurrentLocation();
+
+      setState(() {
+        _initialPosition = LatLng(userLoc!.latitude, userLoc.longitude);
+      });
+    } catch (error) {
+      print("Error get current location");
+    }
+  }
+
+  void _scheduleNotification(String title, String subtitle) {
+    Future.delayed(Duration(seconds: 5)).then((result) async {
+      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your channel id',
+        'your channel name',
+        icon: "@mipmap/ic_launcher",
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+      );
+
+      var iOSPlatformChannelSpecifics = DarwinNotificationDetails();
+
+      var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics,
+      );
+
+      await flutterLocalNotificationsPlugin.show(
+        0,
+        title,
+        subtitle,
+        platformChannelSpecifics,
+        payload: 'you clicked the notfication',
+      );
+    });
+  }
+
+  // void getData() {
+  //   FirebaseFirestore.instance.collection("stores").get().then((value) {
+  //     value.docs.forEach((f) {
+  //       print('${f.data}}');
+  //       GeoPoint pos = f.data() as GeoPoint;
+  //       LatLng latLng = new LatLng(pos.latitude, pos.longitude);
+  //       print('${latLng}');
+  //     });
+  //   });
+  // }
+
+  void _printLatestValue() {}
+
   @override
-  void didUpdateWidget(TrackingPage oldWidget) {
+  Widget build(BuildContext context) {
+    //getData();
+    return StreamBuilder<QuerySnapshot>(
+      stream: _usersStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(body: const Text("Loading"));
+        }
+        var deviceData = MediaQuery.of(context);
+
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Color.fromRGBO(239, 52, 83, 0.918),
+            title: Text('Donation Centres'),
+          ),
+          body: ListView(
+            children: snapshot.data!.docs
+                .map((DocumentSnapshot document) {
+                  Map<String, dynamic> data =
+                      document.data()! as Map<String, dynamic>;
+                  double latitude = data['latitude'];
+                  double longitude = data['longitude'];
+                  LatLng latLng = LatLng(latitude, longitude);
+                  return GestureDetector(
+                    onTap: () {
+                      {
+                        print(data['position']);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UsersGeoPage(
+                                data['name'], latLng, data['radius']),
+                          ),
+                        );
+                      }
+                    },
+                    child: Card(
+                      elevation: 5,
+                      child: ListTile(
+                        trailing: Icon(Icons.more_vert),
+                        title: Text(
+                          data['name'],
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        subtitle: Text(''),
+                      ),
+                    ),
+                  );
+                })
+                .toList()
+                .cast(),
+          ),
+        );
+      },
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class UsersGeoPage extends StatefulWidget {
+  UsersGeoPage(this.name, this.position, this.radius, {super.key});
+//UsersGeoPage({super.key});
+  String name;
+  LatLng position;
+  double radius;
+  @override
+  _UsersGeoPageState createState() => _UsersGeoPageState();
+}
+
+class _UsersGeoPageState extends State<UsersGeoPage> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  Geoflutterfire geo = Geoflutterfire();
+
+  static LatLng _geofenceMarkerPosition = LatLng(0, 0);
+  static double _initRadius = 1000;
+  static LatLng _initialPosition = LatLng(0.339535, 32.571199);
+  static Geolocation? _location;
+
+  Completer<GoogleMapController> _controller = Completer();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final _formkey = GlobalKey<FormState>();
+  Set<Marker> _markers = {};
+  String _platformVersion = Platform.isAndroid ? "Android" : "ios";
+
+  @override
+  void didUpdateWidget(UsersGeoPage oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     print("oldwidget $oldWidget");
@@ -84,9 +329,42 @@ class _TrackingPageState extends State<TrackingPage>
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    // WidgetsBinding.instance.removeObserver(this);
     removeGeoFenceLocation();
-    myController.dispose();
+  }
+
+  @override
+  void initState() {
+    _geofenceMarkerPosition = widget.position;
+    _addMarkerLongPressed(widget.position, widget.name);
+    _setGeofenceRegion(widget.position, widget.name);
+    _initRadius = widget.radius;
+    _initPlatformState();
+    super.initState();
+    print('${widget.position}');
+    //WidgetsBinding.instance.addObserver(this);
+    Geofence.requestPermissions();
+    setCustomMarkerIcon();
+    //
+    //_initPlatformState();
+
+    _listenForPersmissionStatus();
+
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
+
+    var initializationSettingsIOS = DarwinInitializationSettings();
+
+    var initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: null,
+    );
   }
 
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -143,16 +421,12 @@ class _TrackingPageState extends State<TrackingPage>
     Geofence.startListening(GeolocationEvent.entry, (entry) {
       _scheduleNotification(
           "There is a blood donation Centre nearby", "Just go to: ${entry.id}");
-      setState(() {
-        _userStatus = "inside";
-      });
+      setState(() {});
     });
 
     Geofence.startListening(GeolocationEvent.exit, (entry) {
       _scheduleNotification("Outside GeoFence", "Byebye to: ${entry.id}");
-      setState(() {
-        _userStatus = "outside";
-      });
+      setState(() {});
     });
 
     setState(() {});
@@ -192,31 +466,30 @@ class _TrackingPageState extends State<TrackingPage>
       _location!,
       GeolocationEvent.entry,
     ).then((value) {
-      _scheduleNotification(
-          "Blood Donation Centre Added", "centre has been added at $name");
-      print("Georegion added");
+      // _scheduleNotification(
+      //     "Blood Donation Centre Added", "centre has been added at $name");
+      // print("Georegion added");
     }).catchError((error) {
-      print("Added geofence failed, $error");
+      // print("Added geofence failed, $error");
     });
-    if (name != 'Centre') {
-      GeoFirePoint geoFirePoint = geo.point(
-          latitude: geofenceMarkerLatLng.latitude,
-          longitude: geofenceMarkerLatLng.longitude);
-      _firestore.collection('Geofences').add({
-        'name': '$name',
-        'radius': _initRadius,
-        'position': geoFirePoint.data
-      }).then((_) {
-        print('added ${geoFirePoint.hash} successfully');
-      });
-    }
   }
 
   Future<void> _addMarkerLongPressed(LatLng latLng, String name) async {
     setState(() {
       _markers = {};
       _geofenceMarkerPosition = latLng;
+      Geofence.initialize();
 
+      Geofence.startListening(GeolocationEvent.entry, (entry) {
+        _scheduleNotification("There is a blood donation Centre nearby",
+            "Just go to: ${entry.id}");
+        setState(() {});
+      });
+
+      Geofence.startListening(GeolocationEvent.exit, (entry) {
+        _scheduleNotification("Outside GeoFence", "Byebye to: ${entry.id}");
+        setState(() {});
+      });
       _setGeofenceRegion(_geofenceMarkerPosition, name);
 
       _markers.add(
@@ -240,7 +513,7 @@ class _TrackingPageState extends State<TrackingPage>
       var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'your channel id',
         'your channel name',
-        icon: "@mipmap/ic_launcher",
+        icon: "launch_background",
         importance: Importance.max,
         priority: Priority.high,
         ticker: 'ticker',
@@ -263,40 +536,24 @@ class _TrackingPageState extends State<TrackingPage>
     });
   }
 
+  void _printLatestValue() {}
+
   @override
   Widget build(BuildContext context) {
     var deviceData = MediaQuery.of(context);
+    setState(() {});
+    Geofence.startListening(GeolocationEvent.entry, (entry) {
+      _scheduleNotification(
+          "There is a blood donation Centre nearby", "Just go to: ${entry.id}");
+      setState(() {});
+    });
 
 // ignore_for_file: prefer_const_constructors;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(239, 52, 83, 0.918),
-        title: Text('Event Location'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.help_outline),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: Text("Guideline to create a donation Centre"),
-                  content: Text(
-                      "Long pressed the area you wanted to place marker, Slider will be appear for you to adjust the geofence ranges"),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  actions: <Widget>[
-                    ElevatedButton(
-                      child: Text("OK"),
-                      onPressed: () => Navigator.pop(context),
-                    )
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
+        title: Text('Go to Blood Donation Centre'),
       ),
       body: _initialPosition == null
           ? Center(child: CircularProgressIndicator())
@@ -306,11 +563,15 @@ class _TrackingPageState extends State<TrackingPage>
                   height: deviceData.size.height,
                   width: deviceData.size.width,
                   child: GoogleMap(
-                    mapType: MapType.hybrid,
+                    zoomGesturesEnabled: true,
+                    zoomControlsEnabled: false,
+                    mapType: MapType.normal,
                     onMapCreated: (GoogleMapController controller) {
                       _controller.complete(controller);
                     },
                     initialCameraPosition: CameraPosition(
+                      tilt: 50,
+                      bearing: 145,
                       target: _initialPosition,
                       zoom: 14.4746,
                     ),
@@ -318,132 +579,113 @@ class _TrackingPageState extends State<TrackingPage>
                     compassEnabled: true,
                     myLocationButtonEnabled: true,
                     tiltGesturesEnabled: false,
-                    onLongPress: (latLng) {
-                      showDialog(
-                        context: context,
-                        builder: (_) => AlertDialog(
-                          title: const Text(
-                              "Enter name of the Blood  Donation Centre"),
-                          content: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Form(
-                              key: _formkey,
-                              child: TextFormField(
-                                controller: myController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: 'Enter name',
-                                ),
-                              ),
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          actions: <Widget>[
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary:
-                                        Color.fromRGBO(239, 52, 83, 0.918)),
-                                child: const Text("Enter"),
-                                onPressed: () {
-                                  setState(() {
-                                    placename = myController.text;
-                                    _addMarkerLongPressed(latLng, placename);
-                                    print(placename);
-                                  });
-                                  if (myController.text != null) {
-                                    Navigator.pop(context);
-                                  } else {
-                                    // showSnackbar(
-                                    //     context,
-                                    //     Color.fromRGBO(239, 52, 83, 0.918),
-                                    //     Text('Add Place details'));
-                                  }
-                                })
-                          ],
-                        ),
-                      );
+                    markers: {
+                      Marker(
+                        markerId: const MarkerId("currentLocation"),
+                        // icon: currentLocationIcon,
+                        position: LatLng(_initialPosition.latitude,
+                            _initialPosition.longitude),
+                      ),
+                      Marker(
+                        markerId: MarkerId("source"),
+                        icon: sourceIcon,
+                        position: _initialPosition,
+                      ),
+                      Marker(
+                        icon: destinationIcon,
+                        markerId: MarkerId("destination"),
+                        position: widget.position,
+                      ),
                     },
-                    markers: _markers,
+
+                    //_markers,
                     circles:
                         // _geofenceMarkerPosition == null
                         //     ? null
                         //     :
-                        Set.from(
-                      [
-                        Circle(
-                          fillColor: ThemeData().primaryColor.withOpacity(0.2),
-                          strokeColor: const Color.fromARGB(0, 255, 3, 3),
-                          center: _geofenceMarkerPosition,
-                          radius: _initRadius,
-                          circleId: CircleId(
-                            _initialPosition.toString(),
-                          ),
-                        )
-                      ],
-                    ),
+                        {
+                      Circle(
+                        fillColor: ThemeData().primaryColor.withOpacity(0.2),
+                        strokeColor: const Color.fromARGB(0, 255, 3, 3),
+                        center: _geofenceMarkerPosition,
+                        radius: _initRadius,
+                        circleId: CircleId(
+                          _initialPosition.toString(),
+                        ),
+                      )
+                    },
+                    polylines: {
+                      Polyline(
+                        polylineId: PolylineId("route"),
+                        points: polylineCoordinates,
+                        color: primaryColor,
+                        width: 5,
+                      ),
+                    },
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    margin: EdgeInsets.only(bottom: 30, right: 80, left: 20),
-                    padding: EdgeInsets.all(20),
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Text(
-                                "Geofence area: ${(_initRadius / 100).toStringAsFixed(0)}KM"),
-                            Text("Status: $_userStatus")
-                          ],
-                        ),
-                        Center(
-                          child: Slider(
-                              value: _initRadius,
-                              divisions: 5,
-                              min: 100,
-                              max: 1000,
-                              onChangeEnd: (_) {
-                                Geofence.removeGeolocation(
-                                  _location!,
-                                  GeolocationEvent.entry,
-                                );
-                                // .then((value) {
-                                //   // print("Georegion removed");
-                                //   _setGeofenceRegion(
-                                //       _geofenceMarkerPosition, placename);
-                                // });
-                              },
-                              onChanged: (newValue) {
-                                setState(() {
-                                  // _scheduleNotification(
-                                  //     "Blood Donation Centre ",
-                                  //     "Your blood donation centre has been added!");
-                                  _initRadius = newValue;
-                                });
-                              }),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
               ],
             ),
     );
   }
 
-  void _printLatestValue() {}
-}
+  List<LatLng> polylineCoordinates = [];
+  late LocationData? currentLocation;
+  Future<LatLng> getcurrentLocation() async {
+    Location location = Location();
+    location.getLocation().then((location) => currentLocation = location);
+    GoogleMapController googleMapController = await _controller.future;
+    location.onLocationChanged.listen((newlock) {
+      googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(
+              tilt: 0.0,
+              zoom: 17.5,
+              target: LatLng(newlock.latitude!, newlock.longitude!))));
+      setState(() {});
+    });
+    return LatLng(currentLocation!.latitude!, currentLocation!.longitude!);
+  }
 
-class _showinput {}
+  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+
+  void getPolyPoints() async {
+    PolylinePoints polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      google_api_key,
+      PointLatLng(_initialPosition.latitude, _initialPosition.longitude),
+      PointLatLng(widget.position.latitude, widget.position.longitude),
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) =>
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude)));
+    }
+    setState(() {});
+  }
+
+  void setCustomMarkerIcon() {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/Pin_source.png")
+        .then((icon) => sourceIcon = icon);
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/Pin_destination.png")
+        .then((icon) => destinationIcon = icon);
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/Badge.png")
+        .then((icon) => currentLocationIcon = icon);
+//   }
+
+    void setCustomMarkerIcon() {
+      BitmapDescriptor.fromAssetImage(
+              ImageConfiguration.empty, "assets/Pin_source.png")
+          .then((icon) => sourceIcon = icon);
+      BitmapDescriptor.fromAssetImage(
+              ImageConfiguration.empty, "assets/Pin_destination.png")
+          .then((icon) => destinationIcon = icon);
+      BitmapDescriptor.fromAssetImage(
+              ImageConfiguration.empty, "assets/Badge.png")
+          .then((icon) => currentLocationIcon = icon);
+    }
+  }
+}

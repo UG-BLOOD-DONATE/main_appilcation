@@ -19,15 +19,15 @@ class _FindDonorState extends State<FindDonor> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-       theme: ThemeData(fontFamily: 'Raleway',
-       textTheme: const TextTheme(
-        headline1: TextStyle(fontSize: 72.0,fontWeight: FontWeight.bold),
-        headline6: TextStyle(fontSize: 36.0,fontStyle:FontStyle.italic),
-        bodyText2: TextStyle(fontSize: 14.0,fontWeight: FontWeight.w900)
-       ),
-       brightness: Brightness.light,
-       primaryColor: Colors.pink
-       ),
+      theme: ThemeData(
+          fontFamily: 'Raleway',
+          textTheme: const TextTheme(
+              headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+              headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+              bodyText2:
+                  TextStyle(fontSize: 14.0, fontWeight: FontWeight.w900)),
+          brightness: Brightness.light,
+          primaryColor: Colors.pink),
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.pink,
@@ -44,7 +44,7 @@ class _FindDonorState extends State<FindDonor> {
             } else {
               return ListView(
                 children: snapshot.data!.docs.map((doc) {
-                  return CustomCard(
+                  return GestureDetector(
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -53,28 +53,34 @@ class _FindDonorState extends State<FindDonor> {
                         ),
                       ),
                     ),
-                    child: ListTile(
-                      // leading: Center(
-                      //   child: loggedInUser.photoURL == null
-                      //       ? const Icon(
-                      //           Icons.person,
-                      //           color: Colors.white,
-                      //           size: 20,
-                      //         )
-                      //       : ClipRRect(
-                      //           borderRadius: BorderRadius.circular(9.0),
-                      //           child: Image.network(loggedInUser.photoURL!),
-                      //         ),
-                      // ),
-                      leading: CustomImage(
-                        imageUrl: doc['photoURL'],
-                        fit: BoxFit.cover,
-                        width: 60,
-                        height: 60,
+                    child: Card(
+                      shadowColor: Colors.white,
+                      borderOnForeground: true,
+                      elevation: 10.0,
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      child: ListTile(
+                        // leading: Center(
+                        //   child: loggedInUser.photoURL == null
+                        //       ? const Icon(
+                        //           Icons.person,
+                        //           color: Colors.white,
+                        //           size: 20,
+                        //         )
+                        //       : ClipRRect(
+                        //           borderRadius: BorderRadius.circular(9.0),
+                        //           child: Image.network(loggedInUser.photoURL!),
+                        //         ),
+                        // ),
+                        leading: CustomImage(
+                          imageUrl: doc['photoURL'],
+                          fit: BoxFit.cover,
+                          width: 60,
+                          height: 60,
+                        ),
+                        title: Text(doc['fullname']),
+                        subtitle: Text(doc['location']),
+                        trailing: Text(doc['bloodType']),
                       ),
-                      title: Text(doc['fullname']),
-                      subtitle: Text(doc['location']),
-                      trailing: Text(doc['bloodType']),
                     ),
                   );
                 }).toList(),
