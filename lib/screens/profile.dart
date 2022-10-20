@@ -1,21 +1,17 @@
 import 'dart:io';
-import 'dart:math';
 
 //import 'package:alan_voice/alan_voice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_share/flutter_share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ug_blood_donate/components/custom_card.dart';
-import 'package:ug_blood_donate/home.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
-import 'package:path/path.dart' as path;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
@@ -153,7 +149,7 @@ openwhatsapp() async{
       await launch(whatsappURl_android);
     }else{
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: new Text("whatsapp no installed")));
+          SnackBar(content: new Text("whatsapp not installed")));
 
     }
 
@@ -162,13 +158,17 @@ openwhatsapp() async{
   
 
 }
-Future<void> share() async {
-    await FlutterShare.share(
-        title: 'Example share',
-        text: 'Example share text',
-        linkUrl: 'https://flutter.dev/',
-        chooserTitle: 'Example Chooser Title');
-  }
+// Future<void> share() async {
+//     await FlutterShare.share(
+//         title: 'invite a friend',
+//         text: 'Download the blood donate Ug application to get blood donation updates',
+//         linkUrl: 'https://ug-blood-donate.github.io/',
+//         chooserTitle: 'Blood donation Uganda');
+//   }
+
+  _onShareWithEmptyFields(BuildContext context) async {
+  await Share.share("text");
+}
   @override
   Widget build(BuildContext context) {
     var g = currentUserId();
@@ -565,7 +565,8 @@ Future<void> share() async {
               Card(
                 child: GestureDetector(
                   onTap: () {
-                    share();
+                    Share.share('Download the UG blood donate app: https://ug-blood-donate.github.io/', subject: 'lets save life.');
+                   // share();
                     //openwhatsapp();
                   },
                   child: Container(
@@ -595,25 +596,30 @@ Future<void> share() async {
                 height: 5,
               ),
               Card(
-                child: Container(
-                  height: 60,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Icon(Icons.info, color: Colors.pink[500]),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        "Get help",
-                        style: TextStyle(
-                          fontSize: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    openwhatsapp();
+                  },
+                  child: Container(
+                    height: 60,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        const SizedBox(
+                          width: 10,
                         ),
-                      )
-                    ],
+                        Icon(Icons.info, color: Colors.pink[500]),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          "Get help",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

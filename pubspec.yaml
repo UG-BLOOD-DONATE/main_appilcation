@@ -81,7 +81,8 @@ dependencies:
   particles_flutter: ^0.1.4
   url_launcher: ^6.1.6
   get: ^4.6.5
-  flutter_share: ^2.0.0
+  # flutter_share: ^2.0.0
+  share_plus: ^6.0.1
 
 
 dev_dependencies:
