@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_new, prefer_typing_uninitialized_variables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,6 +66,15 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
   }
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  //Making a phonecall
+_makingPhoneCall(number) async {
+  var url = Uri.parse("tel:$number");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +268,7 @@ class _DonerProfilePageState extends State<DonerProfilePage> {
                                   ),
                                   label: const Text('Call Now'),
                                   onPressed: () {
-                                    print('Pressed');
+                                    _makingPhoneCall(num);
                                   },
                                   style: ButtonStyle(
                                     backgroundColor:

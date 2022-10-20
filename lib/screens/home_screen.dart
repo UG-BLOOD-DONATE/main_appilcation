@@ -206,20 +206,30 @@ class _MyHomeScreenState extends State<MyHomeScreen>
                                     bottomLeft: Radius.circular(20.0),
                                     bottomRight: Radius.circular(20.0),
                                   )),
-                              child: const ListTile(
-                                  title: Text(
+                              child: ListTile(
+                                  title: const Text(
                                     'Its time to donate Blood!',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  subtitle: Text(
+                                  subtitle: const Text(
                                       'Click to find the available Donation Centres!'),
-                                  trailing: CircleAvatar(
-                                    backgroundColor: Colors.pink,
-                                    child: Icon(
-                                      Icons.arrow_forward_rounded,
-                                      color: Colors.white,
+                                  trailing: GestureDetector(
+                                    onTap: () {
+                                       Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MapPage()
+                      ),
+                    );
+                                    },
+                                    child: const CircleAvatar(
+                                      backgroundColor: Colors.pink,
+                                      child: Icon(
+                                        Icons.arrow_forward_rounded,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   )),
                             ),

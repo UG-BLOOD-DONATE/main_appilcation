@@ -132,6 +132,7 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     var g = currentUserId();
@@ -190,7 +191,7 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                 color: Colors.black,
               ),
               onPressed: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
             )
           ],
@@ -295,9 +296,9 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                                   color: Colors.white,
                                   size: 24.0,
                                 ),
-                                label: const Text('Call Now'),
+                                label: const Text('Fund events'),
                                 onPressed: () {
-                                  _makingPhoneCall();
+                                  _launchURLApp();
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
