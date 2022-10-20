@@ -3,6 +3,7 @@ import 'dart:math';
 
 //import 'package:alan_voice/alan_voice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -132,7 +133,42 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
     });
   }
 
+openwhatsapp() async{
+  var whatsapp ="+256756322224";
+  var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=hello";
+  var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse("hello download the blood donation mobile application to save a life.")}";
+  if(Platform.isIOS){
+    // for iOS phone only
+    if( await canLaunch(whatappURL_ios)){
+       await launch(whatappURL_ios, forceSafariVC: false);
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: new Text("whatsapp no installed")));
 
+    }
+
+  }else{
+    // android , web
+    if( await canLaunch(whatsappURl_android)){
+      await launch(whatsappURl_android);
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: new Text("whatsapp no installed")));
+
+    }
+
+
+  }
+  
+
+}
+Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Example share',
+        text: 'Example share text',
+        linkUrl: 'https://flutter.dev/',
+        chooserTitle: 'Example Chooser Title');
+  }
   @override
   Widget build(BuildContext context) {
     var g = currentUserId();
@@ -527,25 +563,31 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
                 height: 5,
               ),
               Card(
-                child: Container(
-                  height: 60,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Icon(Icons.messenger, color: Colors.pink[500]),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        "Invite a friend",
-                        style: TextStyle(
-                          fontSize: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    share();
+                    //openwhatsapp();
+                  },
+                  child: Container(
+                    height: 60,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        const SizedBox(
+                          width: 10,
                         ),
-                      )
-                    ],
+                        Icon(Icons.messenger, color: Colors.pink[500]),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          "Invite a friend",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
