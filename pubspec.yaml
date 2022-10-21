@@ -83,6 +83,7 @@ dependencies:
   get: ^4.6.5
   # flutter_share: ^2.0.0
   share_plus: ^6.0.1
+  dart_sentiment: ^0.0.9
 
 
 dev_dependencies:

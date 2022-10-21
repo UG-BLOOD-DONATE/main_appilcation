@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dart_sentiment/dart_sentiment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -43,6 +44,9 @@ class _UploadState extends State<Upload> {
   File? file;
   bool isUploading = false;
   String postId = const Uuid().v4();
+  var analysis = 0;
+  final sentiment = Sentiment();
+  var string = 'Write a Caption';
 
   File? image;
 String? fullname = "";
@@ -73,7 +77,6 @@ String? fullname = "";
       file = File(image.path);
       setState(() {});
     } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
     }
   }
 
@@ -89,7 +92,6 @@ String? fullname = "";
       file = File(image.path);
       setState(() {});
     } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
     }
   }
 
@@ -169,7 +171,7 @@ String? fullname = "";
           onPressed: () => clearImage(),
         ),
         title: const Text(
-          'Caption post',
+          'Create post',
           style: TextStyle(color: Colors.black),
         ),
         actions: [
@@ -178,11 +180,11 @@ String? fullname = "";
             child: const Text(
               "Post",
               style: TextStyle(
-                color: Colors.blueAccent,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
+          ),//: Text('analyiz post',style: TextStyle(color: Colors.blueAccent),),
         ],
       ),
       body: ListView(children: <Widget>[
@@ -204,7 +206,7 @@ String? fullname = "";
           padding: EdgeInsets.only(top: 10.0),
         ),
         ListTile(
-          leading: CircleAvatar(
+          leading: const CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(
                 'assets/images/no_img.png'), //widget.currentUser.photoURL!
           ),
@@ -212,7 +214,7 @@ String? fullname = "";
             width: 250,
             child: TextField(
               controller: captionController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "Write a Caption....",
                 border: InputBorder.none,
               ),
@@ -226,7 +228,7 @@ String? fullname = "";
             width: 250.0,
             child: TextField(
               controller: locationController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Location',
                 border: InputBorder.none,
               ),
@@ -234,7 +236,7 @@ String? fullname = "";
           ),
         ),
         Container(
-          width: 200.0,
+          width: 100.0,
           height: 100.0,
           alignment: Alignment.center,
           child: ElevatedButton.icon(
@@ -246,9 +248,34 @@ String? fullname = "";
             ),
           ),
         ),
+
+        Container(
+          width: 100.0,
+          height: 100.0,
+          alignment: Alignment.center,
+          child: ElevatedButton.icon(
+            onPressed: () {
+              setState(() {
+                string = captionController.text; 
+              });
+            },
+            icon: const Icon(Icons.my_location),
+            label: const Text(
+              'analysis caption',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        
+        Text('Modify caption if the score is less than 1 : ${sentiment.analysis(string)}',
+        style: const TextStyle(
+          fontSize: 15,
+          color: Colors.blue,
+        ),),
       ]),
     );
   }
+  
 
   clearImage() {
     setState(() {
@@ -284,10 +311,10 @@ String? fullname = "";
     setState(() {
       file = null;
       isUploading = false;
-      postId = Uuid().v4();
+      postId = const Uuid().v4();
     });
   }
-
+  
   Future<String> uploadImage(imageFile) async {
     UploadTask uploadTask =
         storageRef.child("post_$postId.jpg").putFile(imageFile);
@@ -347,7 +374,6 @@ String? fullname = "";
     String completeAddress =
         '${placemark.subThoroughfare} ${placemark.administrativeArea} ${placemark.country} ${placemark.postalCode} ${placemark.subLocality}';
     String formattedAddress = "${placemark.locality}, ${placemark.country}";
-    print(completeAddress);
     locationController.text = formattedAddress;
     setState(() {
       locationController.text = formattedAddress;
