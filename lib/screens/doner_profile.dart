@@ -147,7 +147,7 @@ _makingPhoneCall(number) async {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          fullname!,
+                                  '                $fullname',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),

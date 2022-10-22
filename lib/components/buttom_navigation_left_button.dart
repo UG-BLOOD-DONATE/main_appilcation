@@ -1,6 +1,7 @@
 import 'package:bottom_bar_with_sheet/bottom_bar_with_sheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ug_blood_donate/screens/first_screens/second_screen.dart';
 import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
@@ -62,6 +63,26 @@ class _MyHomePageState extends State<MyHomePage> {
       debugPrint('Bottom bar ${opened ? 'opened' : 'closed'}');
     });
     super.initState();
+    var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+          if (user == null) {
+             Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>  Onboarding()),
+  );
+
+            // Navigator.of(context)
+            //     .pushReplacement(ThisIsFadeRoute(Onboarding(), Onboarding()));
+          } else {
+            print('User is signed in!');
+
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => LeftButton(),
+            //   ),
+            // );
+          }
+        });
   }
 
   @override

@@ -59,6 +59,7 @@ class _DonorCardState extends State<DonorCard> {
               ),
               onPressed: () {
                 // do something
+                Navigator.pop(context);
               },
             )
           ],

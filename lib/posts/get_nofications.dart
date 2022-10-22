@@ -21,6 +21,38 @@ class _UserNotificationState extends State<UserNotification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.navigate_before_sharp,
+              color: Colors.black,
+              size: 24.0,
+            ),
+          ),
+          title: const Text(
+            "Campaign",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                Icons.edit_note_sharp,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                // Navigator.pop(context);
+              },
+            )
+          ],
+          //foregroundColor: Colors.black,
+          //backgroundColor: Colors.white,
+        ),
       body: StreamBuilder(
         stream: _notificationStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

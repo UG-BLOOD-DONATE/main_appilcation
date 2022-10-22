@@ -14,6 +14,7 @@ import 'package:ug_blood_donate/screens/donorcard.dart';
 import 'package:ug_blood_donate/screens/find_donor.dart';
 import 'package:ug_blood_donate/screens/map/order_traking_page.dart';
 import 'package:ug_blood_donate/screens/profile.dart';
+import 'package:ug_blood_donate/screens/report.dart';
 import 'package:ug_blood_donate/screens/request_blood.dart';
 import 'package:ug_blood_donate/screens/view_image.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
@@ -47,7 +48,7 @@ class _MyHomeScreenState extends State<MyHomeScreen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 5),
+      duration: const Duration(seconds: 5),
     );
 
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
@@ -87,7 +88,7 @@ class _MyHomeScreenState extends State<MyHomeScreen>
     double w = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-          backgroundColor: Color.fromARGB(255, 248, 2, 76),
+          backgroundColor: const Color.fromARGB(255, 248, 2, 76),
           body: SingleChildScrollView(
             child: Stack(children: [
               CircularParticle(
@@ -98,8 +99,8 @@ class _MyHomeScreenState extends State<MyHomeScreen>
                 speedOfParticles: 0.5,
                 maxParticleSize: 7,
                 particleColor:
-                    Color.fromARGB(255, 255, 255, 255).withOpacity(.7),
-                awayAnimationDuration: Duration(milliseconds: 600),
+                    const Color.fromARGB(255, 255, 255, 255).withOpacity(.7),
+                awayAnimationDuration: const Duration(milliseconds: 600),
                 awayAnimationCurve: Curves.easeInOutBack,
                 onTapAnimation: true,
                 isRandSize: true,
@@ -122,7 +123,7 @@ class _MyHomeScreenState extends State<MyHomeScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       GestureDetector(
@@ -134,12 +135,12 @@ class _MyHomeScreenState extends State<MyHomeScreen>
                             ),
                           );
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.qr_code,
                           size: 30.0,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 190.0,
                       ),
                       GestureDetector(
@@ -151,12 +152,12 @@ class _MyHomeScreenState extends State<MyHomeScreen>
                             ),
                           );
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.notification_add,
                           size: 30.0,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       )
                     ],
@@ -259,19 +260,19 @@ class _MyHomeScreenState extends State<MyHomeScreen>
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 mycard(
-                                  cardChild: icondata(
-                                    label: 'Find Donors',
-                                    icon: Icons.search,
-                                  ),
-                                  page: FindDonor(),
+                                  cardChild: const icondata(
+                                      label: 'Report', icon: Icons.report),
+                                  page: const Report_Page(),
+                              
                                 ),
+                                
                                 mycard(
-                                  cardChild: icondata(
+                                  cardChild: const icondata(
                                       label: ' Request', icon: Icons.bloodtype),
-                                  page: Request(),
+                                  page: const Request(),
                                 ),
                                 mycard(
-                                  cardChild: icondata(
+                                  cardChild: const icondata(
                                       label: 'Campaign',
                                       icon: Icons.campaign_outlined),
                                   page: UserNotification(),
@@ -294,7 +295,7 @@ class _MyHomeScreenState extends State<MyHomeScreen>
                                   ),
                                 ),
                                 mycard(
-                                  cardChild: icondata(
+                                  cardChild: const icondata(
                                       label: 'Centres',
                                       icon: Icons.map_outlined),
                                   page: MapPage(),
@@ -302,10 +303,15 @@ class _MyHomeScreenState extends State<MyHomeScreen>
                                 ),
                                 mycard(
                                   cardChild: const icondata(
-                                      label: 'Report', icon: Icons.report),
-                                  page: ProfilePage(
-                                      userId: widget.currentUser!.uid),
+                                    label: 'Friends',
+                                    icon: Icons.search,
+                                  ),
+                                  page: FindDonor(),
                                 ),
+                              //   mycard(
+                              //     cardChild: const icondata(
+                              //         label: 'Report', icon: Icons.report),
+                              //     page: const Report_Page(),
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -337,7 +343,7 @@ class MyCustomPainter extends CustomPainter {
 
   void circle(Canvas canvas, Rect rect, double value) {
     Paint paint = Paint()
-      ..color = Color.fromARGB(255, 247, 247, 247)
+      ..color = const Color.fromARGB(255, 247, 247, 247)
           .withOpacity((1 - (value / 4)).clamp(.0, 1));
 
     canvas.drawCircle(rect.center,
@@ -358,7 +364,7 @@ class MovieCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 3),
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 3),
       width: 200,
       height: 300,
       child: Column(
@@ -376,17 +382,17 @@ class MovieCard extends StatelessWidget {
             ),
           ),
           //title
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
-          Text("title",
+          const Text("title",
               style: TextStyle(
                   fontFamily: 'open_sans',
                   color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.normal)),
           IconTheme(
-            data: IconThemeData(
+            data: const IconThemeData(
               color: Colors.amber,
               size: 20,
             ),
