@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ug_blood_donate/components/buttom_navigation_left_button.dart';
 import 'package:ug_blood_donate/screens/first_screens/second_screen.dart';
 import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
@@ -67,8 +68,13 @@ class _displaypostsState extends State<displayposts> {
     
     // TODO: implement initState
     super.initState();
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+   
+  }
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+     var user = FirebaseAuth.instance.authStateChanges().listen((user) {
           if (user == null) {
              Navigator.push(
     context,
@@ -81,18 +87,12 @@ class _displaypostsState extends State<displayposts> {
             print('User is signed in!');
 Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) =>   MyHomeScreen(  currentUser: FirebaseAuth.instance.currentUser,)),
+    MaterialPageRoute(builder: (context) =>   LeftButton()),
   );
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => LeftButton(),
-            //   ),
-            // );
+           
           }
         });
   }
-  User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +129,7 @@ Navigator.push(
           icon: const Icon(Icons.navigate_before_rounded),
           tooltip: 'Menu Icon',
           onPressed: () {
-            Navigator.pop(context);
+            // Navigator.pop(context);
           },
         ),
         systemOverlayStyle: SystemUiOverlayStyle.light,

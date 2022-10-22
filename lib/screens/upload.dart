@@ -146,7 +146,7 @@ String? fullname = "";
   }
   
 
-  
+ var my_analysis = 2; 
  
 
   @override
@@ -175,7 +175,7 @@ String? fullname = "";
           style: TextStyle(color: Colors.black),
         ),
         actions: [
-          ElevatedButton(
+          my_analysis == 0 ? ElevatedButton(
             onPressed: isUploading ? null : () => handleSubmit(),
             child: const Text(
               "Post",
@@ -184,7 +184,7 @@ String? fullname = "";
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),//: Text('analyiz post',style: TextStyle(color: Colors.blueAccent),),
+          ) : Center(child: Text('analyiz post',style: TextStyle(color: Colors.blueAccent),)),
         ],
       ),
       body: ListView(children: <Widget>[
@@ -257,6 +257,7 @@ String? fullname = "";
             onPressed: () {
               setState(() {
                 string = captionController.text; 
+                my_analysis = 0;
               });
             },
             icon: const Icon(Icons.my_location),

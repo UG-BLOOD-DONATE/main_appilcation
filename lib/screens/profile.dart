@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ug_blood_donate/components/buttom_navigation_left_button.dart';
 import 'package:ug_blood_donate/components/custom_card.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
@@ -41,6 +42,24 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
   void dispose() {
     routeObserver.unsubscribe(this);
     super.dispose();
+     var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+          if (user == null) {
+             Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>  Onboarding()),
+  );
+
+            // Navigator.of(context)
+            //     .pushReplacement(ThisIsFadeRoute(Onboarding(), Onboarding()));
+          } else {
+            print('User is signed in!');
+Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>   LeftButton()),
+  );
+           
+          }
+        });
   }
 
   @override
@@ -129,32 +148,10 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
         });
       }
     });
-   User? currentUser = FirebaseAuth.instance.currentUser;
-    var user = FirebaseAuth.instance.authStateChanges().listen((user) {
-          if (user == null) {
-             Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) =>  Onboarding()),
-  );
-
-            // Navigator.of(context)
-            //     .pushReplacement(ThisIsFadeRoute(Onboarding(), Onboarding()));
-          } else {
-            print('User is signed in!');
-Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) =>   MyHomeScreen(  currentUser: FirebaseAuth.instance.currentUser,)),
-  );
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => LeftButton(),
-            //   ),
-            // );
-          }
-        });
+  
     
   }
+
 
 openwhatsapp() async{
   var whatsapp ="+256756322224";
@@ -196,6 +193,7 @@ openwhatsapp() async{
   _onShareWithEmptyFields(BuildContext context) async {
   await Share.share("text");
 }
+
   @override
   Widget build(BuildContext context) {
     var g = currentUserId();

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ug_blood_donate/components/buttom_navigation_left_button.dart';
 import 'package:ug_blood_donate/screens/first_screens/second_screen.dart';
 import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
@@ -50,7 +51,12 @@ class _Report_PageState extends State<Report_Page> {
         });
       }
     });
-    var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+  
+  }
+@override
+  void dispose() {
+    // TODO: implement dispose
+      var user = FirebaseAuth.instance.authStateChanges().listen((user) {
           if (user == null) {
              Navigator.push(
     context,
@@ -63,13 +69,14 @@ class _Report_PageState extends State<Report_Page> {
             print('User is signed in!');
 Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) =>   MyHomeScreen(  currentUser: FirebaseAuth.instance.currentUser,)),
+    MaterialPageRoute(builder: (context) =>   LeftButton()),
   );
            
           }
         });
+    
+    
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

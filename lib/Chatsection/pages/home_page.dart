@@ -8,6 +8,7 @@ import 'package:ug_blood_donate/Chatsection/service/auth_service.dart';
 import 'package:ug_blood_donate/Chatsection/service/database_service.dart';
 import 'package:ug_blood_donate/Chatsection/shared/constants.dart';
 import 'package:ug_blood_donate/Chatsection/widgets/group_tile.dart';
+import 'package:ug_blood_donate/components/buttom_navigation_left_button.dart';
 import 'package:ug_blood_donate/screens/first_screens/second_screen.dart';
 import 'package:ug_blood_donate/screens/home_screen.dart';
 
@@ -63,8 +64,13 @@ class _HomePageState extends State<HomePage> {
         groups = snapshot;
       });
     });
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+   
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+     var user = FirebaseAuth.instance.authStateChanges().listen((user) {
           if (user == null) {
              Navigator.push(
     context,
@@ -77,14 +83,9 @@ class _HomePageState extends State<HomePage> {
             print('User is signed in!');
 Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) =>   MyHomeScreen(  currentUser: FirebaseAuth.instance.currentUser,)),
+    MaterialPageRoute(builder: (context) =>   LeftButton()),
   );
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => LeftButton(),
-            //   ),
-            // );
+           
           }
         });
   }

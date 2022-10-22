@@ -56,7 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
     HomePage(),
     ProfilePage(),
   ];
-
   @override
   void initState() {
     _bottomBarController.stream.listen((opened) {
