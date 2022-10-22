@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ug_blood_donate/screens/first_screens/second_screen.dart';
+import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
 
 class Report_Page extends StatefulWidget {
@@ -27,6 +30,7 @@ class _Report_PageState extends State<Report_Page> {
   @override
   void initState() {
     super.initState();
+     User? currentUser = FirebaseAuth.instance.currentUser;
     FirebaseFirestore.instance
         .collection('report')
         .doc(currentUserId())
@@ -46,6 +50,24 @@ class _Report_PageState extends State<Report_Page> {
         });
       }
     });
+    var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+          if (user == null) {
+             Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>  Onboarding()),
+  );
+
+            // Navigator.of(context)
+            //     .pushReplacement(ThisIsFadeRoute(Onboarding(), Onboarding()));
+          } else {
+            print('User is signed in!');
+Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>   MyHomeScreen(  currentUser: FirebaseAuth.instance.currentUser,)),
+  );
+           
+          }
+        });
   }
 
   @override

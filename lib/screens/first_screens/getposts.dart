@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ug_blood_donate/screens/first_screens/second_screen.dart';
+import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/screens/upload.dart';
 
 class displayposts extends StatefulWidget {
@@ -60,6 +62,36 @@ class _displaypostsState extends State<displayposts> {
   //     setState(() {});
   //   });
   // }
+  @override
+  void initState() {
+    
+    // TODO: implement initState
+    super.initState();
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+          if (user == null) {
+             Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>  Onboarding()),
+  );
+
+            // Navigator.of(context)
+            //     .pushReplacement(ThisIsFadeRoute(Onboarding(), Onboarding()));
+          } else {
+            print('User is signed in!');
+Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>   MyHomeScreen(  currentUser: FirebaseAuth.instance.currentUser,)),
+  );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => LeftButton(),
+            //   ),
+            // );
+          }
+        });
+  }
   User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override

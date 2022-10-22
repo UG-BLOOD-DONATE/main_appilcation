@@ -9,9 +9,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'second_screen.dart';
 
 //void main() => runApp(const MaterialApp(home: WebViewExample()));
 
@@ -85,10 +89,34 @@ class _WebViewExampleState extends State<WebViewExample> {
 
   @override
   void initState() {
+    User? currentUser = FirebaseAuth.instance.currentUser;
     super.initState();
     if (Platform.isAndroid) {
       WebView.platform = SurfaceAndroidWebView();
     }
+    var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+          if (user == null) {
+             Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>  Onboarding()),
+  );
+
+            // Navigator.of(context)
+            //     .pushReplacement(ThisIsFadeRoute(Onboarding(), Onboarding()));
+          } else {
+            print('User is signed in!');
+Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>   MyHomeScreen(  currentUser: FirebaseAuth.instance.currentUser,)),
+  );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => LeftButton(),
+            //   ),
+            // );
+          }
+        });
   }
 
   @override

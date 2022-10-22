@@ -44,7 +44,7 @@ class _SplashState extends State<Splash> {
       });
     });
     Timer(Duration(milliseconds: 3850), () {
-      setState(() {
+     setState (() {
         var user = FirebaseAuth.instance.authStateChanges().listen((user) {
           if (user == null) {
             Navigator.of(context)

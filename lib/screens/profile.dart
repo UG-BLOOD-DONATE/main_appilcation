@@ -11,6 +11,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ug_blood_donate/components/custom_card.dart';
 import 'package:ug_blood_donate/models/user_model.dart';
 import 'package:ug_blood_donate/screens/first_screens/LoginRegister.dart';
+import 'package:ug_blood_donate/screens/first_screens/second_screen.dart';
+import 'package:ug_blood_donate/screens/home_screen.dart';
 import 'package:ug_blood_donate/utils/firebase.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -127,6 +129,31 @@ class _ProfilePageState extends State<ProfilePage> with RouteAware {
         });
       }
     });
+   User? currentUser = FirebaseAuth.instance.currentUser;
+    var user = FirebaseAuth.instance.authStateChanges().listen((user) {
+          if (user == null) {
+             Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>  Onboarding()),
+  );
+
+            // Navigator.of(context)
+            //     .pushReplacement(ThisIsFadeRoute(Onboarding(), Onboarding()));
+          } else {
+            print('User is signed in!');
+Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>   MyHomeScreen(  currentUser: FirebaseAuth.instance.currentUser,)),
+  );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => LeftButton(),
+            //   ),
+            // );
+          }
+        });
+    
   }
 
 openwhatsapp() async{
